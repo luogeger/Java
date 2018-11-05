@@ -2387,19 +2387,20 @@ public class A_forName {
         Field f = clazz.getDeclaredField("name");
         System.out.println("f = " + f);// private java.lang.String cn.num0214.Person.name
         f.setAccessible(true);// cannot access a member of class
-        String name = (String)f.get(lucy);
+        String name = (String)f.get(lucy);// lucy是实例
         System.out.println("name = " + name);
 	   
         Method getAge = clazz.getDeclaredMethod("getAge");
-        Integer age = (Integer)getAge.invoke(lucy);
+        Integer age = (Integer)getAge.invoke(lucy);// lucy是实例
         System.out.println("age = " + age);
 
         Method getName = clazz.getDeclaredMethod("getName");
-        String get_name = (String)getName.invoke(lucy);
+        String get_name = (String)getName.invoke(lucy);// lucy是实例
         System.out.println("get_name = " + get_name);
 
 
-        Method setName = clazz.getDeclaredMethod("setName", String.class);//需要传参
+        Method setName = clazz.getDeclaredMethod("setName", String.class);
+        //需要传参， 用参数及类型区分重载, 而且参数是 .class 类型
         setName.setAccessible(true);
         Object lili = setName.invoke(lucy, "lili");
         System.out.println("lili = " + lili);
@@ -3339,13 +3340,21 @@ ResultSet rs =null;
         @Test// 单个字段
         public void queryForObject_onlyFile () {
             String pwd = jt.queryForObject("select password from user where id = ?", String.class, 1);
+            // 返回的是 String
             System.out.println("pwd = " + pwd);
         }
         
         @Test// 聚合函数
         public void queryForObject_function () {
             Integer count = jt.queryForObject("select count(*) from user", Integer.class);
+            // 返回的是 Integer
             System.out.println("count = " + count);
+        }
+        
+        @Test
+        public void queryForObject_object () {
+            User u = jt.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), user.getEmail(), user.getPassword());
+            // 返回的是 instance
         }
     
         @Test// 单行
