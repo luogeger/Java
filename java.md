@@ -3,6 +3,7 @@
 - servlet name
 - design model
 - api document
+- annotation
 
 # 0101
 
@@ -3351,13 +3352,12 @@ ResultSet rs =null;
             System.out.println("count = " + count);
         }
         
-        @Test
+        @Test // 单行返回实例// 返回的是 instance
         public void queryForObject_object () {
             User u = jt.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), user.getEmail(), user.getPassword());
-            // 返回的是 instance
         }
     
-        @Test// 单行
+        @Test// 单行返回对象
         public void row () {
             Map<String, Object> map = jt.queryForMap("select * from user where id = ?", 1);
             Set<String> keys = map.keySet();
