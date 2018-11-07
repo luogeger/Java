@@ -3734,6 +3734,12 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         response.addCookie(cookie);
     ```   
 
+- `session`移除 和 销毁
+    - ```javascript
+        request.getSession().removeSession("user");
+
+        request.getSession().invalidate("user");
+    ```
 
 # 0505
 
@@ -3870,8 +3876,35 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 - 概述
 - 特点
 - 应用
-- 安装
+    - `redis-benchmark` : 性能测试工具
+    - `redis-check-aof` : AOF文件修复工具
+    - `redis-check-dump` : RDB文件检查工具（快照持久化文件）
+    - `redis-cli` : 命令行客户端
+    - `redis-server` : redis服务器启动命令
+    - `redis.windows.conf` : redis核心配置文件
+        - `maxmemory`
+    - `redis-install.bat` : 启动脚本
+        - `redis-server --service-install redis.windows.conf --loglevel verbose` 
+        - `redis-install.bat`
+    - `uninstall-redis.bat` : 关闭脚本
+        - `redis-server --service-stop`
+        - `redis-server --service-uninstall`
+
 - 使用
+    - 1.`redis-server.exe`
+    - 2.`redis-cli.exe`
+    - 3.`ping`
+
+- 测试性能命令：`redis-benchmark.exe -c 50 -n 10000 -t get`
+    - `-c` 表示连接数
+    - `-n` 表示请求数
+    - 50个并发连接，10000个请求
+    
+    
+### 常用命令
+- `select 0` 选择数据库，`0`表示索引，默认有16个
+
+
 
 ### 数据类型
 
