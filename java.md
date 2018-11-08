@@ -3871,7 +3871,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 
 
-# Redis
+# 0509 Redis
 
 - 概述
 - 特点
@@ -3902,45 +3902,47 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     
     
 ### 常用命令
-- `select 0` 选择数据库，`0`表示索引，默认有16个
+- `select 0` : 选择数据库，`0`表示索引，默认有16个
+- `flushdb` : 删除当前数据所有数据，不影响其他数据库
+- `flushall` : 删除所有数据库数据
 
 
 
 ### 数据类型
 
-- String
-    - set
-    - get 
-    - del
-    - mset
-    - mget
+- `String`
+    - `set name 'lucy'` : 重复设置就是修改
+    - `get name` 
+    - `del name`
+    - `mset`
+    - `mget`
     
-- hash 
-    - hget
-    - hset 
-    - del
-    - hmset
-    - hmget
-    - hgetall
-    - hkeys
-    - hvals
+- `hash`
+    - `hget`
+    - `hset` 
+    - `del`
+    - `hmset`
+    - `hmget`
+    - `hgetall`
+    - `hkeys`
+    - `hvals`
 
-- list
-    - lpush
-    - rpush
-    - lpop
-    - rpop
-    - lrange key start end
-    - lrange key 0 -1
-    - index key 2
+- `list` : 底层是 LinkedList
+    - `lpush`
+    - `rpush`
+    - `lpop`
+    - `rpop`
+    - `lrange key start end`
+    - `lrange key 0 -1`
+    - `index key 2`
 
-- set
-    - sadd
-    - smembers key
-    - srem
-    - scard
+- `set`
+    - `sadd`
+    - `smembers key`
+    - `srem`
+    - `scard`
 
-- sorted set  
+- `sorted set`  
 
 ### 通用命令
 
