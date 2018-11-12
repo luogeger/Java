@@ -45,15 +45,60 @@
 | 1.7之前处理io异常 |           |   **   |
 
 
-# 0107
+# 0108
 ### String
+- 特点
+    - `不变性`: 字符串在被创建后不能被更改
+        - ```bash
+            String str1 = "abc";
+            String str2 = str1 + "def";
+            System.out.print(str1 ==  str2);// false
+            // 存储着不同的地址，为不同的对象
+        ```
+    - `共享性`：因为不能更改，所以能共享
+        - ```bash
+            String one = "hello";
+            String two = "hello";
+            System.out.print(one == two);// true
+            // 虽然创建了两个字符串对象，但是内容是一样的，能够共享
+        ```
+    - `String` 在jdk1.8以前底层是靠字符数组`char[]`实现的，jdk9.0已经改为`byte[]`
+        - ```bash
+            String str = "abc";
+
+            char[] data = {'a', 'b', 'c'};
+            byte[] data = {97, 98, 99};
+
+            String str = new String(data);
+        ```
+
+
+- 构建方式
+    - 1.无参构造
+        - `String str1 = new String()`
+    - 2.通过字符数组构造
+        - `char[] c = {'a', 'b', 'c'}; String str2 = new String(c)`
+    - 3.通过字节数组构造
+        - `byte[] b = {97, 98, 99}; String str3 = new String(b)`
+    - 4.直接使用已有字符串构造
+        - `String str4 = new String("cat");`
+    - 5.直接赋值
+        - `String str5 = "dog";`
+
+
 - 字符串的常量池内存分析
     - `jdk1.7`以后存在于堆内存中的字符串常量池中(之前是在常量池的方法区中)
     - `==` 比较的是地址，`equals`比较的是内容
     - `String str = "lucy"` >> 存在常量池中，`String str = new String()` >> 存在普通的堆中。
 
 
+- 常用方法：
+    - 判断
+    - 获取
+    - 转换
+    - 分割
 
+ 
 
 # 0111
 ### 1. final 
@@ -4015,6 +4060,4 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - 管理依赖
     - 管理插件
             
-
-
-            
+                   
