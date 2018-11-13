@@ -3133,8 +3133,11 @@ public class Dinject {
 
 ## 1. 事务
 
-- 概念：事务指的是逻辑上的一组操作，组成这组操作的各个单元，要么全部成功，要么全部失败。
+- MYSQL5.5以后支持事务，存储引擎`InnoDB`支持事务，特点是自动提交
+- 概念：事务指的是逻辑上的一组操作，组成这组操作的各个单元，要么全部成功，要么全部失败(业务上市最小的工作单元，不可拆分)。
 - 作用：保证在一个事务中多次操作数据库中的数据时，要么全部成功，要么全都失败。
+- 只支持DML
+
 
 - `start transaction` ： 开启事务。 
 - `commit` ：            提交事务。
@@ -4060,4 +4063,24 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - 管理依赖
     - 管理插件
             
-                   
+
+
+
+- 04
+    - first
+        - 动态sql
+        - 页面跳转携带参数
+        - `Spring org.lang3.StringUtils`
+    - second
+        - 线路详情             
+            - 结果是联表查询，不能用instance封装，>>           
+    - third
+        - 收藏，外键只能查询到一个数据           
+- 05
+    - first
+        - 添加收藏 -- 事务       
+        - 事务只添加在批量的DML中         
+        - `Spring JDBCTemplate 控制事务`  
+
+# linux
+        
