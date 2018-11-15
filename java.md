@@ -4083,4 +4083,54 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         - `Spring JDBCTemplate 控制事务`  
 
 # linux
-        
+### VMware
+
+
+### CentOS
+
+
+### Shell 
+- 什么是shell
+    - Shell俗称壳，用来区别于Kernel（核），是指“提供使用者使用界面”的软件（命令解析器）。
+    它类似于DOS下的command和后来的cmd.exe。它接收用户命令，然后调用相应的应用程序。
+-  shell分类
+    - 图形界面shell: 通过提供友好的可视化界面，调用相应应用程序，
+    如windows系列操作系统，Linux系统上的图形化应用程序GNOME、KDE等。
+    - 命令行shell：通过键盘输入特定命令的方式，调用相应的应用程序，
+    如windows系统的cmd.exe、Windows PowerShell，Linux系统的Bourne shell ( sh)、Bourne Again shell ( bash)等
+- shell命令: 就是围绕增删查改
+    -  pwd (Print Working Directory) 查看当前目录
+    -  cd (Change Directory) 切换目录，如 cd /etc
+    -  ls (List) 查看当前目录下内容，如 ls -al,“.”(表示当前目录)和“..”(表示当前目录的父目录)。
+    -  mkdir (Make Directory) 创建目录，如 mkdir blog
+    -  touch 创建文件，如 touch index.html
+    -  echo >>追加文件 >重新添加一行
+    -  wc (Word Count) 字数信息统计，如 wc index.html
+    -  cat 查看文件全部内容，如 cat index.html
+    -  more less 查看文件，如more /etc/passwd、less /etc/passwd  不用学习
+    -  rm (remove) 删除文件，如 rm index.html、rm -rf  blog
+    -  rmdir (Remove Directory) 删除文件夹，只能删除空文件夹，不常用
+    -  mv (move) 移动文件或重命名，如 mv index.html ./demo/index.html
+    -  cp (copy) 复制文件，cp index.html ./demo/index.html
+    -  head 查看文件前几行，如 head -5 index.html
+    -  tail 查看文件后几行 –n –f，如 tail index.html、tail -5 index.html 
+    -  history 查看操作历史
+    -  whoami 查看当前用户
+
+- 网络
+    - ping 外网
+        - ```
+            # cd /etc/sysconfig/network-scripts/
+            # ls // 如果有个eth1文件就删除[前提是只用了NAT模式]
+            # vi ifcfg-eth0 
+
+            DVICE=eth0
+            TYPE=Ethernet
+            ONBOOT=yes
+            NM_CONTROLLED=yes
+            BOOTPROTO=static
+            IPADDR=192.168.146.132
+            NETMASK=255.255.255.0
+            DNS1=192.168.146.2
+        ```    
+         
