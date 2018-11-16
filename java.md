@@ -4090,47 +4090,160 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 
 ### Shell 
-- 什么是shell
+- `shell`概述
     - Shell俗称壳，用来区别于Kernel（核），是指“提供使用者使用界面”的软件（命令解析器）。
-    它类似于DOS下的command和后来的cmd.exe。它接收用户命令，然后调用相应的应用程序。
--  shell分类
+        它类似于DOS下的command和后来的cmd.exe。它接收用户命令，然后调用相应的应用程序。
+-  `shell`分类
     - 图形界面shell: 通过提供友好的可视化界面，调用相应应用程序，
-    如windows系列操作系统，Linux系统上的图形化应用程序GNOME、KDE等。
+        如windows系列操作系统，Linux系统上的图形化应用程序GNOME、KDE等。
     - 命令行shell：通过键盘输入特定命令的方式，调用相应的应用程序，
-    如windows系统的cmd.exe、Windows PowerShell，Linux系统的Bourne shell ( sh)、Bourne Again shell ( bash)等
-- shell命令: 就是围绕增删查改
-    -  pwd (Print Working Directory) 查看当前目录
-    -  cd (Change Directory) 切换目录，如 cd /etc
-    -  ls (List) 查看当前目录下内容，如 ls -al,“.”(表示当前目录)和“..”(表示当前目录的父目录)。
-    -  mkdir (Make Directory) 创建目录，如 mkdir blog
-    -  touch 创建文件，如 touch index.html
-    -  echo >>追加文件 >重新添加一行
-    -  wc (Word Count) 字数信息统计，如 wc index.html
-    -  cat 查看文件全部内容，如 cat index.html
-    -  more less 查看文件，如more /etc/passwd、less /etc/passwd  不用学习
-    -  rm (remove) 删除文件，如 rm index.html、rm -rf  blog
-    -  rmdir (Remove Directory) 删除文件夹，只能删除空文件夹，不常用
-    -  mv (move) 移动文件或重命名，如 mv index.html ./demo/index.html
-    -  cp (copy) 复制文件，cp index.html ./demo/index.html
-    -  head 查看文件前几行，如 head -5 index.html
-    -  tail 查看文件后几行 –n –f，如 tail index.html、tail -5 index.html 
-    -  history 查看操作历史
-    -  whoami 查看当前用户
+        如windows系统的cmd.exe、Windows PowerShell，Linux系统的Bourne shell ( sh)、Bourne Again shell ( bash)等
 
+**Shell命令：**
+- 基本命令
+    - `reboot` : 立刻重启
+    - `poweroff`: 立刻关机
+    - `history` 查看操作历史
+    - `whoami` 查看当前用户
+
+- 目录操作
+    -  `pwd` (Print Working Directory) 查看当前目录
+    -  `cd` (Change Directory) 切换目录 
+        - `cd /` 根目录
+        - `cd ~`  home目录
+        - `cd ../` 上一级
+        - `cd -` 上次的目录
+        - `cd /usr/local/src/java` 指定目录 
+    -  `ls` (List) 查看当前目录下内容，如 ls -al,“.”(表示当前目录)和“..”(表示当前目录的父目录)。
+        - `ls -l` == `ll`
+        - `ls -a` 查看所有目录(隐藏的也能看到)
+        - `ls /usr/local` 查看指定目录
+    -  `mkdir` (Make Directory) 创建目录
+        - `mkdir /ust/local/src/mysql`
+    -  `rm` (remove) 删除文件，
+        - `rm index.html` 删除文件
+        - `rm -rf  blog` 删除目录
+    -  `mv` (move) 剪切或重命名，
+        - `mv index.html ./demo/index.html`
+    -  `cp` (copy) 复制文件，cp index.html ./demo/index.html
+        - `cp -r bbb/ /usr/local`: 复制当前目录`bbb`以及里面的内容听到`/usr/local`
+    - `find` : `find /usr/local/ -name 'b'`        
+    -  `rmdir` (Remove Directory) 删除文件夹，只能删除空文件夹，不常用
+
+- 文件操作
+    - `wc` (Word Count) 字数信息统计，如 wc index.html
+    - `touch` 创建文件， `touch index.html`
+    - `head` 查看文件前几行，如 head -5 index.html
+    - `cat` 查看文件全部内容，如 cat index.html
+    - `tail` 查看文件后几行 –n –f，如 tail index.html、tail -5 index.html
+    - `more`  `less` 查看文件，如more /etc/passwd、less /etc/passwd  不用学习
+
+- 压缩文件的操作
+    - `.tar` 打包文件
+    - `.gz` 压缩文件
+    - `.tar.gz` 打包并压缩的文件、
+    - 压缩 a.bxt 和 b.txt
+        - `tar -zcvf ab.tar a.txt b.txt`
+        - `rm -rf *.txt` 再删除
+        - `tar -zxvf ab.tar`  再解压
+
+- 进程
+
+
+- 端口        
+    
 - 网络
-    - ping 外网
-        - ```
-            # cd /etc/sysconfig/network-scripts/
-            # ls // 如果有个eth1文件就删除[前提是只用了NAT模式]
-            # vi ifcfg-eth0 
+    - `ping`
+    - `ifconfig | more` ：查看网络配置信息
+    - ```
+        # cd /etc/sysconfig/network-scripts/
+        # ls // 如果有个eth1文件就删除[前提是只用了NAT模式]
+        # vi ifcfg-eth0 
 
-            DVICE=eth0
-            TYPE=Ethernet
-            ONBOOT=yes
-            NM_CONTROLLED=yes
-            BOOTPROTO=static
-            IPADDR=192.168.146.132
-            NETMASK=255.255.255.0
-            DNS1=192.168.146.2
-        ```    
-         
+        DVICE=eth0
+        TYPE=Ethernet
+        ONBOOT=yes
+        NM_CONTROLLED=yes
+        BOOTPROTO=static
+        IPADDR=192.168.146.132
+        NETMASK=255.255.255.0
+        DNS1=192.168.146.2
+    ```    
+- `yum`
+    - 设置时间
+
+- `lrzsz`
+
+- `jdk`
+    - 先卸载Linux自带的jdk
+        - `java -version` 
+        - `rpm -qa | grep java`
+        - `rpm -e --nodeps java-1.7.0-openjdk-1.7.0.45-2.4.3.3.el6.x86_64`
+        - `rpm -e --nodeps java-1.6.0-openjdk-1.6.0.0-1.66.1.13.0.el6.x86_64`
+        - `mkdir /usr/local/src/jdk`： 新建文件夹
+        - `tar -zxvf jdk-8u181-linux-x64.tar.gz` : [解压] 要在jdk的目录下执行命令
+        - `vim /etc/profile`：
+        - ```
+            // 复制注意目录
+            #set java environment
+        	JAVA_HOME=/usr/local/src/jdk/jdk1.8.0_181
+	        CLASSPATH=.:$JAVA_HOME/lib.tools.jar
+	        PATH=$JAVA_HOME/bin:$PATH
+	        export JAVA_HOME CLASSPATH PATH
+        ```
+        - `source /etc/profile`
+        - `java -version`
+
+- `mysql`
+    - `mkdir /usr/local/src/mysql5.6`：创建目录
+    - `tar -xvf MySQL-5.6.34-1.rhel5.x86_64.rpm-bundle.tar` :[解压]  要在mysql5.6目录下执行命令
+    - `rpm -qa | grep mysql` ：**注意：** 解压之后，先不要安装，把自带的Mysql删除再安装，先执行命令检测有没有安装
+        - `rpm -e --nodeps  mysql-libs-5.1.71-1.el6.x86_64`: 然后在删除
+    - `rpm -ivh MySQL-server-5.6.34-1.rhel5.x86_64.rpm`：安装服务端
+    - `rpm -ivh MySQL-client-5.6.34-1.rhel5.x86_64.rpm`：安装客户端
+    - `service mysql status` ：查看mysql状态，如果失败是因为没有启动
+        - `service mysql start`：启动Mysql        
+        - `service mysql status`: 再查看状态
+    - mysql安装的时候，系统自动生成了密码，存放在`/root/.mysql_sceret`, 先修改密码
+        - `mysql -uroot -p`
+        - `SET PASSWORD = PASSWORD('123456');`    
+    - 自动启动设置
+        - `chkconfig --add mysql`：加入到系统服务
+        - `chkconfig mysql on`：设置为自动启动
+        - `chkconfig`：查看是不是自启状态，
+    - 开启远程访问 
+        - `mysql -uroot -p`先登陆           
+        - `grant all privileges on *.* to 'root' @'%' identified by '123456'; `：设置远程访问，`'123456'`是密码
+        - 退出mysql，分别执行以下命令
+            - `/sbin/iptables -I INPUT -p tcp --dport 3306 -j ACCEPT`
+            - `/etc/rc.d/init.d/iptables save` : 会看到 [确定]
+            - `/etc/rc.d/init.d/iptables save` ：会看到 [表格： filter]
+
+
+- `redis`    
+    - 先安装`gcc`
+        - `yum install gcc-c++`
+        - `gcc --version` 检查有没有安装好
+    - `mkdir /usr/local/src/redis`：创建目录，并上传压缩包
+        - `tar -zxvf redis-3.0.0.tar.gz`: 解压之后会有一个`redis-3.0.0`的源码目录
+        - 解压时候的是源码不能运行，先进入目录编译。`cd redis-3.0.0`, `make`
+        - 编译好了，再进行安装, 在源码包里面执行命令，把`redis`安装到`/usr/local/src/redis`目录里，**注意目录结构**
+            - `make PREFIX=/usr/local/src/redis install`: 然后`redis`目录下会多一个`bin`目录
+    - 前端启动
+        - `cd /usr/local/src/redis/bin` >> `./redis-server` : 启动redis服务
+    - 后端启动        
+        - 先把源码里的`redis.conf`复制到`bin`目录里，**注意目录结构**
+            - 先确定是在源码目录下，`cp redis.conf ../bin/`, 
+        - 再修改配置文件参数
+            - `redis.conf`里的`daemonize on`修改为`yes`
+            - 再执行 `./redis-server ./redis-conf`
+            - 再执行 `./redis-cli`
+            - 再`ping`
+    - 连接客户端
+        - 先开放`6379`这个端口，管理端口的文件是`/etc/sysconfig/iptables`
+        - 再重启防火墙 `service iptables restart`, 会出现4个[确定]
+
+- `tomcat`
+    - 先解压
+    - 再启动
+    - 启动查看日志
