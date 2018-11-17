@@ -4244,6 +4244,6 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         - 再重启防火墙 `service iptables restart`, 会出现4个[确定]
 
 - `tomcat`
-    - 先解压
-    - 再启动
-    - 启动查看日志
+    - 先解压 :`tar -xvf apache-tomcat-7.0.57.tar.gz`
+    - 再启动 ：在`bin`目录下启动`startup.sh`
+    - 启动查看日志 : `./startup.sh && tail -f ../logs/catalina.out` 
