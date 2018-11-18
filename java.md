@@ -4169,8 +4169,21 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         NETMASK=255.255.255.0
         DNS1=192.168.146.2
     ```    
-- `yum`
+
+- 设置静态ip
+    
+```
+# ifconfig eth0 up // 权限不够
+# chkconfig --level 2345 network on // 网络服务在系统启动级别是2345时默认启动
+```    
+
+
+- 时间
+    - `hwclock` 硬件时间
+    - `date` 系统时间
     - 设置时间
+        - `yum -y install ntp ntpdate`
+        - `ntpdate cn.pool.ntp.org`
 
 - `lrzsz`
 
@@ -4227,7 +4240,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - `mkdir /usr/local/src/redis`：创建目录，并上传压缩包
         - `tar -zxvf redis-3.0.0.tar.gz`: 解压之后会有一个`redis-3.0.0`的源码目录
         - 解压时候的是源码不能运行，先进入目录编译。`cd redis-3.0.0`, `make`
-        - 编译好了，再进行安装, 在源码包里面执行命令，把`redis`安装到`/usr/local/src/redis`目录里，**注意目录结构**
+        - 编译好了，再进行安装, 在 **源码包**(redis-3.0.0)里面执行命令，把`redis`安装到`/usr/local/src/redis`目录里，**注意目录结构**
             - `make PREFIX=/usr/local/src/redis install`: 然后`redis`目录下会多一个`bin`目录
     - 前端启动
         - `cd /usr/local/src/redis/bin` >> `./redis-server` : 启动redis服务
