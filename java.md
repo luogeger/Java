@@ -4125,7 +4125,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         - `rm -rf  blog` 删除目录
     -  `mv` (move) 剪切或重命名，
         - `mv index.html ./demo/index.html`
-    -  `cp` (copy) 复制文件，cp index.html ./demo/index.html
+    -  `cp` (copy) 复制文件
         - `cp -r bbb/ /usr/local`: 复制当前目录`bbb`以及里面的内容听到`/usr/local`
     - `find` : `find /usr/local/ -name 'b'`        
     -  `rmdir` (Remove Directory) 删除文件夹，只能删除空文件夹，不常用
@@ -4133,28 +4133,34 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 - 文件操作
     - `wc` (Word Count) 字数信息统计，如 wc index.html
     - `touch` 创建文件， `touch index.html`
-    - `head` 查看文件前几行，如 head -5 index.html
-    - `cat` 查看文件全部内容，如 cat index.html
-    - `tail` 查看文件后几行 –n –f，如 tail index.html、tail -5 index.html
-    - `more`  `less` 查看文件，如more /etc/passwd、less /etc/passwd  不用学习
+    - `head` 查看文件前几行, `head -10 index.html`
+    - `tail` 查看文件后几行, `tail -10 index.html`
+    - `cat` 查看文件全部内容, `cat /etc/sudo.conf`
+    - `more`  `less` 查看文件
+    - `grep`: == `ctrl + f`
+        - `grep to /etc/sudo.conf --color`
+
+- 管道命令：`|`
+    - 过滤操作，将前面的命令的输出，作为后面命令的输入
+        - `ps -ef | grep mysql`, **注意：**至少有一个进程
 
 - 压缩文件的操作
     - `.tar` 打包文件
     - `.gz` 压缩文件
     - `.tar.gz` 打包并压缩的文件、
     - 压缩 a.bxt 和 b.txt
-        - `tar -zcvf ab.tar a.txt b.txt`
-        - `rm -rf *.txt` 再删除
-        - `tar -zxvf ab.tar`  再解压
+        - `tar -zcvf ab.tar a.txt b.txt`: 压缩
+        - `rm -rf *.txt` :再删除`a.txt`和`b.txt`
+        - `tar -zxvf ab.tar` ： 再解压
 
 - 进程
-
-
-- 端口        
+    - `ps -ef`：查看进程
+    - `kill -9 1`: 强制杀死进程，`-9`== 强制， `1`==PID    
     
-- 网络
+- 网络端口
     - `ping`
     - `ifconfig | more` ：查看网络配置信息
+    - `netstat -an | grep 8080`: 查看端口
     - ```
         # cd /etc/sysconfig/network-scripts/
         # ls // 如果有个eth1文件就删除[前提是只用了NAT模式]
