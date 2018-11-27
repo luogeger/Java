@@ -130,12 +130,13 @@
 #### Spring工厂的了解
 
 #### IoC装配Bean => xml
-- 四种方式
-    - 无参构造方法：默认调用的是无参构造方法
-    - 静态工厂方法：在实例化之前可以有一些其他的操作，conn...
-    - 实例工厂方法：先有实例才能获取
-    - FactoryBean：基于某一种类型创建对象的接口
-        - class路径是Bean4Factory，在实例化`Bean4Factory`的时候，会判断时候实现了`FactoryBean`接口，如果实现了就自动调用`getObject`方法，并返回结果
+**xml装配的4种方式**
+- 无参构造方法：默认调用的是无参构造方法
+- 静态工厂方法：在实例化之前可以有一些其他的操作，conn...
+- 实例工厂方法：先有实例才能获取
+- FactoryBean：基于某一种类型创建对象的接口
+    - class路径是Bean4Factory，在实例化`Bean4Factory`的时候，会判断时候实现了`FactoryBean`接口，如果实现了就自动调用`getObject`方法，并返回结果
+
 
 - `Bean.java`
     - `Bean1.java`
@@ -277,43 +278,10 @@ public void getBean () {
 
 ```java
     public class Person {
-
         private  Integer id;
         private String name;
         private Car car;
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public Car getCar() {
-            return car;
-        }
-
-        public void setCar(Car car) {
-            this.car = car;
-        }
-
-        @Override
-        public String toString() {
-            return "Person{" +
-                    "id=" + id +
-                    ", name='" + name + '\'' +
-                    ", car=" + car +
-                    '}';
-        }
+        // getter setter toString
     }
 ```
 - `applicationContext.xml`
@@ -369,6 +337,36 @@ public void getBean () {
 ```
 
 #### IoC装配Bean => annotation
+**注解的装配**
+- 添加注解
+    - @Component
+    - @Repository
+    - @Service
+    - @controller
+- 开启注解
+    - `<context:annotation-config />`
+    - 混合配置的时候使用
+- 开启注解扫描
+    - `<context:component-scan base-package="cn.item.spring"/>`
+    - `"cn.item.spring"`: 也可以只给`cn`，所有子包都扫描
+    - 包含了开启注解，单独使用
+
+```bash
+    1. 添加注解
+    2. 开启注解
+    3. ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+```
+
+**注解的方式注入**
+- 简单值的注入
+    - 
+    ```java
+
+    ```
+- 复杂值的注入
+
+
+
 
 #### xml、annatation混合配置Bean
 

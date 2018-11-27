@@ -2562,7 +2562,7 @@ public @interface G_annotation {
 ## 8.  动态代理
 - 动态代理是哪个版本的 ? = jdk1.6 和 jdk9.0 不一样
 
-- 1. 获取某个被代理类的代理对象，使用java中的 Proxy 类完成
+- 1.获取某个被代理类的代理对象，使用java中的 Proxy 类完成
     - java.lang.reflect.Proxy
     - public class Proxy extends Object implements Serializable
         - static Object newProxyInstance
