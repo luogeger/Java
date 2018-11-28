@@ -2571,7 +2571,7 @@ public @interface G_annotation {
             - params:
                 - loader: 类加载器
                 - interfaces: 被代理对象的所有接口的数组
-                - InvocationHandler h: 调用处理器，是一个接口
+                - InvocationHandler h: 调用处理器，是一个接口，就是代理过程
 
 ## 9.  XML
 - 作用: XML就是一种数据格式，自定义的数据格式

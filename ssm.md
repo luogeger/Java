@@ -243,6 +243,7 @@ public void getBean () {
 - p名称空间
 - spEL表达式
 
+
 - `Car.java`
 
 ```java
@@ -263,17 +264,10 @@ public void getBean () {
             this.price = price;
         }
 
-        @Override
-        public String toString() {
-            return "Car{" +
-                    "id=" + id +
-                    ", name='" + name + '\'' +
-                    ", price=" + price +
-                    '}';
-        }
+        // @Override toString...
     }
 
-```
+````
 - `Person.java`
 
 ```java
@@ -375,4 +369,312 @@ public void getBean () {
 #### SpringTest
 
 #### AOP
-> AOP **Aspect Oriented Programing** 面向切面编程
+```bash
+AOP Aspect Oriented Programing 面向切面编程
+
+OCP原则：开闭原则，对拓展开放，对修改关闭
+
+传统的方式：纵向继承体系重复性代码的编写，破坏了代码的封装，具有侵入性
+    
+AOP：横向抽取机制，在不修改原对象代码的情况下，通过代理对象，调用增强功能代码，从而对原有业务方法的增强
+
+具体实现：动态代理
+
+```
+
+**应用场景**
+- 记录日志
+- 监控方法运行时间(监控性能)
+- 权限控制
+- 缓存优化
+- 事务管理
+
+**相关术语**
+- `Aspect`      切面
+- `Joinpoint`   连接点
+- `Pointcut`    切入点
+- `Advice`      通知
+- `Target`      目标对象
+- `Weaving`     织入
+- `Introduction`引介
+
+#### JDK底层实现AOP
+
+- `applicationContext.xml`
+
+```xml
+    <bean class="cn.item.jdk.Inter_c" id="inter_c_jdk"/>
+```
+
+- `Inter.java`
+
+```java
+    public interface Inter {
+        void save ();
+        int find ();
+    }
+
+```
+
+- `Inter_c.jav`
+
+```java
+    public class Inter_c implements Inter {
+        @Override
+        public void save() {
+            System.out.println("save ...");
+        }
+
+        @Override
+        public int find() {
+            System.out.println("find ...");
+            return 0;
+        }
+    }
+
+```
+
+- `JdkProxy.java`
+
+```java
+    public class JdkProxy implements InvocationHandler{
+        private Object target;
+
+        public JdkProxy(Object target) {
+            this.target = target;
+        }
+
+        public Object getProxyObject() {
+            return Proxy.newProxyInstance(
+                    target.getClass().getClassLoader(),
+                    target.getClass().getInterfaces(),
+                    this);
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+            if ("save".equals(method.getName()))
+                before();
+            return method.invoke(target);
+        }
+
+        public void before () {
+            System.out.println("before ...");
+        }
+    }
+```
+
+- **test.java**
+
+```java
+public void jdk () {
+        // target       获取目标对象
+        // proxy        获取代理对象工厂
+        // proxyObject  获取代理对象
+        // invoke       执行方法
+
+        Inter target = new Inter_c();
+        JdkProxy proxy = new JdkProxy(target);
+        Inter proxyObject = (Inter)proxy.getProxyObject();
+
+        proxyObject.save();
+        proxyObject.find();
+
+    }
+```
+
+#### Cglib底层实现AOP
+
+- `applicationContext.xml`
+
+```xml
+    <bean class="cn.item.Cglib.Target" id="target_c_cglib"/>
+```
+
+
+- `Targer.java`
+
+```java
+    public class Target {
+        public void save(){
+            System.out.println("ProductService保存了");
+        }
+
+        public int find(){
+            System.out.println("ProductService查询了");
+            return 99;
+        }
+    }
+```
+
+- `CglibProxy.java`
+
+```java
+    import org.springframework.cglib.proxy.MethodInterceptor;// 注意导包
+    public class CglibProxy implements MethodInterceptor {
+        private Object target;
+        public CglibProxy(Object target) {
+            this.target = target;
+        }
+
+        public Object getProxyObject() {
+            Enhancer e = new Enhancer();// 获取生成器
+            e.setSuperclass(target.getClass());// 设置目标对象
+            e.setCallback(this);// 设置回调函数
+            return e.create();// 返回代理对象
+        }
+
+        @Override
+        public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+            before();
+            Object result = method.invoke(target);
+            return result;
+        }
+
+        public void before () {
+            System.out.println("before .....");
+        }
+    }
+```
+
+
+- `test.java`
+
+```java
+    @Test
+    public void cglib () {
+        CglibService target = new CglibService();
+        CglibProxy proxy = new CglibProxy(target);
+        CglibService proxyObject = (CglibService) proxy.getProxyObject();
+
+        proxyObject.save();
+        proxyObject.find();
+    }
+```
+
+**JDK 和 Cglib的区别**
+```bash
+    JDK: 基于接口的代理，一定是基于接口，会生成目标对象的接口类型的子对象
+    Cglib: 基于类的代理，不需要接口，会生成目标对象类型的子对象
+
+    Spring在运行期间，生成动态代理对象，不需要特殊的编译器
+
+    Spring的两种代理方式：
+    1.目标对象实现了若干接口，Spring使用JDK的 java.lang.reflect.Proxy类代理
+    2.目标对象没有实现任何接口，Spring使用Cglib库生成目标对象的子类
+
+    注意&提示：
+    1.对接口创建代理优于对类创建代理，Spring推荐面向接口编程。
+        因为这样会产生更加耦合的系统，所以Spring默认是使用JDK代理
+    2.标记为final的方法不能够被通知。
+        Spring是为目标类产生子类，任何需要通知的方法都会被重写，通知织入。
+        final方法是不允许被重写的。
+    3.Spring只支持方法连接点，不提供属性接入点，如果属性被拦截破坏了封装。
+
+```
+
+#### Spring AOP编程的两种方式
+##### 传统动态AOP
+> 使用纯Java实现，不需要专门的编译过程和类加载器，在运行期通过代理方式向目标类植入增强代码，相对复杂
+
+- `applicationContext.xml`
+
+```xml
+    <bean class="cn.item.jdk.Inter_c" id="inter_c_jdk"/>
+
+    <bean class="cn.item.Cglib.CglibService" id="c_cglib"/>
+
+    <bean class="cn.item.old_aop.OldAopAdvice" id="old_aop_advice"/>
+
+    <!-- 3.配置切面和切入点 -->
+    <aop:config>
+        <aop:pointcut id="allBeanAop" expression="execution(* cn.item..*.*(..))"/>
+
+        <aop:advisor advice-ref="old_aop_advice" pointcut-ref="allBeanAop"/>
+    </aop:config>
+```
+
+- `CglibService.java`
+
+```java
+    public class CglibService {
+        public void save(){
+            System.out.println("ProductService保存了");
+        }
+
+        public int find(){
+            System.out.println("ProductService查询了");
+            return 99;
+        }
+    }
+```
+
+- `Inter_c.java`
+
+```java
+    public class Inter_c implements Inter {
+        @Override
+        public void save() {
+            System.out.println("save ...");
+        }
+
+        @Override
+        public int find() {
+            System.out.println("find ...");
+            return 0;
+        }
+    }
+```
+
+- `OldAopAdvice.java`
+
+```java
+    public class OldAopAdvice implements MethodInterceptor{
+        private static Logger LOGGER = Logger.getLogger(String.valueOf(OldAopAdvice.class));
+
+        @Override
+        public Object invoke(MethodInvocation i) throws Throwable {
+            long start = System.currentTimeMillis();
+
+            Object proceed = i.proceed();// == method.invoke();
+
+            long end = System.currentTimeMillis();
+            long time = end - start;
+
+            System.out.println(i.getThis().getClass().getName() + " >> " + i.getMethod().getName() + " >> " + time);
+            LOGGER.info(i.getThis().getClass().getName() + " >> " + i.getMethod().getName() + " >> " + time);
+
+            return proceed;
+        }
+    }
+```
+
+- `test.java`
+
+```java
+    @RunWith(SpringJUnit4ClassRunner.class)
+    @ContextConfiguration(locations = "classpath:applicationContext.xml")
+    public class OldAop {
+
+        @Autowired
+        private Inter i;
+
+        @Autowired
+        private CglibService c;
+
+        @Test
+        public void interfaceAndClass () {
+            i.find();
+            i.save();
+            System.out.println("............... ");
+            c.find();
+            c.save();
+        }
+    }
+```
+
+
+
+##### AspectJ
+> AspectJ是一个基于Java语言的AOP框架，Spring2.0开始支持第三方AOP框架(AspectJ),实现另一种AOP编程
