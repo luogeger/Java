@@ -351,14 +351,32 @@ public void getBean () {
     3. ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
 ```
 
-**注解的方式注入**
-- 简单值的注入
-    - 
-    ```java
+**注解的注入**
 
-    ```
-- 复杂值的注入
+```java
+    @Value("rose")
+    private String name;
 
+    @value("#{c_dao}")// c_dao == id
+    private CustomerDao cDao;
+
+
+    // @Autowired,单独使用时, 默认是根据对象类型装配， xml的调setter方法，一般只有一个类型的对象，因为都是单列，
+    // @Autowired + 形参，Spring工厂创建的时候，扫描到注解对应的方法回去执行，再去找对应的形参再赋值，前提是形参对应的对象也属于Spring
+    @Autowired     
+    @Qualifier(value = "c_dao")// c_dao == id
+    private CustomerDao cDao;
+
+    // JSR-250 java自己提供的，单独使用时也是根据类型注入
+    @Resource
+    @Resource(name="id")
+
+
+    // JSR-330  需要额外的导包
+    @Inject
+    @Name("id")
+
+```
 
 
 
@@ -446,9 +464,9 @@ AOP：横向抽取机制，在不修改原对象代码的情况下，通过代�
 
         public Object getProxyObject() {
             return Proxy.newProxyInstance(
-                    target.getClass().getClassLoader(),
-                    target.getClass().getInterfaces(),
-                    this);
+                    target.getClass().getClassLoader(),// 类
+                    target.getClass().getInterfaces(),// 接口
+                    this);// 过程
         }
 
         @Override
@@ -575,6 +593,7 @@ public void jdk () {
 ```
 
 #### Spring AOP编程的两种方式
+
 ##### 传统动态AOP
 > 使用纯Java实现，不需要专门的编译过程和类加载器，在运行期通过代理方式向目标类植入增强代码，相对复杂
 
@@ -599,12 +618,13 @@ public void jdk () {
 
 ```java
     public class CglibService {
-        public void save(){
-            System.out.println("ProductService保存了");
+        public void save() {
+            System.out.println("类save");
         }
 
-        public int find(){
-            System.out.println("ProductService查询了");
+        public int find() {
+            System.out.println("类find");
+            //int d = 1/0;
             return 99;
         }
     }
@@ -616,12 +636,12 @@ public void jdk () {
     public class Inter_c implements Inter {
         @Override
         public void save() {
-            System.out.println("save ...");
+            System.out.println("接口save");
         }
 
         @Override
         public int find() {
-            System.out.println("find ...");
+            System.out.println("接口find");
             return 0;
         }
     }
@@ -678,3 +698,126 @@ public void jdk () {
 
 ##### AspectJ
 > AspectJ是一个基于Java语言的AOP框架，Spring2.0开始支持第三方AOP框架(AspectJ),实现另一种AOP编程
+
+- `applicationContext.xml`
+
+```xml
+    <bean class="cn.item.jdk.Inter_c" id="inter_c_jdk"/>
+
+    <bean class="cn.item.Cglib.CglibService" id="c_cglib"/>
+
+    <bean class="cn.item.aspect.AspectAdvice" id="aspect_advice"/>
+
+
+    <aop:config>
+        <aop:aspect ref="aspect_advice"><!-- ref="通知的id" -->
+            <!-- 切入点 -->
+            <aop:pointcut id="allBeanAspect" expression="execution(* cn.item..*.*(..))"/>
+
+            <!-- 前置通知
+            <aop:before method="firstBefore" pointcut-ref="allBeanAspect"/>
+            <aop:before method="secondBefore" pointcut-ref="allBeanAspect"/>-->
+
+            <!-- 后置通知
+            <aop:after method="firstAfter" pointcut-ref="allBeanAspect"/> -->
+
+            <!-- 后置通知且带返回值 returning="val" val和getAfterVal的形参保持一致
+            <aop:after-returning method="getAfterVal" returning="val" pointcut-ref="allBeanAspect"/>
+            -->
+
+            <!-- 环绕通知-->
+            <aop:around method="aroundAdvice" pointcut-ref="allBeanAspect"/>
+
+            <!-- 抛出通知 -->
+            <aop:after-throwing method="afterThrowAdvice" throwing="ex" pointcut-ref="allBeanAspect"/>
+            
+            
+            <!-- 最终通知: 就算方法发生异常，最终通知都会执行 -->
+            <aop:after method="afterFinally" pointcut-ref="allBeanAspect"/>
+            <!--<aop:after method="afterFinally" pointcut="bean(*Service)"/>-->
+        </aop:aspect>
+    </aop:config>
+```
+
+- `AspectAdvice.java`
+
+```java
+    public class AspectAdvice {
+        public void firstBefore(JoinPoint joinPoint) throws Throwable {
+            System.out.println("first before ... ");
+        }
+
+        public void secondBefore () {
+            System.out.println("second before ... ");
+        }
+
+        public void firstAfter() {
+            System.out.println("first after... ");
+        }
+
+
+        public void getAfterVal(JoinPoint joinPoint, Object val) throws Throwable {
+            System.out.println(" get after value .."+ val);
+        }
+
+
+        public Object aroundAdvice(ProceedingJoinPoint pJP) throws Throwable {
+            System.out.println("环绕前...");
+            Object result = pJP.proceed();
+            System.out.println("环绕后 。。...");// 如果有异常，环绕后不能执行
+            return result;
+        }
+
+
+        public void afterThrowAdvice(JoinPoint jP, Throwable ex) throws Throwable {
+            System.out.println("::"+ jP.getTarget().getClass().getName());// cn.item.Cglib.CglibService 类的路径
+            System.out.println("::"+ jP.getSignature().getName());// find 方法名
+            System.out.println("::"+ ex.getMessage());// int i = 1/0; >> / by zero
+        }
+
+        public void afterFinally(JoinPoint jP) throws Throwable {
+            System.out.println("after finally ...");
+        }
+    }
+```
+
+- `Test.java`
+
+```java
+    @RunWith(SpringJUnit4ClassRunner.class)
+    @ContextConfiguration(locations="classpath:applicationContext-aspect.xml")
+    public class Aspect {
+        @Autowired
+        private Inter i;
+
+        @Autowired
+        private CglibService c;
+
+        @Test
+        public void interfaceAndClass () {
+            i.find();
+            i.save();
+            System.out.println(" >>>>>>>>>>> ");
+            c.find();
+            c.save();
+        }
+
+    }
+
+```
+
+##### 通知小结
+
+- 只要掌握around通知类型，就可以实现其他四种效果
+
+```java
+    try{
+        // 前置通知
+        Object result = proceedingJoinPoint.proceed();
+        // 后置通知
+    } catch(Exception) {
+        // 抛出通知
+    } finally {
+        // 最终通知
+    }
+```
