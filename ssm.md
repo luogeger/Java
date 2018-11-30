@@ -696,7 +696,7 @@ public void jdk () {
 
 
 
-##### AspectJ
+##### AspectJ (.xml配置切面)
 > AspectJ是一个基于Java语言的AOP框架，Spring2.0开始支持第三方AOP框架(AspectJ),实现另一种AOP编程
 
 - `applicationContext.xml`
@@ -821,3 +821,113 @@ public void jdk () {
         // 最终通知
     }
 ```
+
+##### AspectJ (注解配置切面)
+
+- `applicationContext.xml`
+
+```xml
+    <!-- 开启注解扫描 -->
+    <context:component-scan base-package="cn"/>
+    <!-- 配置aop的aspectj的自动代理：
+			自动扫描bean组件中，含有@Aspect的bean，将其作为aop管理，开启动态代理-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>    
+```
+
+- `Advice.java`
+
+```java
+    @Component("annoAdvice")// 相当于<bean id="myAspect" class="cn.itcast.spring.a_aspectj.MyAspect"/>
+    @Aspect// 相当于<aop:aspect ref="myAspect">
+    public class Advice {
+
+
+    /*    @Before("bean(*service)")
+        public void before () {
+            System.out.println("before ...");
+        }*/
+
+
+        // 自定义切入点
+    /*    @Before("adviceCustomer()")
+        public void before () {
+            System.out.println("before ...");
+        }
+        @Pointcut("bean(p_service)")// 这里是自定义切入点
+        public void adviceCustomer() throws Throwable{
+            System.out.println("advice customer ...");
+        }*/
+
+
+    /*    @AfterReturning(value="cut1() || cut2()", returning = "val")
+        public void afterReturn(JoinPoint joinPoint, Object val) {
+            System.out.println(val);
+            System.out.println("after return ...");
+        }
+
+        @Pointcut("bean(c_service)")
+        public void cut1() {
+        }
+
+        @Pointcut("bean(p_service)")
+        public void cut2() {
+        }*/
+
+
+    /*    @Around(value = "pServiceCut()")
+        public Object around(ProceedingJoinPoint pJP) throws Throwable {
+            System.out.println("环绕前..");
+            Object proceed = pJP.proceed();
+            System.out.println("环绕后..");
+            return proceed;
+        }
+
+        @Pointcut("bean(p_service)")
+        public void pServiceCut() {
+
+        }*/
+
+        @AfterThrowing(value = "execution(* cn.item.a_aspect_anno.CustomerService_c.*())", throwing = "ex")
+        public void afterThrow(JoinPoint jp, Throwable ex) throws Throwable {
+            System.out.println("..出异常了");
+        }
+
+        @After("bean(*service)")
+    //    @After("execution(* cn.item.a_aspect_anno.CustomerService_c.find())")// 具体类的具体方法
+        public void after(JoinPoint jp) {
+            System.out.println(jp);// execution(void cn.item.a_aspect_anno.ProductService.find())
+            System.out.println("最终通知..");
+        }
+    }
+```
+
+- `test.java`
+
+```java
+    @RunWith(SpringJUnit4ClassRunner.class)
+    @ContextConfiguration(locations="classpath:applicationContext.xml")
+    public class ATest {
+
+        @Autowired
+        private CustomerService c;
+
+        @Autowired
+        private ProductService p;
+
+        @Test
+        public void before () {
+            c.save();
+            c.find();
+            ((CustomerService_c) c).update();// 会报错
+            // java.lang.ClassCastException:
+            // com.sun.proxy.$Proxy14 cannot be cast to cn.item.a_aspect_anno.CustomerService_c
+            System.out.println(" -------------------");
+            p.find();
+            p.save();
+        }
+    }
+```
+
+### Spring JdbcTemplate
+
+
