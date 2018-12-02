@@ -1,5 +1,5 @@
 # 0701 Mybatis
-- `font-family: 'Source Code Pro','DejaVu Sans Mono','Ubuntu Mono','Anonymous Pro','Droid Sans Mono',Menlo,Monaco,Consolas,Inconsolata,Courier,monospace,"PingFang SC","Microsoft YaHei",sans-serif;`
+ `font-family: 'Source Code Pro','DejaVu Sans Mono','Ubuntu Mono','Anonymous Pro','Droid Sans Mono',Menlo,Monaco,Consolas,Inconsolata,Courier,monospace,"PingFang SC","Microsoft YaHei",sans-serif;`
 
 ```
     │─user
@@ -30,6 +30,62 @@
 - 概述
 - 解决哪些问题
 - 怎么使用
+
+#### JDBC操作
+```bash
+    1.  注册数据库驱动
+    2.  获取数据库连接
+    3.  创建发送SQL对象
+    4.  执行SQL语句，获取结果
+    5.  遍历结果集
+    6.  关闭资源
+```
+
+#### Maybatis执行sql语句
+
+- `User.java`
+
+- `UserMapper.xml`
+
+```xml
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE mapper
+            PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+            "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    <mapper namespace="UserMapper"><!-- namespace(命名空间)：映射文件的唯一标识 -->
+        <!-- 查询的statement，id：在同一个命名空间下的唯一标识，resultType：sql语句的结果集封装类型 -->
+        <select id="queryUserById" resultType="cn.item.jdbc.User">
+            select * from tb_user where id=#{id}
+        </select>
+    </mapper>
+``
+
+- `mybatis-config.xml`
+
+```xml
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE configuration
+            PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+            "http://mybatis.org/dtd/mybatis-3-config.dtd">
+    <configuration>
+        <environments default="development"><!-- 环境：说明可以配置多个，default:指定生效的环境 -->
+            <environment id="development"><!-- id:环境的唯一标识 -->
+                <transactionManager type="JDBC"/><!-- 事务管理器，type：类型 -->
+                <dataSource type="POOLED"><!-- 数据源：type-池类型的数据源 -->
+                    <property name="driver" value="com.mysql.jdbc.Driver"/>
+                    <property name="url" value="jdbc:mysql://127.0.0.1:3306/fourth"/>
+                    <property name="username" value="root"/>
+                    <property name="password" value="123456"/>
+                </dataSource>
+            </environment>
+        </environments>
+
+        <mappers><!-- 映射文件 -->
+            <mapper resource="UserMapper.xml"/>
+        </mappers>
+    </configuration>
+```
 
 
 
@@ -928,7 +984,7 @@ public void jdk () {
     }
 ```
 
-### Spring JdbcTemplate
+#### Spring JdbcTemplate
 
 
-### SpringMVC
+# SpringMVC
