@@ -3,6 +3,8 @@
 
 ```
     │─user
+    │─software
+    │─luogeger
     │     
     │─dev_env      
     │   ├─jdk
@@ -43,28 +45,41 @@
 
 #### Maybatis执行sql语句
 
+- `使用步骤`
+    - 1.`mybatis-config.xml`
+    - 2.`UserMapper.xml`
+    - 3.创建SqlSessionFactory
+    - 4.获取SqlSession对象   
+    - 5.调用方法，执行语句，操作数据库
+    - 6.提交事务 `session.commit()`
+    - 7.关闭会话 `session.close()`    
+
 - `User.java`
 
 - `UserMapper.xml`
 
 ```xml
     <?xml version="1.0" encoding="UTF-8" ?>
+    <!-- 注意：这里是mapper -->
     <!DOCTYPE mapper
             PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
     <mapper namespace="UserMapper"><!-- namespace(命名空间)：映射文件的唯一标识 -->
-        <!-- 查询的statement，id：在同一个命名空间下的唯一标识，resultType：sql语句的结果集封装类型 -->
+        <!-- 
+            1.查询的statement，id：在同一个命名空间下的唯一标识，
+            2.resultType：sql语句的结果集封装类型, 需要全路径 -->
         <select id="queryUserById" resultType="cn.item.jdbc.User">
-            select * from tb_user where id=#{id}
+            select * from tb_user where id= #{id}
         </select>
     </mapper>
-``
+```
 
 - `mybatis-config.xml`
 
 ```xml
     <?xml version="1.0" encoding="UTF-8" ?>
+    <!-- 注意：这里是configuration -->
     <!DOCTYPE configuration
             PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
             "http://mybatis.org/dtd/mybatis-3-config.dtd">
@@ -81,10 +96,33 @@
             </environment>
         </environments>
 
-        <mappers><!-- 映射文件 -->
+        <mappers><!-- 映射文件, 注意路径 -->
             <mapper resource="UserMapper.xml"/>
         </mappers>
     </configuration>
+```
+
+- `test.java`
+
+```java
+    public static void main(String[] args) throws IOException {
+        SqlSession sqlSession = null;
+        try {
+
+            String resource = "mybatis-config.xml";// 指定mybatis的全局配置文件
+            InputStream inputStream = Resources.getResourceAsStream(resource);// 读取mybatis-config.xml配置文件
+            SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);// 构建sqlSessionFactory
+            sqlSession = sqlSessionFactory.openSession();// 获取sqlSession回话
+
+            User user = sqlSession.selectOne("UserMapper.queryUserById", 5);
+            // 执行查询操作，获取结果集。参数：1_命名空间（namespace）+“.”+statementId, 2_sql的占位符参数
+            System.out.println(user);
+        } finally {
+            if (sqlSession != null) {// 关闭连接
+                sqlSession.close();
+            }
+        }
+    }
 ```
 
 

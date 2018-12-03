@@ -4,6 +4,7 @@
 - design model
 - api document
 - annotation
+- method: get, post, put, delete
 
 # 0101
 
