@@ -4,7 +4,6 @@
 ```
     │─user
     │─software
-    │─luogeger
     │     
     │─dev_env      
     │   ├─jdk
@@ -21,17 +20,20 @@
     │   ├─iso
     │   ├─navicat
     │   ├─vscode
-        
-        
+          
 ```
 
-- 1.引入依赖
-- 2.全局配置文件
-- 3.映射文件
 
-- 概述
-- 解决哪些问题
-- 怎么使用
+- jdbc是获取数据源执行sql语句
+- 读取核心配置文件获取sqlSessionFactory, 在获取sqlSession对象，执行mapper.xml的sql语句
+    - sqlSession是mybatis通过动态代理产生，过程很麻烦，`sqlSession.getMapper(UserMapper.class)`
+    - 映射文件被核心配置文件引入 
+    - 1.sqlSessionFactory, sqlSession, mapper接口的初始化，过于复杂，交给spring
+        - sqlSessionFactory
+        - mapper
+    - 2.mybatis核心配置文件的读取，交给spring
+    - 3.映射文件的引入，交给spring, 之前有4种方式引入映射文件
+
 
 #### JDBC操作
 ```bash
@@ -109,10 +111,10 @@
         SqlSession sqlSession = null;
         try {
 
-            String resource = "mybatis-config.xml";// 指定mybatis的全局配置文件
+            String resource = "mybatis-config.xml";// 指定mybatis的核心配置文件
             InputStream inputStream = Resources.getResourceAsStream(resource);// 读取mybatis-config.xml配置文件
             SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);// 构建sqlSessionFactory
-            sqlSession = sqlSessionFactory.openSession();// 获取sqlSession回话
+            sqlSession = sqlSessionFactory.openSession();// 获取sqlSession对象
 
             User user = sqlSession.selectOne("UserMapper.queryUserById", 5);
             // 执行查询操作，获取结果集。参数：1_命名空间（namespace）+“.”+statementId, 2_sql的占位符参数
@@ -124,8 +126,126 @@
         }
     }
 ```
+> 别名：SELECT *, user_name AS userName FROM tb_user
+
+#### CRUD
+- 接口 + 实现类 + `Mapper.xml`
+    - `UserDao.java`
+
+    ```java
+        public interface UserDao {
+            User queryUserById(Long id);
+
+            List<User> queryUserAll();
+
+            void insertUser(User user);
+
+            void updateUser(User user);
+
+            void deleteUserById(Long id);
+
+        }
+
+    ```
+
+    - `UserDao_c.java`
+
+    ```java
+        public class UserDao_c implements UserDao {
+            private SqlSession sqlSession;
+
+            public UserDao_c(SqlSession sqlSession){
+                this.sqlSession = sqlSession;
+            }
+
+            @Override
+            public User queryUserById(Long id) {
+                return this.sqlSession.selectOne("UserDaoMapper.queryUserById", id);
+            }
+            //@Override ....
+        }
+
+    ```
+
+    - `Mapper.xml`
+
+    ```xml
+        <mapper namespace="UserDaoMapper">
+            <select id="queryUserById"  resultType="cn.item.pojo.User">
+                select *, user_name AS userName from tb_user where id = #{id}
+            </select>
+            
+            .....
+        </mapper>        
+    ```
+
+    - `Test.java`
+
+    ```java
+        import org.apache.ibatis.io.Resources;
+        import org.apache.ibatis.session.SqlSession;
+        import org.apache.ibatis.session.SqlSessionFactory;
+        import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+        public Class UserDaoTest {
+            private UserDao dao;
+
+            @Before
+            pubnlic void setUp() throws Exception {
+                String resouce = "mybatis-cofnig.xml";
+                InputStream is = Resource.getResourceAsStream(resource);
+
+                SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(is);
+                SqlSession session = factory.openSession();
+                this.dao = new UserDao_c(session);
+            }
+
+            @Test
+            public void queryUserById (){
+                User u = this.dao.queryUserById(3L);
+            }
+        }
+    ```
+
+#### 动态代理Mapper实现类
+- **命名空间**必须改成 **接口文件**的全路径
+    - `<mapper namespace="cn.item.Dao.UserDaoMapper">`
+- **statement**必须和接口 **方法名**一致, 以及 **结果集的封装类型**和方法的 **返回类型**一致
+    - `public User queryUserById(Long id) {`
+    - `<select id="queryUserById"  resultType="cn.item.pojo.User">`
+- **parameType**
+    - `select *, user_name AS userName from tb_user where id = #{id}`
+- `Test.java`
+    - ```java
+        private UserMapper userMap;
+        @Before
+        public void setUp() throws Exception{
+            // .....
+            SqlSession sqlSession = sqlSessionFactory.openSession(true);// 表示自动提交事务
+            this.userMap = sqlSession.getMapper(userMap.class);
+        }
+        ```
+
+#### mybatis-config.xml配置
+> mybatis-config.xml讲究严格的顺序
+
+- `configuration`
+    - `properties`
+    - `settings`
+    - `typeAliases`
+    - typeHandlers类处理器
+    - objectFactory对象工厂
+    - plugins插件
+    - `environments`
+        - `environment`
+            - `transactionManager`
+            - `dataSource`
+    - databaseIdProvider数据库厂商标识
+    - `mappers`
 
 
+
+        
 
 # 0704 Spring
 #### 概述
@@ -1023,6 +1143,10 @@ public void jdk () {
 ```
 
 #### Spring JdbcTemplate
+
+#### spring 事务管理机制
+
+#### 声明式事务管理
 
 
 # SpringMVC
