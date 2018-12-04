@@ -23,6 +23,9 @@
           
 ```
 
+- 持久层
+- 业务层
+- 控制层
 
 - jdbc是获取数据源执行sql语句
 - 读取核心配置文件获取sqlSessionFactory, 在获取sqlSession对象，执行mapper.xml的sql语句
