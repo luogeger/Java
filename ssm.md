@@ -1153,3 +1153,34 @@ public void jdk () {
 
 
 # SpringMVC
+
+
+- `web.xml`
+    - spring 监听器
+    - servlet ,springmvc监听器的入口，启动springmvc的框架，
+    - 字符编码过滤器
+
+- `applicationContext.xml`
+    - 只扫描services
+    - 外部资源文件
+    - 数据源交给spring 
+
+- `springmvc-servlet.xml`
+    - 扫描controller
+    - MVC注解驱动
+    - 视图解析器  
+
+- `applicationContext-mybatis.xml`
+    - SqlSessionFactory交给Spring
+        - 数据源
+        - mybaits-config.xml。。
+        - 扫描Mapper文件。。
+        - 别名扫描
+    - Mapper文件交给Spring
+
+- `applicationContext-tx.xml`
+    - 事务
+    - 切面
+
+    
+        
