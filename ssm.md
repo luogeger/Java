@@ -282,7 +282,7 @@
 
     - `Service_c.java`
     ```java
-        // 1.读取配置文件创建工厂对象
+        // 1.读取配置文件创建工厂对象(IOC容器)
         // 2.获取Bean对象，得到的是Object，向下转型，参数是Bean的id
         // 3.调用方法
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -1154,7 +1154,22 @@ public void jdk () {
 
 # SpringMVC
 
+#### RequeatMapping(映射请求)
+- 标准URL映射
 
+- Ant风格的映射(通配符)
+
+- restful风格的映射(占位符)
+
+- 限定请求方法
+
+- 限定请求参数
+
+- 组合注解
+
+
+
+### ssm_travel
 - `web.xml`
     - spring 监听器
     - servlet ,springmvc监听器的入口，启动springmvc的框架，
@@ -1181,6 +1196,35 @@ public void jdk () {
 - `applicationContext-tx.xml`
     - 事务
     - 切面
+
+> 1
+
+- 乱码
+    - 查出来的不乱码，说明是响应的时候乱码，消息转换器把结果转化成json
+    - json => StringHttpMessageConverter, ISO_8859_1;
+    - 重新配置消息转换器 -> 构造器注入配置
+    - `springmvc-servlet.xml`
+        
+- Spring Data Redis
+    - `-redis.xml` p命名空间
+        - `StringRedisSerializable`序列化器
+
+- 精选
+
+- cid, 分页
+
+- 线路详情
+    - 多表查询
+
+- 线路收藏
+    - 用户id在session
+    - 11:19
+    - 联合主键(中间表)
+
+- Mybatis分页插件
+    - 拦截器: 增删改查
+    - `maven`
+    - `mybatis-config.xml`    
 
     
         
