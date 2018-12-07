@@ -1170,6 +1170,8 @@ public void jdk () {
 
 
 ### ssm_travel
+> 1
+
 - `web.xml`
     - spring 监听器
     - servlet ,springmvc监听器的入口，启动springmvc的框架，
@@ -1197,18 +1199,86 @@ public void jdk () {
     - 事务
     - 切面
 
-> 1
+- 静态资源处理，
+    - `<mvc:default-servlet-handler/>`
+    - 其实就是在springMVC框架里面注册了一个bean, 就是一个处理器, 就是转发到静态资源
+
+> 2
 
 - 乱码
     - 查出来的不乱码，说明是响应的时候乱码，消息转换器把结果转化成json
-    - json => StringHttpMessageConverter, ISO_8859_1;
-    - 重新配置消息转换器 -> 构造器注入配置
-    - `springmvc-servlet.xml`
+    - `StringHttpMessageConverter`, ISO_8859_1;(如果controller返回的是字符串，走的就是这个消息器)
+    - 转换器本事是框架默认的，需要重新定义
+    - 在`springmvc-servlet.xml`重新配置消息转换器 -> 构造器注入的方式配置
+    - 
+    ```xml
+        <mvc:annotation-driven>
+            <mvc:message-converters>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <constructor-arg name="defaultCharset" value="UTF-8"/>
+                </bean>
+            </mvc:message-converters>
+        </mvc:annotation-driven>
+    ```
         
 - Spring Data Redis
-    - `-redis.xml` p命名空间
+    - `jar包`
+    ```xml
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>1.7.5.RELEASE</version>
+        </dependency>
+    ```
+    - `applicationContext-redis.xml` 创建配置文件
+        -
+        ```xml
+            <?xml version="1.0" encoding="UTF-8"?>
+            <beans xmlns="http://www.springframework.org/schema/beans"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+                xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+                xmlns:tx="http://www.springframework.org/schema/tx"
+                xsi:schemaLocation="http://www.springframework.org/schema/beans
+                    http://www.springframework.org/schema/beans/spring-beans.xsd
+                    http://www.springframework.org/schema/aop
+                    http://www.springframework.org/schema/aop/spring-aop.xsd
+                    http://www.springframework.org/schema/context
+                    http://www.springframework.org/schema/context/spring-context.xsd
+                    http://www.springframework.org/schema/tx
+                    http://www.springframework.org/schema/tx/spring-tx.xsd">
+                <!-- jedis连接池配置 -->
+                <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+                    <property name="maxTotal" value="${maxtotal}" />
+                    <property name="maxWaitMillis" value="${maxwaitmillis}" />
+                </bean>
+                <!-- jedis连接工厂 p:database表示使用的是第一个数据库
+                    此处采用的是p命名空间的方式注入，需要在头部引入p命名空间
+                -->
+                <bean id="connectionFactory"
+                    class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+                    p:host-name="${host}" p:port="${port}" p:pool-config-ref="poolConfig"
+                    p:database="0">
+                </bean>    
+                <!-- spring data提供的redis模板 -->
+                <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+                    <property name="connectionFactory" ref="connectionFactory"></property>
+                    <!-- 采用字符串类型的key和value序列化 -->
+                    <property name="keySerializer">
+                        <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"></bean>
+                    </property>
+                    <property name="valueSerializer">
+                        <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"></bean>
+                    </property>
+                </bean>
+            </beans>
+        ```
+        - p命名空间
         - `StringRedisSerializable`序列化器
-
+    - 引入配置文件
+        - 
+        ```xml
+            <context:property-placeholder location="classpath:jdbc.properties,classpath:jedis.properties"/>
+        ```
 - 精选
 
 - cid, 分页
@@ -1223,8 +1293,25 @@ public void jdk () {
 
 - Mybatis分页插件
     - 拦截器: 增删改查
-    - `maven`
-    - `mybatis-config.xml`    
+    - `pro.xml`
+    ```xml
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+            <version>0.9.5</version>
+        </dependency>
+    ```
+    - `mybatis-config.xml`
+    ```xml
+        <plugins>
+            <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+        </plugins>
+    ```    
 
     
         
