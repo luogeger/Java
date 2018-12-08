@@ -1314,4 +1314,32 @@ public void jdk () {
     ```    
 
     
-        
+> 3
+
+- Mapping
+
+
+- Example
+    - `or`
+    - `排序`
+    - 创建查询条件对象
+
+- REST
+    - 表述性状态转移
+    - Web服务的架构风格
+    - 无状态性
+
+- get 
+
+- post
+    - 字符编码过滤
+    - ResponseEntity<Void>
+    - build()
+
+- put 不能提交表单数据
+    - `HeepPutFormContentFilter` 过滤器，在web.xml配置
+
+
+
+
+    
