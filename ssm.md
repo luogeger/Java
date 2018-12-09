@@ -1316,15 +1316,157 @@ public void jdk () {
     
 > 3
 
-- Mapping
-
+- Mybatis通用Mapper只支持单表
+    - `maven`
+    ```xml
+        <dependency>
+			<groupId>com.github.abel533</groupId>
+			<artifactId>mapper</artifactId>
+			<version>2.3.4</version>
+        </dependency>
+    ```
+    - `mybatis-config.xml`: 一定要放在分页插件的后面，容易出问题
+    ```xml
+        <plugin interceptor="com.github.abel533.mapperhelper.MapperInterceptor">
+			<!--主键自增回写方法,默认值MYSQL,详细说明请看文档 -->
+			<property name="IDENTITY" value="MYSQL" />
+			<!--通用Mapper接口，多个通用接口用逗号隔开 -->
+			<property name="mappers" value="com.github.abel533.mapper.Mapper" />
+        </plugin>
+    ```
+    - Mapper接口要继承`com.github.abel533.mapper.Mapper`, 而且还有泛型
+        - `public interface NewUserMapper extends Mapper<User>`
+        - 既然不用写Mapper.xml文件，就对实体类有约束, => 注解约束
+            - 默认驼峰转_
+            - 1.表名：`@Table(name = "tab_user")`
+            - 2.字段名：`@Column(name = "fieldName")`
+            - 3.忽略属性：`@Transient`, 基于内存的，不需要持久化
+            - 4.建议有一个`@Id`注解作为主键的字段，也可以有多个`@Id`注解的字段作为联合主键
+                - `@GenerateValue(generator = "JDBC")` : MyBatis使用JDBC的getGeneratedKeys 方法来取出由数据库内部生成的主键, `SELECT LAST_INSERT_ID()`
 
 - Example
-    - `or`
-    - `排序`
-    - 创建查询条件对象
+    ```java
+        @RunWith(SpringJUnit4ClassRunner.class)
+        @ContextConfiguration("classpath:spring/applicationContext*.xml")
+        public class NewUserMapperTest {
+            @Autowired
+            private NewUserMapper userMapper;
 
-- REST
+            @Test
+            public void test1 () {
+                // 构造条件
+                User u = new User();
+                u.setName("乔峰");
+                System.out.println(userMapper.selectOne(u));// null
+                // Preparing: SELECT EMAIL,STATUS,USERNAME,NAME,CODE,UID,TELEPHONE,PASSWORD,SEX,BIRTHDAY FROM tab_user WHERE NAME = ? AND UID = ?
+                // Parameters: 乔峰(String), 0(Integer)
+                // Total: 0
+                // --> private Integer uid
+            }
+
+            @Test
+            public void test2 () {
+                System.out.println(userMapper.selectOne(null));
+                // Caused by: org.apache.ibatis.exceptions.TooManyResultsException:
+                // Expected one result (or null) to be returned by selectOne(), but found: 3
+            }
+
+            @Test// 查询所有
+            public void test3 () {
+                User u = new User();
+                u.setSex("男");
+                System.out.println(userMapper.select(u));
+            }
+
+            @Test// 主键查询
+            public void test4 () {
+                User u = new User();
+                System.out.println(userMapper.selectByPrimaryKey(8));
+            }
+
+            @Test// 新增 (全表插入)
+            public void test5 () throws Exception {
+                User u = new User();
+                u.setUsername("jack");
+                u.setPassword(Md5Util.encodeByMd5("890"));
+                u.setName("杰克");
+                u.setStatus("N");
+                u.setCode(UuidUtil.getUuid());
+                userMapper.insert(u);
+                // INSERT INTO tab_user (EMAIL,STATUS,UID,USERNAME,NAME,CODE,TELEPHONE,PASSWORD,SEX,BIRTHDAY) VALUES ( ?,?,?,?,?,?,?,?,?,? )
+            }
+
+            @Test// 选择性插入
+            public void test6 () throws Exception {
+                User u = new User();
+                u.setUsername("jack123");
+                u.setPassword(Md5Util.encodeByMd5("890"));
+                u.setName("杰克123");
+                u.setStatus("N");
+                u.setCode(UuidUtil.getUuid());
+                userMapper.insertSelective(u);
+                // INSERT INTO tab_user ( STATUS,UID,USERNAME,NAME,CODE,PASSWORD ) VALUES ( ?,?,?,?,?,? )
+            }
+
+            @Test// 全表更新, 没有重新赋值的字段会变成null, 会丢失数据
+            public void test7 () throws Exception {
+                User u = new User();
+                u.setUid(13);
+                u.setUsername("jack123890");
+                u.setPassword(Md5Util.encodeByMd5("890"));
+                u.setName("杰克123890");
+                u.setStatus("Y");
+                u.setCode(UuidUtil.getUuid());
+                userMapper.updateByPrimaryKey(u);
+            }
+
+            @Test// 选择性更新
+            public void test8 () {
+
+            }
+
+            @Test// 主键删除
+            public void test9 () {
+                User u = new User();
+                u.setUid(13);
+                userMapper.deleteByPrimaryKey(13);
+            }
+
+            @Test// 根据用户名删除
+            public void test10 () {
+                User u = new User();
+                u.setUsername("jack123890");
+                userMapper.delete(u);
+            }
+
+            @Test// or 查询
+            public void test11 () {
+                Example ex = new Example(User.class);
+
+                Example.Criteria criteria = ex.createCriteria();
+                criteria.andEqualTo("sex", "男");// 是属性名字，不是字段名
+
+                Example.Criteria criteria2 = ex.createCriteria().andGreaterThanOrEqualTo("birthday", "2018-11-01");
+                //Example.Criteria criteria2 = ex.createCriteria();
+                //criteria2.andGreaterThan("birthday", "2018-11-01");
+
+                ex.or(criteria2);// 目前只有前面一个条件
+
+                ex.setOrderByClause("uid desc");// 排序
+                List<User> users = userMapper.selectByExample(ex);
+                for (User user : users) {
+                    System.out.println(user);
+                }
+            }
+
+            @Test// 排序
+            public void test12 () {
+
+            }
+        }// end
+    ```
+
+- REST **Representational State Transfer**
     - 表述性状态转移
     - Web服务的架构风格
     - 无状态性
