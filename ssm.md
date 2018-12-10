@@ -1629,4 +1629,274 @@ public void jdk () {
 
 
 # Lucene
-    
+
+> 文档列表
+
+> 倒排索引列表
+
+#### 创建索引
+
+- `Document` 文档类 
+    - 文档对象，是一条原始的数据
+
+- `Field` 字段类 
+    - 一个Document中可以有很多个不同的字段，每一个字段都是一个Field类的对象。一个Document中的每个字段类型是不确定的，   所以Field类就提供了不同的子类
+    - Field子类一定会被创建索引，但是不一定会被存储。需要同过构造函数中的参数`Store`来指定
+    - 索引 -> 分词 -> 存储
+    - `TextField` 既创建索引，又会被分词
+    - `StringField` 只创建索引，不会被分词，不分词会造成整个字段作为一个词条，除非用户完全匹配，否则搜索不到。
+    - `StoreFiled` 一定会存储，一定不会创建索引，但是可以创建各种数据类型的字段。 == `url`
+
+- `Directory` 目录类 
+    - 指定索引存储的位置
+    - `FSDirectory` 文件系统目录，索引库指向本地磁盘，速度慢，安全
+    - `RAMDirectory` 内存目录，索引库保存在内存，速度快，不安全
+
+- `Analyzer` 分词器类    
+    - `IKAnalyzer` 中文分词器
+    ```xml
+        <dependency>
+            <groupId>com.janeluo</groupId>
+            <artifactId>ikanalyzer</artifactId>
+            <version>2012_u6</version>
+        </dependency>
+    ```
+    - 扩展词典和停用词典
+        - `ext.dic`
+        - `IKAnalyzer.cfg.xml`
+        - `stopword.dic`
+
+- `IndexWriterConfig` 写出器配置类
+
+- `IndexWriter` 写出类
+
+#### 查询索引
+
+#### 修改索引
+
+#### 删除索引
+
+#### 高级使用
+- 高亮显示
+- 排序
+- 分页
+- 得分算法
+
+```java
+public class CRUD {
+    @Test
+    public void createTest () throws IOException {
+        Document doc = new Document();
+
+        doc.add(new StringField("id", "1", YES));
+        doc.add(new TextField("title", "有事儿漂流瓶联系", YES));
+
+        Directory dir = FSDirectory.open(new File("indexDir"));
+
+        //Analyzer analyzer = new StandardAnalyzer();
+        Analyzer analyzer = new IKAnalyzer();// 中文分词器
+
+        IndexWriterConfig conf = new IndexWriterConfig(Version.LATEST, analyzer);
+
+        conf.setOpenMode(IndexWriterConfig.OpenMode.CREATE);// 每次都清空文档列表
+        IndexWriter indexWriter = new IndexWriter(dir, conf);
+
+        indexWriter.addDocument(doc);
+        indexWriter.commit();
+        indexWriter.close();
+
+    }
+
+    @Test// 批量创建索引
+    public void test2 () throws IOException {
+        List<Document> docs = new ArrayList<>();
+        Document doc1 = new Document();
+        doc1.add(new LongField("id", 1, YES));
+        doc1.add(new TextField("title", "谷歌地图之父跳槽facebook", YES));
+        docs.add(doc1);
+
+        Document doc2 = new Document();
+        doc2.add(new LongField("id", 2, YES));
+        doc2.add(new TextField("title", "谷歌地图之父加盟FaceBook", YES));
+        docs.add(doc2);
+
+        Document doc3 = new Document();
+        doc3.add(new LongField("id", 3, YES));
+        doc3.add(new TextField("title", "谷歌地图创始人拉斯离开谷歌加盟facebook", YES));
+        docs.add(doc3);
+
+        Document doc4 = new Document();
+        doc4.add(new LongField("id", 4, YES));
+        doc4.add(new TextField("title", "谷歌地图之父跳槽Facebook与Wave项目取消有关", YES));
+        docs.add(doc4);
+
+        Document doc5 = new Document();
+        doc5.add(new LongField("id", 5, YES));
+        doc5.add(new TextField("title", "谷歌地图之父拉斯加盟社交网站Facebook", YES));
+        docs.add(doc5);
+
+        Directory dir = FSDirectory.open(new File("indexDir"));
+        Analyzer ik = new IKAnalyzer();
+        IndexWriterConfig conf = new IndexWriterConfig(Version.LATEST, ik);
+        conf.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+        IndexWriter writer = new IndexWriter(dir, conf);
+        writer.addDocuments(docs);
+        writer.commit();
+        writer.close();
+
+    }
+
+
+    public void queryTest (Query query) throws Exception {
+        Directory dir = FSDirectory.open(new File("indexDir"));
+        IndexReader reader = DirectoryReader.open(dir);
+        IndexSearcher searcher = new IndexSearcher(reader);
+
+        //QueryParser parser = new QueryParser("title", new IKAnalyzer());
+        //Query query = parser.parse("谷歌地图之父拉斯");
+
+        TopDocs topDocs = searcher.search(query, 7);
+        ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+
+        for (ScoreDoc docObj : scoreDocs) {
+            float docScore = docObj.score;// 文档得分
+            int docID = docObj.doc;// 取出文档编号
+            Document doc = reader.document(docID);// 根据编号找文档
+
+            System.out.println("  ["+ docID +"]  "+ docScore);
+            System.out.println(doc.get("id") +" >> "+ doc.get("title"));
+        }
+    }
+
+    @Test// 单一查询解析器
+    public void test3 () throws Exception {
+        QueryParser parser = new QueryParser("title", new IKAnalyzer());
+        Query query = parser.parse("拉斯");
+        queryTest(query);
+    }
+
+    @Test// 多字段查询
+    public void test4 () throws Exception {
+        MultiFieldQueryParser parser = new MultiFieldQueryParser(new String[]{"id", "title"}, new IKAnalyzer());
+        Query query = parser.parse("3");
+        queryTest(query);
+    }
+
+    @Test// 自定义查询对象，通过Query的子类，直接创建查询对象，实现高级查询
+    public void test5 () {
+
+    }
+
+    // 索引搜索对象，执行搜索功能， IndexSearcher依赖IndexReader类，实现快速搜索、排序、打分
+    @Test// Term: 词条查询， 词条是不能再分词的单位，用于不可分割的字段查询，要求字段的类型必须是字符串
+    public void test6 () throws Exception {
+        TermQuery query = new TermQuery(new Term("id", "1"));
+        queryTest(query);
+    }
+
+    @Test// WildcardQuery: 通配符查询， ？表示任意一个字符，*表示任意多个任意字符
+    public void test7 () throws Exception {
+        Query query = new WildcardQuery(new Term("title", "*斯*"));
+        queryTest(query);
+    }
+
+    @Test// FuzzyQuery: 模糊查询，最大的编辑距离不能超过2
+    public void test8 () throws Exception {
+        FuzzyQuery query = new FuzzyQuery(new Term("title", "aave"));
+        queryTest(query);
+    }
+
+    @Test// NumericRangeQuery: 数值范围查询，可以用来对非String类型的ID进行精确的查找
+    public void test9 () throws Exception {
+        Query query = NumericRangeQuery.newLongRange("id", 1L, 3L, true, true);
+        queryTest(query);
+    }
+
+    @Test// BooleanQuery: 组合查询 Occur.MUST == Occur.SHOULD == Occur.MUST_NOT
+    public void test10 () throws Exception {
+        Query q1 = NumericRangeQuery.newLongRange("id", 1L, 3L, true, true);
+        Query q2 = NumericRangeQuery.newLongRange("id", 3L, 4L, true, true);
+
+        BooleanQuery query = new BooleanQuery();
+        query.add(q1, BooleanClause.Occur.MUST);
+        query.add(q2, BooleanClause.Occur.MUST);
+
+        queryTest(query);
+    }
+
+    // 修改索引
+    // a: lucene修改功能底层会先删除，再添加
+    // b: 修改功能会根据Term进行匹配，所有匹配到的都会被删除，不安全
+    // c: 所以，一般修改的时候，会根据唯一不重复字段进行匹配修改，(ID)
+    // d: 但是，词条搜索要求ID必须是字符串，如果不是这个方法就不能用
+    // 如果ID非数值类型，不能直接修改，可以手动删除(数值范围查询锁定ID)，再添加
+    @Test
+    public void test11 () throws Exception{
+        Directory directory = FSDirectory.open(new File("indexDir"));
+        IndexWriterConfig config = new IndexWriterConfig(Version.LATEST,new IKAnalyzer());
+        IndexWriter writer = new IndexWriter(directory,config);
+
+        Document document = new Document();
+        document.add(new StringField("id","1", YES));
+        document.add(new TextField("title","修改id为1的词条", YES));
+        //底层先根据词条查询数据，删掉；再添加
+        writer.updateDocument(new Term("id","5"),document);
+        writer.commit();
+        writer.close();
+    }
+
+    // 删除索引
+    // a: 根据ID精确删除
+    // b: 如果是用Term删除，要求ID是字符串类型
+    @Test
+    public void test12 () throws Exception{
+        Directory directory = FSDirectory.open(new File("indexDir"));
+        IndexWriterConfig config = new IndexWriterConfig(Version.LATEST,new IKAnalyzer());
+        IndexWriter writer = new IndexWriter(directory,config);
+
+        Query query = NumericRangeQuery.newLongRange("id", 2L, 2L, true, true);
+		writer.deleteDocuments(query);
+
+		//writer.deleteDocuments(new Term("id", "1"));//词条删除, == 字符串
+        //writer.deleteAll();// 删除所有
+        writer.commit();
+        writer.close();
+    }
+
+
+    @Test// 高亮显示
+    public void highLight () throws Exception {
+        Directory directory = FSDirectory.open(new File("indexDir"));
+        IndexReader reader = DirectoryReader.open(directory);
+        IndexSearcher searcher = new IndexSearcher(reader);
+
+
+        QueryParser parser = new QueryParser("title",new IKAnalyzer());
+        Query query = parser.parse("谷歌地图");
+
+
+        Formatter formatter = new SimpleHTMLFormatter("<em>","</em>");//创建格式化工具
+        Scorer scorer = new QueryScorer(query);
+        Highlighter highlighter = new Highlighter(formatter,scorer);//创建高亮显示工具
+
+        TopDocs topDocs = searcher.search(query, 7);
+        ScoreDoc[] scoreDocs = topDocs.scoreDocs;// 文档列表
+        System.out.println("总共数据: "+ topDocs.totalHits);
+        for (ScoreDoc docObj : scoreDocs) {
+            float docScore = docObj.score;// 文档得分
+            int docID = docObj.doc;// 文档编号
+
+            Document doc = reader.document(docID);// 文档
+            String title = doc.get("title");// 索引title字段
+            String highTitle = highlighter.getBestFragment(new IKAnalyzer(), "title", title);
+
+            System.out.println("id = "+ docID +"  score = "+ docScore +"");
+            System.out.println(highTitle);
+        }
+
+    }
+
+
+
+}// end
+```
