@@ -1169,7 +1169,7 @@ public void jdk () {
 
 
 
-### ssm_travel
+# ssm_travel
 > 1
 
 - `web.xml`
@@ -1471,17 +1471,162 @@ public void jdk () {
     - Web服务的架构风格
     - 无状态性
 
-- get 
+- REST架构原则
+    - 所有的事务都可以被抽象为资源`Resource`  
+    - 每个资源都有唯一的标识符`Resource Identifier`, 
+    - 同一资源具有多种表现形式`xml`, `json`
+    - 而且对资源的操作不会改变标识符
+    - 所有的操作都是无状态的`Stateless`
+        - 服务器只需要处理当前的 request，不必了解前面 request的历史，当前请求完成就可以释放资源
+        - 服务器可以充分利用 Pool技术来提高稳定性和性能
+    - 符合REST原则的架构方式就可以称为`RESTful`    
+    
+- REST架构设计
+    - 接口`URL`
+        - 协议，地址，名称，？参数列表
+        - 不使用大写字母，`-`代替`_`，参数列表被`encode`过
+    - 响应
+        - `Content body`仅仅用来传输数据，不需要拆箱
+        - 描述数据或请求的 **元数据**放在`Header`中，
+    - 指定响应属性字段
 
-- post
-    - 字符编码过滤
-    - ResponseEntity<Void>
-    - build()
+- **Status Code**
+    - 200 `OK`查询成功
+    - 201 `Created`新增成功
+    - 202 `Accepted`请求被接受
+    - 204 `No Content`修改，删除执行，但是没有返回数据
+    - 301 `Moved Permanently`资源永久移除
+    - 302 `Moved Temporarily`资源暂时移除
+    - 303 `See Other`重定向
+    - 304 `Not Modified`缓存
+    - 400 `Bad Required`请求参数错误
+    - 401 `Unauthorized`未授权
+    - 404 `NOT_FOUND`
+    - 405 `Method Not Allowed`请求方式错误，不允许的http方法
+    - 409 `Conflict`资源冲突，或者资源被锁定
+    - 415 `Unsupported Media Type`不支持的数据(媒体)类型
+    - 429 `Too Many Requests`请求过多被限制
+    - 500 `Internal Server Error`服务器错误
+    - 501 `Not Implemented`接口未实现
+    - 505 `Http Version not supported`
 
-- put 不能提交表单数据
-    - `HeepPutFormContentFilter` 过滤器，在web.xml配置
+
+- **GET**
+
+```java
+    @Controller
+    @RequestMapping("rest/user")
+    public class NewUserController {
+        @Autowired
+        private UserService userService;
+
+        // 根据uid查询用户 == 1.请求方式 2.请求参数 3.没有数据 4.异常 5.响应实体(泛型类)
+        @GetMapping("{uid}")
+        public ResponseEntity<User> fineUserById(@PathVariable("uid")Integer uid) {
+            try {
+                if (uid  <= 0 || uid == null) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                }
+                User u = userService.findUserById(uid);
+                if (u == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                }
+                return ResponseEntity.ok().body(u);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+        }
+    }
+```
+
+- **post**
+```java
+    @PostMapping
+    public ResponseEntity<Void> createUser(User user) {// 这个参数从哪里来, from-data数据形式，乱码
+        System.out.println(user);
+        try {
+            // username非空验证
+            if (StringUtils.isEmpty(user.getUsername())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();// 构建空的实体
+            }
+            Boolean flag = userService.createdUser(user);
+            if (flag){
+                return ResponseEntity.status(HttpStatus.CREATED).build();// 构建空的实体
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+```
+
+- **put** 不能提交表单数据
+    - `web.xml`配置过滤器
+    ```xml
+        <!--解决put请求无法提交表单数据的问题-->
+        <filter>
+            <filter-name>HttpPutFormContentFilter</filter-name>
+            <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+        </filter>
+        <filter-mapping>
+            <filter-name>HttpPutFormContentFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+    ```
+    
+    ```java
+        @PutMapping// 修改
+        public ResponseEntity<Void> updateUser(User user) {// 这个参数从哪里来, from-data数据形式，乱码
+            try {
+                if (StringUtils.isEmpty(user.getUid())) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                }
+
+                Boolean flag = userService.updateUser(user);
+                if (flag) {
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    ```
+
+- **delete**
+    - `web.xml`配置过滤器，最主要的是请求体要携带参数 `_method`:`delete`
+    ```xml
+        <!-- 将POST请求转化为PUT或DELETE请求，要用_method参数来指定真正的请求方式-->
+        <filter>
+            <filter-name>HiddenHttpMethodFilter</filter-name>
+            <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+        </filter>
+        <filter-mapping>
+            <filter-name>HiddenHttpMethodFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+    ```
+
+    ```java
+        @DeleteMapping// 删除
+        public ResponseEntity<Void> deleteUser(User user) {
+            try {
+                if (StringUtils.isEmpty(user.getUid())) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                }
+
+                Boolean flag = userService.deleteUser(user.getUid());
+                if (flag) {
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    ```
 
 
-
-
+# Lucene
     
