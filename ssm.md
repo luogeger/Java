@@ -1900,3 +1900,12 @@ public class CRUD {
 
 }// end
 ```
+
+
+# solr
+
+#### jetty启动solr服务
+
+#### tomcat启动solr服务
+- `solr.war`在`tomcat`启动需要额外的jar包, 在`jetty`运行不需要
+- 在`catalina.bat`指定`solr`的目录
