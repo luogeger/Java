@@ -1902,10 +1902,152 @@ public class CRUD {
 ```
 
 
-# solr
+# Solr
 
-#### jetty启动solr服务
+- `Lucene`
+    - 用于 **全文搜索**的开源程序库，由Apache基金会支持和提供
+    - 提供简单强大的应用程序接口(API), 在Java开发环境里Lucene是成熟免费的开源代码工具
+    - Lucene并不是现成的搜索引擎产品，但是可以用来制作搜索引擎产品
+- `Solr`
+    - **企业级搜索应用服务器** 对外提供API接口。用户通过http请求像搜索服务器提交相应格式的文件生成索引，也可以通过http访问提出查找请求。
+    - **基于Lucene的全文搜索服务器** 同时进行了扩展，提供比Lucene更为丰富的查询语言，实现了可配置、可扩展，并且对查询性能进行了优化，还提供了完善的功能管理界面
 
-#### tomcat启动solr服务
+#### jetty启动Solr服务
+- 进入`solr-4.10.2\example`目录执行`java -jar start.jar`
+- 访问`127.0.0.1:8983/solr`
+
+#### tomcat启动Solr服务
 - `solr.war`在`tomcat`启动需要额外的jar包, 在`jetty`运行不需要
-- 在`catalina.bat`指定`solr`的目录
+- 在`tomcat\bin\catalina.bat`指定`solr`的目录：
+    - 配置`set "JAVA_OPTS=-Dsolr.solr.home=D:\dev_src\solr-4.10.2\example\solr"`
+
+#### Solr管理页面
+
+#### Solr的Core
+> 在 **Solr** 中，每一个 **Core** 代表一个索引库，里面包含索引数据及其配置信息
+
+> **Solr** 中可以拥有多个 **Core**，也就是同事管理多个索引库，就像 **Mysql**中的 **database**
+
+```bash
+│─solr                           
+│   ├─core                      
+│   │   ├─conf                  # 配置文件目录
+│   │   │   ├─schema.xml        # 字段及字段约束信息
+│   │   │   ├─solrconfig.xml    # 索引库的相关配置
+│   │   │   ├─...               
+│   │   ├─data                  # 索引数据目录
+│   │   ├─core.properties       # Core的自身属性
+│   │   ├─README.txt
+```
+
+- `core.properties`
+    - 记录当前 **Core** 的名称、索引位置、配置文件名称等信息，也可以不写，一般要求`name`值和文件夹名称一致
+        - `name=core01`
+
+- `schema.xml`
+> Solr会提前对文档中的字段进行定义，并且在`schema.xml`中对这些字段的属性进行约束，例如：字段的数据类型、是否索引、是否存储、是否分词....
+
+    ```xml
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <schema name="example" version="1.5">
+            <field name="_version_" type="long" indexed="true" stored="true"/>
+            <field name="_root_" type="string" indexed="true" stored="false"/>
+            <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /> 
+            <field name="title" type="text_ik" indexed="true" stored="true" multiValued="false"/>
+            <field name="text" type="text_ik" indexed="true" stored="false" multiValued="true"/>
+
+            <dynamicField name="*_i"  type="int"    indexed="true"  stored="true"/>
+            <uniqueKey>id</uniqueKey>
+
+            <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+            <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
+            <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
+            <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
+            <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+            <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+            <fieldType name="text_ik" class="solr.TextField">
+                <analyzer class="org.wltea.analyzer.lucene.IKAnalyzer"/>
+                <!-- <tokenizer class="solr.WhitespaceTokenizerFactory"/> -->      
+            </fieldType>
+        </schema>
+    ```
+
+- `sclrconfig.xml`
+    - 第三方扩展插件的jar包, 相对路径是相对于索引库的路径
+    ```xml
+        <lib dir="../contrib/extraction/lib" regex=".*\.jar" />
+        <lib dir="../dist/" regex="solr-cell-\d.*\.jar" />
+
+        <lib dir="../contrib/clustering/lib/" regex=".*\.jar" />
+        <lib dir="../dist/" regex="solr-clustering-\d.*\.jar" />
+
+        <lib dir="../contrib/langid/lib/" regex=".*\.jar" />
+        <lib dir="../dist/" regex="solr-langid-\d.*\.jar" />
+
+        <lib dir="../contrib/velocity/lib" regex=".*\.jar" />
+        <lib dir="../dist/" regex="solr-velocity-\d.*\.jar" />
+    ```
+    - `<requestHandler/>`标签
+    ```xml
+        <requestHandler name="/select" class="solr.SearchHandler">
+            <lst name="defaults">
+                <str name="echoParams">explicit</str>
+                <int name="rows">10</int>
+                <str name="df">title</str>
+            </lst>
+        </requestHandler>
+    ```
+    - `<initParams/>`
+    - `<updateHandler/>`
+    - `<query/>`
+    - `<requestDispatcher/>`
+    - `<updateProcessor/>`
+    - `<updateProcessorChain/>`
+
+#### Solr引入Mysql数据
+- 在`core\conf\solrconfig.xml`导入插件依赖
+    ```xml
+    <lib dir="../dist/" regex="solr-dataimporthandler-\d.*\.jar" />
+    <requestHandler name="/import" class="org.apache.solr.handler.dataimport.DataImportHandler">
+        <lst name="defaults">
+            <str name="config">db-data-config.xml</str>
+        </lst>
+    </requestHandler>
+    ```
+
+- 在`core\conf\schemal.xml`设置Slolr索引库字段信息匹配Mysql数据库的字段类型
+    ```xml
+        <field name="id" type="long" indexed="true" stored="true" required="true" multiValued="false" /> 
+        <field name="title" type="text_ik" indexed="true" stored="true" multiValued="false"/>     
+        <field name="price"  type="long" indexed="true" stored="true"/>
+    ```
+
+- 数据库连接驱动jar包, 放在`WEB-INF\lib`目录下
+    - `mysql-connector-java-5.1.32.jar`
+
+- 连接数据库配置文件`db-data-config.xml`, 放在在`core\conf`目录下
+    ```xml
+    <?xml version="1.0" encoding="UTF-8" ?>  
+    <dataConfig>
+        <dataSource type="JdbcDataSource"
+                driver="com.mysql.jdbc.Driver"
+                url="jdbc:mysql://localhost:3306/solr" 
+                user="root"
+                password="123"/>
+                
+        <document>
+            <entity name="item" query="select id,title,price from items"><!-- 执行sql语句 -->
+                <field column="id" name="id"/><!-- 如果字段与数据库列不一致，可以通过<field>来设置 -->
+            </entity>
+        </document>
+    </dataConfig>   
+    ```
+
+- 启动报错：修改了`id`字段的类型，`core\conf\solrconfig.xml`配置文件中的组件出错，注释即可
+    ```xml
+    <searchComponent name="elevator" class="solr.QueryElevationComponent" >
+        <!-- pick a fieldType to analyze queries -->
+        <str name="queryFieldType">string</str>
+        <str name="config-file">elevate.xml</str>
+    </searchComponent>
+    ```
