@@ -1,3 +1,5 @@
+- performance logs
+
 # 0701 Mybatis
  `font-family: 'Source Code Pro','DejaVu Sans Mono','Ubuntu Mono','Anonymous Pro','Droid Sans Mono',Menlo,Monaco,Consolas,Inconsolata,Courier,monospace,"PingFang SC","Microsoft YaHei",sans-serif;`
 
@@ -2015,16 +2017,6 @@ public class CRUD {
     </requestHandler>
     ```
 
-- 在`core\conf\schemal.xml`设置Slolr索引库字段信息匹配Mysql数据库的字段类型
-    ```xml
-        <field name="id" type="long" indexed="true" stored="true" required="true" multiValued="false" /> 
-        <field name="title" type="text_ik" indexed="true" stored="true" multiValued="false"/>     
-        <field name="price"  type="long" indexed="true" stored="true"/>
-    ```
-
-- 数据库连接驱动jar包, 放在`WEB-INF\lib`目录下
-    - `mysql-connector-java-5.1.32.jar`
-
 - 连接数据库配置文件`db-data-config.xml`, 放在在`core\conf`目录下
     ```xml
     <?xml version="1.0" encoding="UTF-8" ?>  
@@ -2033,8 +2025,8 @@ public class CRUD {
                 driver="com.mysql.jdbc.Driver"
                 url="jdbc:mysql://localhost:3306/solr" 
                 user="root"
-                password="123"/>
-                
+                password="123456"/>
+
         <document>
             <entity name="item" query="select id,title,price from items"><!-- 执行sql语句 -->
                 <field column="id" name="id"/><!-- 如果字段与数据库列不一致，可以通过<field>来设置 -->
@@ -2043,7 +2035,18 @@ public class CRUD {
     </dataConfig>   
     ```
 
-- 启动报错：修改了`id`字段的类型，`core\conf\solrconfig.xml`配置文件中的组件出错，注释即可
+- 在`core\conf\schemal.xml`设置Slolr索引库字段信息匹配Mysql数据库的字段类型
+    ```xml
+        <field name="id" type="long" indexed="true" stored="true" required="true" multiValued="false" /> 
+        <field name="title" type="text_ik" indexed="true" stored="true" multiValued="false"/>     
+        <field name="price"  type="long" indexed="true" stored="true"/>
+    ```
+
+- 数据库连接驱动jar包, 放在`tomcat\webapps\solr\WEB-INF\lib`目录下
+    - `mysql-connector-java-5.1.32.jar`
+
+- tomcat启动报错：`Error initializing QueryElevationComponent`
+    - 因为修改了`id`字段的类型，`core\conf\solrconfig.xml`配置文件中的组件出错，注释即可
     ```xml
     <searchComponent name="elevator" class="solr.QueryElevationComponent" >
         <!-- pick a fieldType to analyze queries -->
@@ -2051,3 +2054,107 @@ public class CRUD {
         <str name="config-file">elevate.xml</str>
     </searchComponent>
     ```
+
+     
+# SolrCloud
+
+#### 单点服务器的问题
+- 高并发，tomcat 200左右，最大连接数限制，导致无法承载高并发，
+    - 访问同一个服务器，但是是不同的模块
+    - 同一瞬间，触发同一个操作
+- 单点故障
+    - 停电，断网，死机，重启...
+- 大数据
+    - 单表的数据量很大，都是几千万的数据量
+
+```
+    最初提高计算机性能的主要方法是通过提高CPU主频和总线带宽，
+    但是，这一方法对系统性能的提升是有限的。
+    后来通过增加CPU个数和内存容量来提高性能，出现向量机，对称多处理机(SMP)...
+    但是，当CPU的个数超过一定阈值，多处理机系统的可扩展性就变的极差。
+    主要瓶颈在CPU访问内存的带宽并不能随着CPU数量的增加而有效增加。
+    与SMP相反，集群系统的性能随着CPU数量的增加几乎是线性变化。
+```
+
+#### 集群
+> 解决高并发，单点故障转移。集群是将多台服务器集中在一起，每台服务器都 **实现相同的业务**，做相同的事情。但是每台服务器并不是缺一不可，存在的作用是缓解并发压力和故障转移问题。可以使用廉价的硬件构造高性能系统，实现高扩展、高性能、低成本、高可用。
+
+- 伸缩性 `Scalability`
+- 高性能 `High Performance`
+- 高可用性 `High availability`
+- 负载均衡 `Load balancing`
+
+**实现**
+- 每个`tomcat` **应用服务器**的访问地址不同(`ip`), 需要同一地址
+- tomcat挂载到`NginX` **web服务器下面**，`NignX`的负载均衡有轮询策略
+    -  但是也有问题，因为服务器有差异，处理请求的能力不一样。(线程池算法)
+    - `NginX`能够承受有限`5万`
+- 此时，每个tomcat的功能都是一样的，解决了高并发，大数据，单点故障的问题，但是有**NginX**的单点故障的问题，NginX需要备份，通过**keep-alived**保持联系，此时NginX2处于**冷备份**。
+    - lvs 解决热备份也down机的问题， 只接受请求，由NginX响应给用户
+
+**弊端**
+- 系统庞大难以维护
+- 所有的功能模块耦合在一起，无法对针对单个模块进行优化
+- 每个功能模块的压力是不一样的，但是功能模块集中在一起，无法对高并发模块进行水平扩展
+
+#### 分布式架构
+- 分布式：把多台服务器集中到一起，每台实现总体业务中的 **不同功能**，从业务功能家督大幅度的提高效率，缓解服务器的访问和存储压力
+- 如果某台服务器故障，网站对应的功能缺失，也可能导致依赖功能或全部功能丧失
+- 因此，分布式系统需要运行在集群服务器中，甚至分布式系统的每个不同子任务都可以部署集群
+                   
+
+#### 分布式集群架构
+
+#### 代理技术
+- 正向代理 `Forward Proxy`
+    - 访问本来无法访问的服务器
+    - 加速访问
+    - 缓存作用
+    - 客户端访问授权
+    - 隐藏访问者的行踪
+
+
+- 反向代理 `Reverse Proxy`
+    - 保护和隐藏原始资源服务器
+    - 负载均衡
+        - 当反向代理服务器不止一个的时候，可以做成集群，当很多用户访问资源服务器的时候，让不同的代理去响应不同的用户，然后发送不同的资源。而且反向代理和正向代理一样拥有缓存的作用，可以缓存资源服务器的资源，而不是每次都要像资源服务器请求数据，特别是一些静态资源，比如图片和文件
+
+
+#### Zookeeper分布式协调服务
+
+**集群结构**
+- Zookeeper
+    - `leader` 只能有一个，
+    - `follower` 多个，
+- 全局数据一致
+- 数据更新原子性
+- 实时性：**在一定时间范围内**， 用户能读到最新数据
+- 半数机制
+
+**leader选主机制**
+- 全新集群
+- 非全新集群
+
+**Zookeeper作用**
+- 命名服务
+- 配置维护
+- 集群选主
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- 11:20 yum install lr
+- 11:59
+- jsp
+- scr
