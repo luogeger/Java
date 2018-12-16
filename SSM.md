@@ -1542,7 +1542,7 @@ public void jdk () {
     }
 ```
 
-- **post**
+- **POST**
 ```java
     @PostMapping
     public ResponseEntity<Void> createUser(User user) {// 这个参数从哪里来, from-data数据形式，乱码
@@ -1563,7 +1563,7 @@ public void jdk () {
     }
 ```
 
-- **put** 不能提交表单数据
+- **PUT** 不能提交表单数据
     - `web.xml`配置过滤器
     ```xml
         <!--解决put请求无法提交表单数据的问题-->
@@ -1596,7 +1596,7 @@ public void jdk () {
         }
     ```
 
-- **delete**
+- **DELETE**
     - `web.xml`配置过滤器，最主要的是请求体要携带参数 `_method`:`delete`
     ```xml
         <!-- 将POST请求转化为PUT或DELETE请求，要用_method参数来指定真正的请求方式-->
@@ -2139,22 +2139,8 @@ public class CRUD {
 - 命名服务
 - 配置维护
 - 集群选主
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 - 11:20 yum install lr
 - 11:59
 - jsp
 - scr
+

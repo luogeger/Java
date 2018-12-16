@@ -4107,6 +4107,12 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - `history` 查看操作历史
     - `whoami` 查看当前用户
 
+- 查看版本信息
+    - `cat /etc/issue`
+    - `cat /proc/version`
+    - `yum -y install redhat-lsb`
+    - `lsb_release -a`
+
 - 目录操作
     -  `pwd` (Print Working Directory) 查看当前目录
     -  `cd` (Change Directory) 切换目录 
