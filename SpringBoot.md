@@ -151,7 +151,78 @@
 
 #### mapper
 - jdbc
-    - `spring-boot-starter-jdbc` 内置连接池 `Starter for using JDBC with the HikariCP connection pool`
-    - 
+    - mysql驱动
+    - jdbc启动器
+        - `spring-boot-starter-jdbc` 内置连接池 `Starter for using JDBC with the HikariCP connection pool`, 只需要配置内置的jdbc启动器就可以了
+        - `application.properties` 配置连接信息 
 - mybatis
+    - mybatis启动器
+    - 通用Mapper启动器：pojo使用了通用mapper的注解
+    - `UserMapper.java`继承通用Mapper`Mapper<User>`
+    - 加注解，实现接口扫描`@org.apache.ibatis.annotations.Mapper`
+
+#### service    
 - transaction
+
+
+
+
+
+
+
+
+
+# SpringCloud
+
+#### provider
+
+#### consumer
+
+#### 注册中心
+
+- 导入依赖
+- 覆盖默认配置
+    - `server.port` : `10086`
+    - `spring.application.name` : `eureka_service`
+    - `eureka.client.service-url.defaultZone` : `http://localhost:10086/eureka`
+- 添加注解
+    - `@EnableEurekaServer` 
+
+#### 服务列表
+
+> **service-provider**
+
+- `provider.pom`
+    - 版本号
+        - ```xml
+            <spring-cloud.version>Finchley.SR2</spring-cloud.version>
+        ```
+    - 依赖管理
+        - ```xml
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework.cloud</groupId>
+                        <artifactId>spring-cloud-dependencies</artifactId>
+                        <version>${spring-cloud.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+        ```
+    - 组件
+        - ```xml
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            </dependency>
+        ```
+- `application.yml` 注册到服务中心
+    - `spplication.name` : `provider`
+    - `erueka.client.service-url.defaultZone` : `http://localhost:10086/eureka`
+- `ProviderApplication.java` 启动客户端功能
+    - `@EnableDiscoveryClient` : `SpringCloud`
+
+> **service-consumer**    
+
