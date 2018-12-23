@@ -524,7 +524,7 @@ public class CRUD {
 - 启动器的父工程
 - 引导类
     - `@EnableAutoConfiguration`
-    - `@ComponentScan` :开启终结扫描
+    - `@ComponentScan` :开启组件扫描
     - `@SpringBootApplication` ：相当于上面两个注解 + `@SpringBootCongfiguration`
         - `@SpringBootCongfiguration` ：相当于`@Configuration`
    
@@ -690,17 +690,17 @@ public class CRUD {
 ### Eureka
 - `/jʊ'rikə/`
 - 服务注册中心
-    - `Eureka`的服务端应用，提供服务 **注册和发现**功能
+    - `Eureka`的服务端应用，提供服务**注册和发现**功能
 - 服务提供者
     - 提供服务的应用，可以是`SpringBoot`应用，也可以是其他技术实现，只要对外提供的Rest风格的服务就行。
 - 服务消费者
     - 消费应用从注册中心获取服务列表，得知每个服务提供者的信息，知道去哪里调用服务
 
-#### provider_service: 服务提供者
+> **provider_service: 服务提供者**
 
-#### consumer_service: 服务消费者
+> **consumer_service: 服务消费者**
 
-#### eureka_service: 服务注册中心
+> **eureka_service: 服务注册中心**
 
 - 导入依赖
 - `application.yml` 覆盖默认配置
@@ -846,3 +846,76 @@ public class CRUD {
         续订小于阈值，因此实例未过期判断为安全。
         DS副本
     ```    
+
+### Ribbon
+- Ribbon是Netflix发布的负载均衡器，助于控制HTTP合同TCP客户端的行为。为Ribbon配置服务提供者地址列表以后，可以基于算法，自动地帮助服务消费者去请求。Ribbon默认提供了一些算法，轮询、随机...
+
+- 在`public RestTemplate restTemplate() {`上注解`@LoadBalanced` 就是开启了ribbon的负载均衡
+- `this.restTemplate.getForObject("http://provider_service/user/" + id, User.class)`
+- 测试
+    - 启动多个服务提供者
+    - ip，端口的配置，在`provider-service`
+        - `instance: prefer-ip-address: false`,  `instance: ip-address: 192.168.150.1`
+    - 随机的测试，在`consumer.yml`配置
+        - ```yaml
+            provider-service: #提供者的id
+                ribbon:
+                    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+        ```        
+
+### Hystrix
+- Hystix是Netflix开源的一个延迟和容错库，用于隔离访问远程服务、第三方库，防止出现级联失败。
+
+> **熔断现象**：一个请求需要很多个微服务协同完成，如果卡在某个服务会造成内存溢出。需要采取**线程隔离**、**服务降级**的技术手段来解决。熔断的触发有2中情况，一种线程池满了，另一种请求超时。
+
+- 如果一个服务经常熔断，那么这个服务就是故障服务，Hystrix会主动切断服务，处于`open`状态，**5秒**之内不再接受请求，之后处于半开状态`half open`，然后放行部分请求，查看还能不能连接上服务，如果能连上就进入闭合状态`closed`, 如果还连接又回到`open`状态，周而复始。
+    - `closed`: 请求正常访问
+    - `open`: 请求都会被降级。Hystrix会对请求计数，当一定时间请求的失败比例超过阈值，就会触发熔断，进入`open`状态。默认失败比例的阈值是50%，请求次数不低于20次。
+    - `half open`: 
+
+- 熔断的参数
+    - ```xml
+        requestVolumeThreshold：触发熔断的最小请求次数，默认20
+        errorThresholdPercentage：触发熔断的失败请求最小占比，默认50%
+        sleepWindowInMilliseconds：休眠时长，默认是5000毫秒
+    ```    
+
+
+> **服务降级**：优先保证核心服务，而非核心服务不可用或弱可用。用户的请求故障时，不会被阻塞，更不会无休止的等待或看到系统崩溃，至少可以看到一个执行结果(返回友好提示)。服务降级虽然会导致**请求失败**，但是不会导致阻塞，最多对这个依赖服务对应的线程池中的资源造成影响，**最主要**的是不会对其他服务有影响，更快的释放资源，不至于宕机。
+
+- 消费方处理请求超时
+- `依赖`
+```xml
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+    </dependency>
+```
+- `覆盖默认配置`
+- `添加注解`: 在`ServiceConsumerApplication.java`上添加`@EnableCircuitBreaker`, 开启熔断注解 
+    - 组合注解：`@SpringCloudApplication`
+- 首先，熔断是对远程调用进行熔断，    
+
+> **线程隔离**：
+
+### Feign
+- Feign是Netflix开发的声明式、模板化的HTTP客户端。Feign可以把Rest请求进行隐藏，伪装成SpringMVC的Controller一样。不用拼接URL、参数等操作，一切可以交给Feign去做。
+- Spring Cloud对Feign进行了增强，使得Feign支持了SpringMVC注解，并且整理Ribbon和Eureka，让Feign的使用更加方便
+- Spring Cloud中使用Feign非常简单，创建一个接口，并且在接口上添加一些注解，代码就完成了
+- 不需要`RestTemplate` == 远程调用，也不需要`@DefaultProperties` == 熔断功能
+
+> **远程访问** 消费者从服务列表获取服务, 
+
+- 依赖
+- 注解`@EnableFeignClients`， 在引导类加
+- 覆盖配置
+- 定义**接口**，添加注解`@FeignClient("[服务名]")` ，接口里面定义的方法不用方法体，熔断方法来重写
+- 通过注入接口的动态代理对象使用，底层也是`RestTemplate`
+
+> Feign集成了Hystrix, 默认是关闭的
+
+- `feign.hystrix.enabled: true`, 开启Feign的负载均衡功能，只需要继承
+- Feign接口添加实现类，给哪个方法添加熔断方法，就实现哪个方法，
+- 产生关联，添加注解`@FeignClient(value = "[服务名]", fallback = "[clazz]")`
+
+### Zuul

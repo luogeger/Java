@@ -5,7 +5,7 @@
 - api document
 - annotation
 - method: get, post, put, delete
-
+- reflect，proxy
 # 0101
 
 #### 1. 常量 6种
@@ -40,10 +40,10 @@
 
 |     1.7     |    1.8    | 9.0  |
 | :---------: | :-------: | :--: |
-|             | 默认方法，静态方法 | 私有方法 |
-|             |  Lambda   |      |
-|  系统行分隔符号：   |           |      |
-| 1.7之前处理io异常 |           |   **   |
+|        -     | 默认方法，静态方法 | 私有方法 |
+|        -     |  Lambda   |      |
+|  系统行分隔符号：   |      -     |      |
+| 1.7之前处理io异常 |        -   |   -   |
 
 
 # 0108
@@ -4273,3 +4273,5 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - 先解压 :`tar -xvf apache-tomcat-7.0.57.tar.gz`
     - 再启动 ：在`bin`目录下启动`startup.sh`
     - 启动查看日志 : `./startup.sh && tail -f ../logs/catalina.out` 
+
+
