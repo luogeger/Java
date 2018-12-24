@@ -294,20 +294,22 @@ public class CRUD {
 #### Solr管理页面
 
 #### Solr的Core
-> 在 **Solr** 中，每一个 **Core** 代表一个索引库，里面包含索引数据及其配置信息
-
-> **Solr** 中可以拥有多个 **Core**，也就是同事管理多个索引库，就像 **Mysql**中的 **database**
+> 在 **Solr** 中，每一个 **Core** 代表一个索引库，里面包含索引数据及其配置信息。 **Solr** 中可以拥有多个 **Core**，也就是同事管理多个索引库，就像 **Mysql**中的 **database**
 
 ```bash
-│─solr                           
-│   ├─core                      
-│   │   ├─conf                  # 配置文件目录
-│   │   │   ├─schema.xml        # 字段及字段约束信息
-│   │   │   ├─solrconfig.xml    # 索引库的相关配置
-│   │   │   ├─...               
-│   │   ├─data                  # 索引数据目录
-│   │   ├─core.properties       # Core的自身属性
-│   │   ├─README.txt
+solr
+├── contrib
+├── core                      
+│   ├── conf                  # 配置文件目录
+│   │   ├─ schema.xml          # 字段及字段约束信息
+│   │   ├─ solrconfig.xml      # 索引库的相关配置
+│   │   ├─ ...  
+│   ├── data                  # 索引数据目录
+│   ├── core.properties       # Core的自身属性
+│   └── README.txt
+├── dist
+
+
 ```
 
 - `core.properties`
@@ -315,6 +317,7 @@ public class CRUD {
         - `name=core01`
 
 - `schema.xml`
+
 > Solr会提前对文档中的字段进行定义，并且在`schema.xml`中对这些字段的属性进行约束，例如：字段的数据类型、是否索引、是否存储、是否分词....
 
     ```xml
@@ -514,6 +517,8 @@ public class CRUD {
 
 # SpringBoot
 
+> SpringBoot是基于Spring来构建，可以理解是对Spring的简化，快速构建Spring应用。SpringCloud是利用SpringBoot简化构建分布式应用。
+
 #### 概述
 - spring体系的一部分，创建独立的spring应用程序
 - 内嵌tomcat，jetty，undertow，不需要打包成war包部署，自动配置spring和第三方库
@@ -687,6 +692,29 @@ public class CRUD {
 
 
 # SpringCloud
+
+- `Eureka` 
+    - `Eureka Server`
+    - `Eureka Client`
+    - `Eureka 高可用`
+    - `服务发现机制`
+- `Config` 同一配置中心
+    - `Config Server`
+    - `Config Client`
+    - `Spring Cloud Bus` 结合`RabibtMQ`实现自动刷新
+- `Ribbon` 服务通信，负载均衡
+    - `RestTemplate` 
+    - `Feign`
+    - `分析源码，了解底层`
+- `Hystrix` 微服务API
+    - 动态路由，校验
+- `Zuul`
+    - 熔断机制
+
+**容器编排，服务追踪**
+- `docker`
+- `RANCHER`    
+
 ### Eureka
 - `/jʊ'rikə/`
 - 服务注册中心
@@ -919,3 +947,7 @@ public class CRUD {
 - 产生关联，添加注解`@FeignClient(value = "[服务名]", fallback = "[clazz]")`
 
 ### Zuul
+
+
+
+
