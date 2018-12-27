@@ -1503,6 +1503,7 @@ public void jdk () {
     - 304 `Not Modified`缓存
     - 400 `Bad Required`请求参数错误
     - 401 `Unauthorized`未授权
+    - 403 `Forbidden` 被禁止
     - 404 `NOT_FOUND`
     - 405 `Method Not Allowed`请求方式错误，不允许的http方法
     - 409 `Conflict`资源冲突，或者资源被锁定
