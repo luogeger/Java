@@ -1511,6 +1511,8 @@ public void jdk () {
     - 429 `Too Many Requests`请求过多被限制
     - 500 `Internal Server Error`服务器错误
     - 501 `Not Implemented`接口未实现
+    - 502 `Bad Gateway` 
+    - 504 `Gateway Timeout`
     - 505 `Http Version not supported`
 
 
