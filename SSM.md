@@ -1319,6 +1319,8 @@ public void jdk () {
 > 3
 
 - Mybatis通用Mapper只支持单表
+    - **方法**
+        - `selectByIdList(List<String>)`
     - `maven`
     ```xml
         <dependency>
