@@ -1320,7 +1320,7 @@ public void jdk () {
 
 - Mybatis通用Mapper只支持单表
     - **方法**
-        - `selectByIdList(List<String>)`
+        - `selectByIdList(List<String>)`: `Mapper`要继承`SelectByIdListMapper<Category, Long>`
     - `maven`
     ```xml
         <dependency>
