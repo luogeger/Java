@@ -4,6 +4,7 @@
 
 > 倒排索引列表
 
+
 #### 创建索引
 
 - `Document` 文档类 
@@ -47,10 +48,12 @@
 #### 删除索引
 
 #### 高级使用
+
 - 高亮显示
 - 排序
 - 分页
 - 得分算法
+
 
 ```java
 public class CRUD {
@@ -265,9 +268,6 @@ public class CRUD {
         }
 
     }
-
-
-
 }// end
 ```
 
@@ -303,13 +303,11 @@ solr
 │   ├── conf                  # 配置文件目录
 │   │   ├─ schema.xml          # 字段及字段约束信息
 │   │   ├─ solrconfig.xml      # 索引库的相关配置
-│   │   ├─ ...  
+│   │   └──...  
 │   ├── data                  # 索引数据目录
 │   ├── core.properties       # Core的自身属性
 │   └── README.txt
-├── dist
-
-
+└── dist
 ```
 
 - `core.properties`
@@ -519,13 +517,14 @@ solr
 
 > SpringBoot是基于Spring来构建，可以理解是对Spring的简化，快速构建Spring应用。SpringCloud是利用SpringBoot简化构建分布式应用。
 
-#### 概述
+
+#### overview
 - spring体系的一部分，创建独立的spring应用程序
 - 内嵌tomcat，jetty，undertow，不需要打包成war包部署，自动配置spring和第三方库
 - 启动器依赖，不会有版本冲突，简化配置文件
 
 
-#### 启动器
+#### 启动器starter
 - 启动器的父工程
 - 引导类
     - `@EnableAutoConfiguration`
@@ -535,7 +534,7 @@ solr
    
 
 
-#### 默认配置    
+#### default_config    
 - **配置文件**注入
     - `jdbc.properties`
     - `JdbcConfig.java`
@@ -951,3 +950,57 @@ solr
 
 
 
+# ElasticSearch
+
+- 介绍
+- 安装
+- 运行
+- 操作
+
+- 创建用户
+- 下载elasticsearch
+- 退出到root用户， 修改权限
+- chown youyou:youyou elasticsearch-6.3
+- chmod 755(777)
+    - 所属组，所属用户
+- 切换Youyou用户
+- 解压
+- 重命名, 任何地方都可以用
+    - mv ela6.4 ela
+- 启动在bin下面启动，修改配置文件
+    - jvm.options参数
+        - Xms512m, Xmx512 
+    - elasticsearch.yml
+        - 数据保存在某个目录(索引库)
+            - path:data:/home/youyou/elasticsearch/data
+        - 日志目录
+            - path.logs:/home/youyou/elasticsearch/logs
+        - mkdir data
+        - 默认情况只允许本地连接
+            - network.host: 0.0.0.0(允许所有ip访问)
+- 在bin目录下启动，
+    - ./elasticesearch
+    - 需要高版本过滤器，syscall(内核过低)            
+        - elasticsearch.yml禁用配置，最下方添加
+            - bootstrap.system_call_filter: false
+    - 文件权限不足
+        - 修改系统配置文件，切换到root用户 
+    - 线程数量不够        
+        - vim /etc/se添加配置
+    - 虚拟内存不够
+    - 刷新 `sysctl -p`
+- 有2个端口，
+    - 9200 ：独立端口
+    - 9300 ：云服务端口
+
+### Kibana        
+- config/elasticsearch.url\
+- ik-analysis
+    - 复制到 plugins目录下
+    - `unzip elasticsearch.6.3.0.zip -d ik-analyzer` 解压到当前新建的`ik-analyzer`目录下
+        - 一定要删除解压包 ``
+    - 在重新启动
+- 测试ik分词器
+
+### API
+- 

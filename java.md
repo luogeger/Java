@@ -6,6 +6,8 @@
 - annotation
 - method: get, post, put, delete
 - reflect，proxy
+
+
 # 0101
 
 #### 1. 常量 6种
@@ -4106,6 +4108,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - `poweroff`: 立刻关机
     - `history` 查看操作历史
     - `whoami` 查看当前用户
+    - `su - roming` 切换用户
 
 - 查看版本信息
     - `cat /etc/issue`
@@ -4130,8 +4133,10 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     -  `rm` (remove) 删除文件，
         - `rm index.html` 删除文件
         - `rm -rf  blog` 删除目录
+        - `rm -rf *` 删除当前目录下的所有
     -  `mv` (move) 剪切或重命名，
         - `mv index.html ./demo/index.html`
+        - `` 重命名
     -  `cp` (copy) 复制文件
         - `cp -r bbb/ /usr/local`: 复制当前目录`bbb`以及里面的内容听到`/usr/local`
     - `find` : `find /usr/local/ -name 'b'`        
@@ -4159,6 +4164,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         - `tar -zcvf ab.tar a.txt b.txt`: 压缩
         - `rm -rf *.txt` :再删除`a.txt`和`b.txt`
         - `tar -zxvf ab.tar` ： 再解压
+    - - `unzip elasticsearch.6.3.0.zip -d ik-analyzer` 解压到当前新建的`ik-analyzer`目录下        
 
 - 进程
     - `ps -ef`：查看进程
@@ -4167,21 +4173,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 - 网络端口
     - `ping`
     - `ifconfig | more` ：查看网络配置信息
-    - `netstat -an | grep 8080`: 查看端口
-    - ```
-        # cd /etc/sysconfig/network-scripts/
-        # ls // 如果有个eth1文件就删除[前提是只用了NAT模式]
-        # vi ifcfg-eth0 
-
-        DVICE=eth0
-        TYPE=Ethernet
-        ONBOOT=yes
-        NM_CONTROLLED=yes
-        BOOTPROTO=static
-        IPADDR=192.168.146.132
-        NETMASK=255.255.255.0
-        DNS1=192.168.146.2
-    ```    
+    - `netstat -an | grep 8080`: 查看端口    
 
 - 设置静态ip
     
