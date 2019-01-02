@@ -953,6 +953,7 @@ solr
 # ElasticSearch
 
 - 介绍
+    - 不支持 root 用户
 - 安装
 - 运行
 - 操作

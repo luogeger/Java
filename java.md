@@ -4107,8 +4107,16 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - `reboot` : 立刻重启
     - `poweroff`: 立刻关机
     - `history` 查看操作历史
+
+- 用户操作    
     - `whoami` 查看当前用户
     - `su - roming` 切换用户
+    - `useradd roming` 添加用户
+    - `userdel -f roming` **彻底**删除用户
+
+- 权限操作
+    - `chown roming:roming elastic` 修改目录`elastic`的所属权限
+    - `chomod 755(777)`
 
 - 查看版本信息
     - `cat /etc/issue`
@@ -4136,7 +4144,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         - `rm -rf *` 删除当前目录下的所有
     -  `mv` (move) 剪切或重命名，
         - `mv index.html ./demo/index.html`
-        - `` 重命名
+        - `mv elasticsearch-6.3.0/ elasticsearch` 重命名
     -  `cp` (copy) 复制文件
         - `cp -r bbb/ /usr/local`: 复制当前目录`bbb`以及里面的内容听到`/usr/local`
     - `find` : `find /usr/local/ -name 'b'`        
