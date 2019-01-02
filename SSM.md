@@ -1495,6 +1495,7 @@ public void jdk () {
     - 指定响应属性字段
 
 - **Status Code**
+    - [常见状态码](https://www.cnblogs.com/phpfeng/p/9247142.html)
     - 200 `OK`查询成功
     - 201 `Created`新增成功
     - 202 `Accepted`请求被接受
@@ -1633,5 +1634,7 @@ public void jdk () {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     ```
+
+
 
 
