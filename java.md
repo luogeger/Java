@@ -4108,6 +4108,12 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - `poweroff`: 立刻关机
     - `history` 查看操作历史
 
+- 查看版本信息
+    - `cat /etc/issue`
+    - `cat /proc/version`
+    - `yum -y install redhat-lsb`
+    - `lsb_release -a`
+
 - 用户操作    
     - `whoami` 查看当前用户
     - `su - roming` 切换用户
@@ -4115,14 +4121,8 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - `userdel -f roming` **彻底**删除用户
 
 - 权限操作
-    - `chown roming:roming elastic` 修改目录`elastic`的所属权限
-    - `chomod 755(777)`
-
-- 查看版本信息
-    - `cat /etc/issue`
-    - `cat /proc/version`
-    - `yum -y install redhat-lsb`
-    - `lsb_release -a`
+    - `chown roming:roming elasticsearch-6.3.0.tar.gz`
+    - `chmod 777 elasticsearch-6.3.0.tar.gz`
 
 - 目录操作
     -  `pwd` (Print Working Directory) 查看当前目录
@@ -4172,23 +4172,26 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         - `tar -zcvf ab.tar a.txt b.txt`: 压缩
         - `rm -rf *.txt` :再删除`a.txt`和`b.txt`
         - `tar -zxvf ab.tar` ： 再解压
-    - - `unzip elasticsearch.6.3.0.zip -d ik-analyzer` 解压到当前新建的`ik-analyzer`目录下        
+    - `unzip elasticsearch.6.3.0.zip -d ik-analyzer` 解压到当前新建的`ik-analyzer`目录下       
 
 - 进程
     - `ps -ef`：查看进程
-    - `kill -9 1`: 强制杀死进程，`-9`== 强制， `1`==PID    
-    
+    - `kill -9 1`: 强制杀死进程，`-9`== 强制， `1`==PID
+
 - 网络端口
     - `ping`
     - `ifconfig | more` ：查看网络配置信息
-    - `netstat -an | grep 8080`: 查看端口    
+    - `netstat -an | grep 8080`: 查看端口  
+    - `service iptables status`: 查看防火墙状态
+        - `service iptables stop`: 一次性关闭
+        - 永久关闭  
 
-- 设置静态ip
-    
-```
-# ifconfig eth0 up // 权限不够
-# chkconfig --level 2345 network on // 网络服务在系统启动级别是2345时默认启动
-```    
+
+        
+- 其他
+    - `ifconfig eth0 up` : 权限不够
+    - `chkconfig --level 2345 network on` : 网络服务在系统启动级别是2345时默认启动
+   
 
 
 - 时间

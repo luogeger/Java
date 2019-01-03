@@ -953,43 +953,71 @@ solr
 # ElasticSearch
 
 - 介绍
-    - 不支持 root 用户
 - 安装
+    - **不支持 root 用户**
+    - 在`youyou`用户的权限下上传`elastic`，在`root`用户下修改tar包的权限
+        - `chown youyou:youyou elasticsearch-6.3.0.tar.gz`
+        - `chmod 777 elasticsearch-6.3.0.tar.gz`
+    - 解压：切换到`youyou`用户下解压
+        - `tar -zxvf elasticsearch-6.3.0.tar.gz`
+    - 重命名，任何地方都可以用
+- 修改配置
+    - `jvm.options` 内存占用太多了，调小一些
+        ```xml
+        -Xms512m
+        -Xmx512m
+        ```
+    - `elasticsearch.yml`
+        - 日志目录
+            - `path.logs:/home/youyou/elasticsearch/logs`
+        - 数据保存在某个目录(索引库)
+            - `path:data:/home/youyou/elasticsearch/data`
+        - **mkdir data** 一定记住要创建这个目录，
+        - 默认情况只允许本地连接
+            - `network.host: 0.0.0.0`(允许所有ip访问)
 - 运行
+    - `bin`目录执行`./elasticsearch`, 会有**4**个报错
+
+```xml
+    [o.e.b.JNANatives         ] unable to install syscall filter: 
+    java.lang.UnsupportedOperationException: seccomp unavailable: requires kernel 3.5+ with CONFIG_SECCOMP and CONFIG_SECCOMP_FILTER compiled in ......
+
+
+    ERROR: [4] bootstrap checks failed
+    [1]: max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]
+    [2]: max number of threads [1024] for user [youyou] is too low, increase to at least [4096]
+    [3]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+    [4]: system call filters failed to install; check the logs and fix your configuration or disable system call filters at your own risk
+```
+- 处理运行报错
+    - `4` 过滤器需要高版本的内核，所以禁用。
+        - `elasticsearch.yml`禁用配置，最下方添加
+            - `bootstrap.system_call_filter: false`
+    - `1` 文件权限不足, 当前用户是`youyou`不是`root`
+        - **切换到root用户**，修改配置文件
+            - `vim /etc/security/limits.conf`, 添加一下内容
+            ```yaml
+                * soft nofile 65536
+                * hard nofile 131072
+                * soft nproc 4096
+                * hard nproc 4096
+            ```
+    - `2` 线程数量不够        
+        - `vim /etc/security/limits.d/90-nproc.conf`
+            - `soft nproc 1024` 修改为 `4096`
+    - `3` 虚拟内存不够: `vm.max_map_count`限制一个进程可以拥有的VMA(虚拟内存区域)的数量
+        - `vim /etc/sysctl.conf` 添加 `vm.max_map_count=655360` 执行 `sysctl -p` 刷新
+    - **切换用户， 错误修改完毕一定要重启终端，否则配置无效**
+
+
 - 操作
 
-- 创建用户
-- 下载elasticsearch
-- 退出到root用户， 修改权限
-- chown youyou:youyou elasticsearch-6.3
-- chmod 755(777)
-    - 所属组，所属用户
-- 切换Youyou用户
-- 解压
-- 重命名, 任何地方都可以用
-    - mv ela6.4 ela
 - 启动在bin下面启动，修改配置文件
     - jvm.options参数
         - Xms512m, Xmx512 
     - elasticsearch.yml
-        - 数据保存在某个目录(索引库)
-            - path:data:/home/youyou/elasticsearch/data
-        - 日志目录
-            - path.logs:/home/youyou/elasticsearch/logs
-        - mkdir data
-        - 默认情况只允许本地连接
-            - network.host: 0.0.0.0(允许所有ip访问)
 - 在bin目录下启动，
     - ./elasticesearch
-    - 需要高版本过滤器，syscall(内核过低)            
-        - elasticsearch.yml禁用配置，最下方添加
-            - bootstrap.system_call_filter: false
-    - 文件权限不足
-        - 修改系统配置文件，切换到root用户 
-    - 线程数量不够        
-        - vim /etc/se添加配置
-    - 虚拟内存不够
-    - 刷新 `sysctl -p`
 - 有2个端口，
     - 9200 ：独立端口
     - 9300 ：云服务端口
