@@ -1007,29 +1007,70 @@ solr
             - `soft nproc 1024` 修改为 `4096`
     - `3` 虚拟内存不够: `vm.max_map_count`限制一个进程可以拥有的VMA(虚拟内存区域)的数量
         - `vim /etc/sysctl.conf` 添加 `vm.max_map_count=655360` 执行 `sysctl -p` 刷新
-    - **切换用户， 错误修改完毕一定要重启终端，否则配置无效**
+    - **切换youyou用户**再次执行， 部分用户修改完毕需要重启终端，否则配置无效
+    - 启动很慢，成功以后`publish_address {192.168.150.129:9200}, bound_addresses {[::]:9200}`
+        - `9200`：独立端口，`9300`：云服务端口
 
+### Kibana   
+- 修改配置，`config\kibana.yml`
+    - `elasticsearch.url: "192.168.150.129:9200"`
+- 双击`bin\kibana.bat`启动
 
-- 操作
-
-- 启动在bin下面启动，修改配置文件
-    - jvm.options参数
-        - Xms512m, Xmx512 
-    - elasticsearch.yml
-- 在bin目录下启动，
-    - ./elasticesearch
-- 有2个端口，
-    - 9200 ：独立端口
-    - 9300 ：云服务端口
-
-### Kibana        
-- config/elasticsearch.url\
-- ik-analysis
-    - 复制到 plugins目录下
-    - `unzip elasticsearch.6.3.0.zip -d ik-analyzer` 解压到当前新建的`ik-analyzer`目录下
-        - 一定要删除解压包 ``
-    - 在重新启动
-- 测试ik分词器
+- 测试分词
+    - ```json
+        POST _analyze
+        {
+            "text":     "我是中国人"
+        }
+    ```
+    - 发现不能中文分词
+- 安装`ik-analysis`
+    - 复制到`/home/youyou/elasticsearch/plugins`目录下
+    - `unzip elasticsearch.6.3.0.zip -d ik-analyzer`：解压到当前新建的`ik-analyzer`目录下
+        - **一定要删除解压包**, 再重新启动
+    - 测试ik分词器
+    - ```json
+        POST _analyze
+        {
+            "analyzer": "ik_max_word",
+            "text":     "我是中国人"
+        }
+    ```
 
 ### API
-- 
+
+- 索引库 `indices`
+    - 类型 `type`
+        - 文档 `document`
+            - 字段 `field`
+
+> 索引库
+
+- 创建索引库: 请求方式，索引库名，json格式
+    - ```json
+        PUT second
+        {
+        "settings": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+        }
+    ```
+
+- 查看索引库：`GET second`
+    - 查看所有的索引库：`GET *`
+- 删除索引库：`DELETE second`
+    -     
+
+
+
+> 映射配置
+
+映射就是定义文档的过程，文档包含哪些字段，字段是否索引，是否分词，是否保存...
+
+
+
+> 
+
+> 
+
