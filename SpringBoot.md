@@ -1013,7 +1013,7 @@ solr
 
 ### Kibana   
 - 修改配置，`config\kibana.yml`
-    - `elasticsearch.url: "192.168.150.129:9200"`
+    - `elasticsearch.url: "http://192.168.150.129:9200"`
 - 双击`bin\kibana.bat`启动
 
 - 测试分词
@@ -1074,3 +1074,4 @@ solr
 
 > 
 
+### 高级查询

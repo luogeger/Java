@@ -4182,11 +4182,12 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - `ping`
     - `ifconfig | more` ：查看网络配置信息
     - `netstat -an | grep 8080`: 查看端口  
+    - `/etc/init.d/iptables status` 查看打开的端口
     - `service iptables status`: 查看防火墙状态
         - `service iptables stop`: 一次性关闭
-        - 永久关闭  
-
-
+        - `` 永久关闭  
+        - `` 永久开启
+    
         
 - 其他
     - `ifconfig eth0 up` : 权限不够
