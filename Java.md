@@ -505,15 +505,15 @@ Collections.sort(list, new Comparator<String>() {
 
 > **Map 是双列集合，Collection是单列集合，它们都是超级父接口**
 
-1. 特点：由哈希控制键，能保证唯一性
-2. 区别：单列集合一次只能存一个对象，对象之间没有任何关系。双列集合一次可以存两个对象，两个对象只有有映射关系。
-3. 常用方法：
-   1. ``put``
-   2. ``remove``
-   3. ``get``
-   4. ``clear``
-   5. ``containsKey`` ``containsValue``
-   6. ``keySet``   ``entrySet``
+- 1.特点：由哈希控制键，能保证唯一性
+- 2.区别：单列集合一次只能存一个对象，对象之间没有任何关系。双列集合一次可以存两个对象，两个对象只有有映射关系。
+- 3.常用方法：
+   - `put`
+   - `remove`
+   - `get`
+   - `clear`
+   - `containsKey` `containsValue`
+   - `keySet`   `entrySet`
 
 ```java
 // keySet
