@@ -948,6 +948,9 @@ solr
 ### Zuul
 
 
+# FastDFS
+
+> 分布式文件系统（Distributed File System）是指文件系统管理的物理存储资源不一定直接连接在本地节点上，而是通过计算机网络与节点相连。
 
 
 # ElasticSearch
