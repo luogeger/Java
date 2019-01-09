@@ -1075,3 +1075,12 @@ solr
 > 
 
 ### 高级查询
+
+
+# RabbitMQ
+
+- simple
+- work
+- fanout
+- direct
+- topic
