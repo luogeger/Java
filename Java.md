@@ -4187,8 +4187,9 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         - `service iptables restart` 再重启
     - `service iptables status`: 查看防火墙状态
         - `service iptables stop`: 一次性关闭
-        - `` 永久关闭  
-        - `` 永久开启
+        - `chkconfig iptables off` 永久关闭  
+        - `chkconfig iptables on` 永久开启
+    - 查看有哪些自启动服务        
     
         
 - 其他
