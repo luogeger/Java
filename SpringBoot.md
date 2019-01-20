@@ -982,9 +982,9 @@ solr
     - 重命名，任何地方都可以用
 - 修改配置
     - `jvm.options` 内存占用太多了，调小一些
-        ```xml
-        -Xms512m
-        -Xmx512m
+        ```text
+          -Xms512m
+          -Xmx512m
         ```
     - `elasticsearch.yml`
         - 日志目录
@@ -997,7 +997,7 @@ solr
 - 运行
     - `bin`目录执行`./elasticsearch`, 会有**4**个报错
 
-```xml
+```text
     [o.e.b.JNANatives         ] unable to install syscall filter: 
     java.lang.UnsupportedOperationException: seccomp unavailable: requires kernel 3.5+ with CONFIG_SECCOMP and CONFIG_SECCOMP_FILTER compiled in ......
 
@@ -1036,7 +1036,7 @@ solr
 - 双击`bin\kibana.bat`启动
 
 - 测试分词
-    - ```json
+    - ```text
         POST _analyze
         {
             "text":     "我是中国人"
@@ -1048,7 +1048,7 @@ solr
     - `unzip elasticsearch.6.3.0.zip -d ik-analyzer`：解压到当前新建的`ik-analyzer`目录下
         - **一定要删除解压包**, 再重新启动
     - 测试ik分词器
-    - ```json
+    - ```text
         POST _analyze
         {
             "analyzer": "ik_max_word",
@@ -1066,13 +1066,13 @@ solr
 > 索引库
 
 - 创建索引库: 请求方式，索引库名，json格式
-    - ```json
+    - ```text
         PUT second
         {
-        "settings": {
-            "number_of_shards": 1,
-            "number_of_replicas": 0
-        }
+            "settings": {
+                "number_of_shards": 1,
+                "number_of_replicas": 0
+            }
         }
     ```
 
@@ -1094,6 +1094,9 @@ solr
 > 
 
 ### 高级查询
+
+# 页面静态化
+
 
 
 # RabbitMQ

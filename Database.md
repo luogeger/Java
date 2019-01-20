@@ -680,7 +680,7 @@ public class D_comboPooled_test {
 #### C3P0
 - 基本用法：
 
-```javascript
+```javascript 1.5
     ComboPooledDataSource cpds = new ComboPooledDataSource();
     cpds.setDriverClass("com.mysql.jdbc.Driver");
     cpds.setJdbcUrl("jdbc:mysql://localhost:3306/fourth");
@@ -721,6 +721,7 @@ PreparedStatement pst =null;
 ResultSet rs =null;
 ```
 
+
 #### DRUID
 - 配置文件的参数，通常放在`src`目录下
     - `url` : `"jdbc:mysql://localhost:3306/third"`
@@ -743,7 +744,7 @@ ResultSet rs =null;
     - `Connection conn = ds.getConnection();`
     
 - **案例**
-```javascript
+```java
     Properties p = new Properties();
     InputStream file = E_druid.class.getClassLoader().getResourceAsStream("druid.properties");
     p.load(file);
@@ -841,3 +842,8 @@ ResultSet rs =null;
         
     }
 ```
+
+# ORACLE
+
+- 表里的值区分大小写
+- 隐形转换，字符串转成数字
