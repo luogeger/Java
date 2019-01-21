@@ -8,7 +8,7 @@
 - reflect，proxy
 
 
-# 0101
+# base-0101
 
 #### 1. 常量 6种
 
@@ -37,7 +37,6 @@
 | 双精度浮点 | double (默认) | 8         | `4.9E-324` ~ `1.7977E+308` |
 | 布尔型   | boolean     | 1         | `true` `false`  |
 
-
 #### 3. java develop kit
 
 |     1.7     |    1.8    | 9.0  |
@@ -46,7 +45,6 @@
 |        -     |  Lambda   |      |
 |  系统行分隔符号：   |      -     |      |
 | 1.7之前处理io异常 |        -   |   -   |
-
 
 # 0108
 ### String
@@ -180,8 +178,6 @@
         System.out.println(name);//输出
     }
 ```
-
-
 
 #### 2. for增强
 
@@ -352,7 +348,6 @@ public class T01 {
 }
 
 ```
-
 
 # 0203
 ## 一、  Collection  /kə'lɛkʃən/ 集合 
@@ -1318,7 +1313,6 @@ public class P01 {
 }
 ```
 
-
 # 0209	I/O流
 
 - 字节流：输入、输出
@@ -1550,7 +1544,6 @@ public class io_Exception {
     }
 }// end
 ```
-
 
 # 0210	
 
@@ -1840,8 +1833,7 @@ public class B_Properties {
 }
 ```
 
-
-# 0211	Socket
+# Socket-0211	
 
 - **复制文件：字节流 -> 字符流 -> 字符缓冲流** 
 
@@ -2505,7 +2497,7 @@ public @interface G_annotation {
 ### 3.	反射获取注解及使用
 
 
-# 0215 proxy
+# proxy-0215
 ## 1.  Class对象的介绍
 
 ## 2.  Class对象获取的方式
@@ -2599,10 +2591,8 @@ public @interface G_annotation {
     - JDOM: 开源组织的DOM方式的解析技术
         - DOM4J: JDOM的分离版、增强版，开源，DOM解析方式，Hibernate底层的XML解析技术
 
-↑ ↓ ← → ↖ ↗ ↙ ↘
 
-
-满目山河空念远
+满目山河空念远↑ ↓ ← → ↖ ↗ ↙ ↘
 
 this inspection reports all fields, methods or classes, 
 found in the specified inspection scope, 
@@ -2611,14 +2601,12 @@ that may have their access modifier narrowed down
 
 
 
-# 0501
+# Servlet-0501
 
 ### 1. Tomcat
 
-    
 ### 2. Web
-
-    
+ 
 ### 3. Servlet
 > Servlet是运行在服务端的小程序，是SUN公司提供的一套规范，用来处理客户端请求、响应动态web资源给浏览器
 
@@ -2709,7 +2697,10 @@ public interface Servlet {
     - 支持 Servlet异步处理
     - 文件上传 API简化
  
- # 0502
+ 
+ 
+ 
+# REQUEST-0502
  ### 1. HTTP协议
  > HTTP：HyperText Transfer Protocol, 超文本传输协议
  <br>
@@ -2744,6 +2735,7 @@ public interface Servlet {
 
             
  
+ 
  ### 2. HttpServletRequest
  > **HttpServletRequest**对象代表客户端的请求，HTTP请求中的所有信息都封装在这个对象中
  
@@ -2777,6 +2769,7 @@ public interface Servlet {
 - `request.setCharacterEncoding("utf-8");`     
  
  
+ 
  ### 3. request 作用域
 - request 生命周期
     - 1.浏览器向 `Servlet`发送请求
@@ -2806,6 +2799,7 @@ public interface Servlet {
         - ```javascript 
             request.getRequestDispatcher("/about.html").forward(request, response);
             ```
+ 
  
 ### 4. HttpServletResponse
 - 响应行
@@ -2876,7 +2870,10 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 ```
  
  
-# 0504
+ 
+ 
+ 
+# cookie-session-0504
 > cookie 和 session 都是在会话期间产生，作用都是保存数据
 
 ### cookie
@@ -2960,7 +2957,8 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         request.getSession().invalidate("user");
     ```
 
-# 0505
+
+# jsp-0505
 
 ### JSP 
 > `Java Server Page`, 本质是**简化的Servlet**，一种**动态网页**的技术标准，其实就是一个既能书写**Servlet**代码，又能书写**HTML**代码的文件
@@ -3064,7 +3062,8 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 
 
-# 0507
+
+# Filter-0507
 
 ### 1. Filter
 > 过滤器本质是Java中预先定义好了的不同的接口，和Servlet类似。具体怎么过滤，需要定义一个实现类，实现接口中的过滤方法。
@@ -3087,10 +3086,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 ### 3. 映射路径
 
-
-
-
-# 0509 Redis
+# Redis-0509 
 
 - 概述
 - 特点
@@ -3175,7 +3171,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 
 
-# 0510
+# maven-0510
 ### maven
 
 - `bin` : 该目录包含了mvn运行的脚本，分别为mvn、mvn.bat、mvnDebug、mvnDebug.bat和m2.conf，这些脚本用来配置 Java 命令，
