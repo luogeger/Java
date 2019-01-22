@@ -1,6 +1,6 @@
 - performance logs
 
-# 0701 Mybatis
+# Mybatis
  `font-family: 'Source Code Pro','DejaVu Sans Mono','Ubuntu Mono','Anonymous Pro','Droid Sans Mono',Menlo,Monaco,Consolas,Inconsolata,Courier,monospace,"PingFang SC","Microsoft YaHei",sans-serif;`
 
 ```
@@ -252,7 +252,7 @@
 
         
 
-# 0704 Spring
+# Spring
 #### 概述
 
 
@@ -1156,7 +1156,11 @@ public void jdk () {
 
 # SpringMVC
 
-#### RequeatMapping(映射请求)
+> model view controller 负责请求的调度和跳转, **DispatcherServlet**是SpringMVC的总导演，总策划，负责截获请求并分配给相应的处理器进行处理
+
+![](imgs/springmvc.png)
+
+#### RequestMapping(映射请求)
 - 标准URL映射
 
 - Ant风格的映射(通配符)
