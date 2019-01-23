@@ -844,7 +844,6 @@ ResultSet rs =null;
 ```
 
 # ORACLE
-
 - sql增强
     - 表里的值区分大小写
     - 隐形转换，字符串转成数字
@@ -873,4 +872,11 @@ ResultSet rs =null;
     - ROWNUM
     - ROWID        
 
+- 索引
+
 - SELECT * FROM emp t1, emp t2 WHERE t1.sal > t2.sal AND ename = 'SCOTT';
+
+
+# H
+- 主键自增
+- 没有驼峰
