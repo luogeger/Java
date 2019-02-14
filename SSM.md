@@ -1508,17 +1508,20 @@ public void jdk () {
     - 302 `Moved Temporarily`资源暂时移除
     - 303 `See Other`重定向
     - 304 `Not Modified`缓存
-    - 400 `Bad Required`请求参数错误
-    - 401 `Unauthorized`未授权
-    - 403 `Forbidden` 被禁止
+    - 400 `Bad Required`请求参数错误，服务器不理解客户端的请求，未做任何处理
+    - 401 `Unauthorized`未授权，用户未提供身份验证凭据，或者没有通过身份验证
+    - 403 `Forbidden` 被禁止，用户通过身份验证，但是不具备访问资源所需的权限
     - 404 `NOT_FOUND`
     - 405 `Method Not Allowed`请求方式错误，不允许的http方法
     - 409 `Conflict`资源冲突，或者资源被锁定
-    - 415 `Unsupported Media Type`不支持的数据(媒体)类型
-    - 429 `Too Many Requests`请求过多被限制
+    - 410 `Gone`所请求的资源已经从这个地址转移，不再可用
+    - 415 `Unsupported Media Type`不支持的数据(媒体)类型，客户端要求的返回格式不支持。比如API只能返回JSON格式，但是客户端要求返回XML格式。
+    - 422 `Unprocessable Entity` 客户端上传的附件无法处理，导致请求失败
+    - 429 `Too Many Requests`请求过多被限制，客户端的请求次数超过限额
     - 500 `Internal Server Error`服务器错误
     - 501 `Not Implemented`接口未实现
     - 502 `Bad Gateway` 
+    - 503 `Service Unavailable` 服务器无法处理请求，一般用于网站维护状态
     - 504 `Gateway Timeout`
     - 505 `Http Version not supported`
 
