@@ -519,9 +519,11 @@ solr
 
 
 #### overview
-- spring体系的一部分，创建独立的spring应用程序
-- 内嵌tomcat，jetty，undertow，不需要打包成war包部署，自动配置spring和第三方库
-- 启动器依赖，不会有版本冲突，简化配置文件
+- spring体系的一部分，创建独立的spring应用程序，
+    - 内置了servlet容器，内嵌tomcat，jetty，undertow，不需要打包成war包部署 
+    - 提供了默认配置，自动配置spring和第三方库，简化配置文件
+    - 启动器依赖，不会有版本冲突，不会出现混乱的依赖关系
+
 
 
 #### 启动器starter
