@@ -1158,6 +1158,9 @@ public void jdk () {
 
 > model view controller 负责请求的调度和跳转, **DispatcherServlet**是SpringMVC的总导演，总策划，负责截获请求并分配给相应的处理器进行处理
 
+- `<packaging>war</packaging>`
+- 配置`web.xml`
+
 ![](imgs/springmvc.png)
 
 #### RequestMapping(映射请求)
