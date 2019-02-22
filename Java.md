@@ -2706,13 +2706,6 @@ public interface Servlet {
  <br>
  > HTTP/1.0 获得一个web资源，连接断开，HTTP/1.1 可以获得多个web资源，连接断开
  
-- 常见状态码
-    - 302 `move temporaily` (暂时的)：重定向，资源临时从不同的URI 响应
-    - 304 `not modified`
-    - 403 `forbidden` (forbid, permit)
-    - 405 `method not allowed`
-    - 500 `internal server error`
- 
 - 请求方式：
     - 1.`OPTIONS`: 
     - 2.`HEAD`:

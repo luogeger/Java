@@ -1156,14 +1156,80 @@ public void jdk () {
 
 # SpringMVC
 
-> model view controller 负责请求的调度和跳转, **DispatcherServlet**是SpringMVC的总导演，总策划，负责截获请求并分配给相应的处理器进行处理
-
-- `<packaging>war</packaging>`
-- 配置`web.xml`
+- 基于MVC的设计理念，采用松散耦合可插播组件结构，比其他MVC框架更具备扩展性和灵活性
+- **Model View Controller** 负责请求的调度和跳转, **DispatcherServlet**是SpringMVC的总导演，总策划，负责截获请求并分配给相应的处理器进行处理
+- SpringMVC通过一套MVC注解，让POJO成为处理的请求，无需实现任何接口，同时，SpringMVC还支持REST的URL请求
 
 ![](imgs/springmvc.png)
 
-#### RequestMapping(映射请求)
+### start
+
+- `<packaging>war</packaging>`
+- **前端控制器**`web.xml`
+- 配置映射器、适配器、处理器、视图解析器: `springMVC`默认读取`/WEB-INF/{servlet-name}-servlet.xml`这个配置文件
+    - 父类中看源码`DispatcherServlet.java`
+    - SpringMVC都是面向接口，需要配置对应的实现, 而且实现的方式有很多种
+- **映射器**
+    - `HandlerMapping` -- `BeanNameUrlHandlerMapping`将URL映射成对应对象的名称    
+
+- **适配器**
+    - `HandlerAdapter` -- `SimpleControllerHandlerAdapter`: 处理器必须是Controller接口的实现类
+    ```java
+        @Override
+        public boolean supports(Object handler) {
+            return (handler instanceof Controller);
+        }
+
+        @Override
+        public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
+                throws Exception {
+
+            return ((Controller) handler).handleRequest(request, response);
+        }
+    ```
+
+    - `HandlerAdapter` -- `SimpleControllerHandlerAdapter`
+    ```java
+        @Override
+        public boolean supports(Object handler) {
+            return (handler instanceof Servlet);
+        }
+
+        @Override
+        public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
+                throws Exception {
+            ((Servlet) handler).service(request, response);
+            return null;
+        }
+    ```
+
+- **处理器**
+    - `public class HelloController implements Controller`其实是个处理器, 只不过实现了Controller接口, 这时候`实现类`和`springMVC`还没有关系，需要进行配置
+        - `<bean name="/first.do" class="com.ssm.controller.HelloController"/>`
+
+- **视图解析器**
+    - `UrlBasedViewResolver` -- `InternalResourceViewResolver`
+        - `line49: <p>Example: prefix="/WEB-INF/jsp/", suffix=".jsp", viewname="test" ==> "/WEB-INF/jsp/test.jsp"`   
+    ```xml
+        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <property name="suffix" value=".jsp" />
+            <property name="prefix" value="/WEB-INF/pages/" />
+        </bean>
+    ```
+
+### optimize
+- `log4j.properties`日志
+- `Servlet`只有在第一次访问的时候才进行初始化，对一个访问很不友好 == `<load-on-startup>1</load-on-startup>`
+- **映射器**和 **适配器**不需要配置, => `DispatcherServlet.java -> line265`
+    - 配置不过时的映射器`RequestMappingHandlerMapping`和适配器`RequestMappingHandlerAdapters`， 
+        - **注解驱动**代替映射器和适配器 == `<mvc:annotation-driven />`
+        - 注解驱动的两个功能：1.使用最新的映射器和适配器  2.对json的支持`AnnotationDrivenBeanDefinitionParser.java`
+- **处理器**必须是`Controoler`的实现类，而且每个`Controller`又需要配置
+    - 注解开发，不用配置`bean`
+- **视图解析器**也可以不用配置
+    - `mv.setViewName("/WEB-INF/pages/first.jsp")`
+
+### RequestMapping(映射请求)
 - 标准URL映射
 
 - Ant风格的映射(通配符)
@@ -1171,11 +1237,107 @@ public void jdk () {
 - restful风格的映射(占位符)
 
 - 限定请求方法
+    - `@RequestMapping(value = "cat", method = {RequestMethod.POST, RequestMethod.GET})`
 
 - 限定请求参数
+    - `@RequestMapping(value="cat", params="id")`
+    - `@RequestMapping(value="cat", params="!id")`
+    - `@RequestMapping(value="cat", params="id=1")`
+    - `@RequestMapping(value="cat", params="id!=1")`
 
 - 组合注解
 
+### processing data 接收数据和绑定数据
+- `Servlet`内置对象：request，response，session
+    - ```java
+        @RequestMapping("show13")
+        public ModelAndView test13(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+            ModelAndView mv = new ModelAndView("hello");
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append("request:" + request + "<br>");
+            stringBuffer.append("response:" + response + "<br>");
+            stringBuffer.append("session:" + session + "<br>");
+            mv.addObject("msg", "springmvc接受的servlet内置对象:" + stringBuffer);
+            return mv;
+        }
+    ```
+
+- `Model model`
+    - `model.addAttribute("msg", "model")` 会覆盖 `request.setAttribute("msg", "request")`
+
+- `cookie`
+    - `public String test(@CookieValue(value = "JSESSIONID") String cok, Model model) {`
+
+- `url`中的请求参数
+    - `public String test(@RequestParam(value = "username", required = false) String name, Model model) {`
+    - `public String test(@RequestParam(value = "username", defaultValue = "goodman") String name, Model model) {`
+
+- 基本数据类型的绑定：表单数据
+    - ```java
+        @RequestMapping("show20")
+        @ResponseStatus(HttpStatus.OK)
+        public void test(
+                @RequestParam("name") String name,
+                @RequestParam("age") Integer age,
+                @RequestParam(value = "marry", defaultValue = "false") boolean marry,
+                @RequestParam("income") Double income,
+                @RequestParam("interests") String[] interests // 字符串数组
+        ) {
+            StringBuffer sb = new StringBuffer();
+            sb.append("name:" + name + "\r\n");
+            sb.append("age:" + age + "\r\n");
+            sb.append("isMarry:" + marry + "\r\n");
+            sb.append("income:" + income + "\r\n");
+            sb.append("interests:" + Arrays.toString(interests) + "\r\n");
+            System.out.println("sb = " + sb);
+        }
+    ```
+
+- POJO对象的绑定：获取前端的数组最终也是赋值给实体类
+    - 前端传过来的对象的key值和set方法名的后缀要保持一致
+    ```java
+        @RequestMapping("show21")
+        public String test21(Model model, User user) {
+            model.addAttribute("msg", user);
+            return "hello";
+        }
+    ```
+
+- 集合的绑定
+
+### jstl
+- 
+```xml
+    <dependency>
+        <groupId>jstl</groupId>
+        <artifactId>jstl</artifactId>
+    </dependency>
+```
+
+### JSON
+- 
+```xml
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+    </dependency>
+```
+- 导包，重启，注解驱动
+- 序列化和反序列化
+    - `@ResponseBody`
+    - `@RequestBody`
+- 约定编程
+
+### file upload 文件上传
+- 导包
+- 配置`bean`， id名已经约定好了，在`DispatcherServlet.java` line:160
+
+### forward, redirect 转发，重定向
+- servlet -> jsp的概念，方法到页面只有转发， 现在是方法到方法的概念: 是`<url>.do`
+    - `return redirect:show.do`
+    - `return forward:show.do` 可以拿到`request`域的数据
+    
+### interceptor 拦截器
 
 
 # ssm_travel
