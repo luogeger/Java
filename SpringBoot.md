@@ -518,7 +518,7 @@ solr
 > SpringBoot是基于Spring来构建，可以理解是对Spring的简化，快速构建Spring应用。SpringCloud是利用SpringBoot简化构建分布式应用。
 
 
-#### overview
+### overview
 - spring体系的一部分，创建独立的spring应用程序，
     - 内置了servlet容器，内嵌tomcat，jetty，undertow，不需要打包成war包部署 
     - 提供了默认配置，自动配置spring和第三方库，简化配置文件
@@ -529,24 +529,51 @@ solr
     
 
 
-#### 启动器starter
-- 启动器的父工程
-- 引导类
-    - `@EnableAutoConfiguration`
-    - `@ComponentScan` :开启组件扫描
-    - `@SpringBootApplication` ：相当于上面两个注解 + `@SpringBootCongfiguration`
-        - `@SpringBootCongfiguration` ：相当于`@Configuration`
+### starter启动器
+- `pom.xml`
+- `引导类`
+- `Controller`
+    - ```java
+        @RestController// @Rest
+        @RequestMapping("hello1")
+        public class HelloController1 {
+
+            @GetMapping("one")
+            public String test1 () {
+                return "1 - one";
+            }
+
+            @GetMapping("two")
+            public String test2() {
+                return "1 - two";
+            }
+        }
+    ```
    
 
 
-#### default_config    
+### java配置   
 - **配置文件**注入
+    - `pom.xml`
+    ```xml
+        <dependency>
+            <groupId>com.github.drtrang</groupId>
+            <artifactId>druid-spring-boot2-starter</artifactId>
+            <version>1.1.10</version>
+        </dependency>
+    ```
     - `jdbc.properties`
+    ```xml
+        jdbc.driverClassName=com.mysql.jdbc.Driver
+        jdbc.url=jdbc:mysql://127.0.0.1:3306/youyou
+        jdbc.username=root
+        jdbc.password=123456
+    ```
     - `JdbcConfig.java`
     ```java
         @Configuration
         @PropertySource("classpath:jdbc.properties")
-        public class JdbcConfig {
+        public class JavaConfiguration {
             @Value("${jdbc.url}")
             private String url;
 
@@ -570,102 +597,22 @@ solr
         }
     ```
     - `TestApplication.java`
-    ```java
-        @SpringBootApplication
-        public class TestApplication {
-            public static void main(String[] args) {
-                SpringApplication.run(TestApplication.class, args);
-            }
-        }
-    ```
-    - `HelloController.java`
-    ```java
-        @Autowired
-        private DataSource dds;
-    ```
+    - `HelloController1.java`
 
 
-- **java配置**注入
-    - `application.properties`
-    ```properties
-        jdbc.driverClassName=com.mysql.jdbc.Driver
-        jdbc.url=jdbc:mysql://127.0.0.1:3306/items
-        jdbc.username=root
-        jdbc.password=123456
-    ```
-    - `JavaProperties.java`
-    ```java
-        @ConfigurationProperties(prefix = "jdbc")
-        public class JdbcProperties {
-            private String url;
-            private String driveClassName;
-            private String username;
-            private String password;
-            // getter, setter
-        }
-    ```
-    - `JdbcConfig.java`
-    ```java
-        @Configuration
-        @EnableConfigurationProperties(JdbcProperties.class)// 启用资源配置读取类
-        public class JdbcConfig {
-            @Autowired
-            private JdbcProperties jp;
+### SpringBoot的属性注入
 
-            @Bean
-            public DataSource dataSource() {
-                DruidDataSource dds = new DruidDataSource();
-                dds.setUrl(this.url);
-                dds.setDriverClassName(this.driveClassName);
-                dds.setUsername(this.username);
-                dds.setPassword(this.password);
-                return dds;
-            }
-        }
-    ```    
+> java配置方式。属性注入使用的是`@Value`注解。这种方式虽然可行，但是不够强大，因为它只能注入**基本类型值**。在SpringBoot中，提供了新的属性注入方式，支持各种java**基本数据**及**复杂数据**的注入。
+
+- **属性类**读取资源配置文件
+    - `SpringBoot`在启动时会默认读取`application.properties`或`application.yml`文件，属性类添加`@ConfiguratiionProperties(prefix = "jdbc")`读取资源文件的前缀数据
 
 - 构造方法注入
-    - `JdbcConfig.java`
-    ```java
-        @Configuration
-        @EnableConfigurationProperties(JdbcProperties.class)// 启用资源配置读取类
-        public class JdbcConfig {
-            private JdbcProperties jp;
-
-            public JdbcConfig (JdbcProperties jp) {// 2.构造方法注入, 
-                this.jp = jp;
-            }
-
-            @Bean
-            public DataSource dataSource() {
-                DruidDataSource dds = new DruidDataSource();
-                dds.setUrl(this.url);
-                dds.setDriverClassName(this.driveClassName);
-                dds.setUsername(this.username);
-                dds.setPassword(this.password);
-                return dds;
-            }
-        }
-    ``` 
     
-- 方法形参的方式注入
-    - `JdbcConfig.java`
-    ```java
-        @Configuration
-        @EnableConfigurationProperties(JdbcProperties.class)// 启用资源配置读取类
-        public class JdbcConfig {
+- **@bean**方法形参的方式注入
 
-            @Bean
-            public DataSource dataSource(JdbcProperties jp) {// 3.方法形参注入
-                DruidDataSource dds = new DruidDataSource();
-                dds.setUrl(jp.getUrl());
-                dds.setDriverClassName(jp.getDriveClassName());
-                dds.setUsername(jp.getUsername());
-                dds.setPassword(jp.getPassword());
-                return dds;
-            }
-        }
-    ``` 
+- 配合**@Bean**方法，都不需要**属性类**
+
 
 #### controller
 - service.port

@@ -2700,7 +2700,7 @@ public interface Servlet {
  
  
  
-# REQUEST-0502
+# Request-0502
  ### 1. HTTP协议
  > HTTP：HyperText Transfer Protocol, 超文本传输协议
  <br>
@@ -3059,10 +3059,12 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 # Filter-0507
 
 ### 1. Filter
-> 过滤器本质是Java中预先定义好了的不同的接口，和Servlet类似。具体怎么过滤，需要定义一个实现类，实现接口中的过滤方法。
+- 再`tomcat`启动时创建
+- 在servlet之前执行，拦截请求，将servlet中一些共同的业务代码抽取出来，这就是过滤器作用。比如：请求乱码处理。
+- 过滤器本质是Java中预先定义好了的不同的接口，和Servlet类似。具体怎么过滤，需要定义一个实现类，实现接口中的过滤方法。
 
-- `Filter` 是由`Tomcat`启动时创建， 是`javax.servlet`包下面的一个接口，接口中定义了3个方法
-
+- `Filter`是`javax.servlet`包下面的一个接口，接口中定义了3个方法
+    -
     ```java 
         package javax.servlet;
         import java.io.IOException;

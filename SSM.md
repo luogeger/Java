@@ -1336,10 +1336,28 @@ public void jdk () {
 - servlet -> jsp的概念，方法到页面只有转发， 现在是方法到方法的概念: 是`<url>.do`
     - `return redirect:show.do`
     - `return forward:show.do` 可以拿到`request`域的数据
-    
+
 ### interceptor 拦截器
+- `HandlerInterceptor.java` 
+    - `boolean preHandle`：判断是否执行业务方法
+    - `void postHandle`: 业务方法完成之后再执行
+    - `void afterCompletion`：视图渲染完成之后执行
+- 实现`HandlerInterceptor`并重写方法，此时，还需要配置才能够使用
+    - ```java
 
+    ```    
 
+- **拦截器和过滤器区别**
+
+| 区别点   | 拦截器   | 过滤器   |
+| :--- | :--- | :--- |
+| 配置文件| `web.xml` | `-servlet.xml` |
+| 复用性 | 可以 | - |
+| 生命周期 | tomcat启动时创建 | - |
+| - | 可以使用request, response对象 | - |
+| 执行顺序 | - | - |
+
+    
 # ssm_travel
 > 1
 
