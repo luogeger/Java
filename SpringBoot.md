@@ -607,19 +607,60 @@ solr
 - **属性类**读取资源配置文件
     - `SpringBoot`在启动时会默认读取`application.properties`或`application.yml`文件，属性类添加`@ConfiguratiionProperties(prefix = "jdbc")`读取资源文件的前缀数据
 
-- 构造方法注入
+- **构造方法**
+    - 不用`@Autowired`注入，通过构造方法注入
     
-- **@bean**方法形参的方式注入
+- `@Bean`方法形参的方式注入
+    - 连`全局属性`都不需要了
 
-- 配合**@Bean**方法，都不需要**属性类**
+- `@Bean`配合`@ConfigurationProperties(prefix = "jdbc")`
+    - **属性类**都不需要了
+    - `@EnableConfigurationProperties(JdbcProperties.class)`不需要了
+    - `@Bean`的**形参**不需要了
+    - `@Bean`的`get, set`方法不需要了
+    - **但是**， `get, set`的后缀名一定要和配置文件的字段名一样
+    - 
+    ```java
+        @Configuration
+        public class JdbcConfiguration {
 
+            @Bean
+            @ConfigurationProperties(prefix = "jdbc")// 声明要注入的属性前缀，SpringBoot会自动把相关属性通过set方法注入到DataSource中
+            public DataSource dataSource() {
+                DruidDataSource dataSource = new DruidDataSource();
+                return dataSource;
+            }
+        }
+    ```
 
-#### controller
-- service.port
-- static
-- interceptor    
+### SpringBoot全局配置
+- `server.port=80`
+- `logging.level.org.springframework=DEBUG`
 
-#### mapper
+### SpringBoot-user
+
+- **spring-web-mvc**
+> 如果你想要保持Spring Boot 的一些默认MVC特征，同时又想自定义一些MVC配置（包括：拦截器，格式化器, 视图控制器、消息转换器 等等），你应该让一个类实现WebMvcConfigurer，并且添加@Configuration注解，但是千万不要加@EnableWebMvc注解。如果你想要自定义HandlerMapping、HandlerAdapter、ExceptionResolver等组件，你可以创建一个WebMvcRegistrationsAdapter实例 来提供以上组件。
+>
+> 如果你想要完全自定义SpringMVC，不保留SpringBoot提供的一切特征，你可以自己定义类并且添加@Configuration注解和@EnableWebMvc注解
+
+    - pom
+    - 拦截器
+
+- **jdbc**
+    - pom
+    - 内置`HikariCP`连接池，不用配置`className`
+    - mysql
+
+- **mybatis**
+    - pom
+    - 通用mapper
+    - 覆盖默认配置
+
+- **transaction**
+ 
+
+### mapper
 - jdbc
     - mysql驱动
     - jdbc启动器
@@ -631,8 +672,6 @@ solr
     - `UserMapper.java`继承通用Mapper`Mapper<User>`
     - 加注解，实现接口扫描 `org.apache.ibatis.annotations.Mapper`
 
-#### service    
-- transaction
 
 
 
