@@ -8,9 +8,9 @@
 - reflect，proxy
 
 
-# base-0101
+# Base
 
-#### 1. 常量 6种
+### constant 常量
 
 | 类型   | 含义   | 举例   |
 | :--- | :--- | :--- |
@@ -21,7 +21,7 @@
 | 布尔值  | 只有2个值     | `true` , `false` |
 | null |   只有一个值   | `null`     |
 
-#### 2. 变量
+### variable 变量
 
 - **值类型** : ``整数`` ``浮点数`` ``字符`` ``布尔`` 
 - **引用类型** ``类``  ``数组`` ``接口``  
@@ -37,7 +37,9 @@
 | 双精度浮点 | double (默认) | 8         | `4.9E-324` ~ `1.7977E+308` |
 | 布尔型   | boolean     | 1         | `true` `false`  |
 
-#### 3. java develop kit
+### 基本数据类、包装类
+
+### java develop kit
 
 |     1.7     |    1.8    | 9.0  |
 | :---------: | :-------: | :--: |
@@ -46,7 +48,6 @@
 |  系统行分隔符号：   |      -     |      |
 | 1.7之前处理io异常 |        -   |   -   |
 
-# 0108
 ### String
 - 特点
     - `不变性`: 字符串在被创建后不能被更改
@@ -101,16 +102,15 @@
 
  
 
-# 0111
-### 1. final 
+### final 
 - **类** ，不能被继承
 - **方法** ， 不能被重写
 - **变量** ， 不能被重新赋值
     - 被`final`修饰的常量，一般都是大写
 
-### 2. 权限修饰符
+### Permission modifier 权限修饰符 
 
-### 3. 内部类
+### inner class 内部类
 - `成员内部类`
     - **类里面定义类**
     - 格式
@@ -138,33 +138,29 @@
     - 格式
     - 访问
 
-# 0201
-#### 1. Objects
+### Objects
 - `equals`
 - `toString`
 - `hashCode`
 - `Objects`
 
-#### 2. 日期时间类
+### Date
 - `Date`
 - `DateFormat`
 - `Calendar`
 
-#### 3. System
+### System
 - `currentTimeMilis`
 - `arraycopy`
 
-#### 4. StringBuilder
+### StringBuilder
 - `append`
 - `toString`
 
-#### 5. 基本数据类型包装类
-
-# 0202
-#### 1. Iterator接口 /ɪtə'retɚ/ 迭代器
-
-> 1. List 有 索引， Set没有，所以不能用遍历
-> 2. 集合遍历的时候，有些数据类型需要向下转型
+### Iterator
+- `/ɪtə'retɚ/` 迭代器
+    - List 有 索引， Set没有，所以不能用遍历
+    - 集合遍历的时候，有些数据类型需要向下转型
 
 ```javascript 
     Collection<String> coll = new ArrayList<String>();
@@ -179,7 +175,7 @@
     }
 ```
 
-#### 2. for增强
+### for
 
 > jdk1.5之后对遍历数组和集合进行优化
 
@@ -200,7 +196,8 @@
 
 ```
 
-#### 3. Generic  /dʒə'nɛrɪk/ 泛型
+### Generic  
+- `/dʒə'nɛrɪk/` 泛型
 > 泛型不支持基本类型
 <br>
 > 泛型不支持继承
@@ -349,15 +346,15 @@ public class T01 {
 
 ```
 
-# 0203
-## 一、  Collection  /kə'lɛkʃən/ 集合 
 
-- Collection
+###Collection  
+
+- Collection `/kə'lɛkʃən/` 
   - List (Interface)
   - Set (Interface)
 
 
-### 1.集合概述
+- 集合概述
 
 1. 集合体系是从 ``jdk1.2`` 以后开始的
 
@@ -367,148 +364,127 @@ public class T01 {
 | 具有索引       |             |
 | 数据不唯一，可以重复 |       **  |
 
-### 2.集合和数组区别
+- 集合和数组区别
 
 
 
-### 3.集合常用功能
+> **集合常用功能**
 
-> Collection是所有单列集合``List`` ``Set``的父接口 , 因此定义了一些操作所有集合的通用方法。
+- Collection是所有单列集合``List`` ``Set``的父接口 , 因此定义了一些操作所有集合的通用方法。
+    - ``boolean add (E e)``:  把给定的对象添加到当前集合中
+    - ``void clear()``:   清空集合所有的元素
+    - ``boolean remove (E e)``:  把给定的对象删除
+    - ``boolean contains(E e)``:  判断是否包含给定对象
+    - ``boolean isEmpty()``:  判断集合是否为空
+    - ``int size()``: 返回集合中元素的个数
+    - ``Object[] toArray()``:  把集合中的元素，存储到数组中，可以**间接**对集合进行遍历。 
 
-   1.``boolean add (E e)``:  把给定的对象添加到当前集合中
-2. ``void clear()``:   清空集合所有的元素
- 3. ``boolean remove (E e)``:  把给定的对象删除
- 4. ``boolean contains(E e)``:  判断是否包含给定对象
- 5. ``boolean isEmpty()``:  判断集合是否为空
- 6. ``int size()``: 返回集合中元素的个数
- 7. ``Object[] toArray()``:  把集合中的元素，存储到数组中，可以**间接**对集合进行遍历。 
+### List
 
-## 二、List
+- List
+    - ArrayList
+    - LinkedList
+    - Vector
 
-- List (Interface)
-  - ArrayList
-  - LinkedList
-  - Vector
+- List 接口中的方法：
+    - `void add(int index, E element)` 将指定的元素插入此列表中的指定位置（可选操作）。
+    - `E set(int index, E element)` `返回旧值`用指定的元素（可选操作）替换此列表中指定位置的元素。
 
-> List 接口中的方法：
+- ArrayList
 
-1.  `void add(int index, E element)` 将指定的元素插入此列表中的指定位置（可选操作）。
-2.  `E set(int index, E element)` `返回旧值`用指定的元素（可选操作）替换此列表中指定位置的元素。
+- LinkedList
 
-
-
-
-
-### 1. 	ArrayList
-
-
-
-### 2.	LinkedList
-
-```
-public void addFirst(E e):将指定元素插入此列表的开头。
-public void addLast(E e):将指定元素添加到此列表的结尾。
-public E getFirst():返回此列表的第一个元素。
-public E getLast():返回此列表的最后一个元素。
-public E removeFirst():移除并返回此列表的第一个元素。
-public E removeLast():移除并返回此列表的最后一个元素。
-public E pop():删除并返回此列表的第一个元素。此方法相当于removeFirst() 。
-public boolean isEmpty()：如果列表不包含元素，则返回true。
-```
+- 常用方法
+    - public void addFirst(E e):将指定元素插入此列表的开头。
+    - public void addLast(E e):将指定元素添加到此列表的结尾。
+    - public E getFirst():返回此列表的第一个元素。
+    - public E getLast():返回此列表的最后一个元素。
+    - public E removeFirst():移除并返回此列表的第一个元素。
+    - public E removeLast():移除并返回此列表的最后一个元素。
+    - public E pop():删除并返回此列表的第一个元素。此方法相当于removeFirst() 。
+    - public boolean isEmpty()：如果列表不包含元素，则返回true。
 
 
 
-## 三、Set
+
+### Set
 
 - Set (Interface)
-  - HashSet 
-    - LinkedHashSet 
-  - TreeSet
+    - HashSet 
+        - LinkedHashSet 
+    - TreeSet
+
+
+- Set 接口中的方法：
 
 
 
-> Set 接口中的方法：
-
-1. ​
-
+- HashSet
+    - jdk1.8以前 哈希表 = 数组 + 链表，1.8以后，哈希表 = 数组 + 链表 + 红黑树；（为了提高查询效率）
 
 
-#### 1. 	HashSet
+- LinkedHashSet
+    - 底层是链表 + 哈希
+    - 链表：存储有序，哈希：保证数据唯一。
 
-1. jdk1.8以前 哈希表 = 数组 + 链表，1.8以后，哈希表 = 数组 + 链表 + 红黑树；（为了提高查询效率）
-2. ​
-
-##### LinkedHashSet
-
-1. 底层是链表 + 哈希
-2. 链表：存储有序，哈希：保证数据唯一。
-
-  #### 2.TreeSet
+- TreeSet
 
 
-# 0204
+### Collections 工具类
 
-## 一、Collections 工具类
+-  常用方法:  **都是静态方法，没有构造函数** 
+    - ``public static void shuffle(List<?> list)`` 打乱集合顺序
+    - ``public static void shuffle(List<?> list, Random rnd)`` 打乱集合顺序 
+    - ``public static <T> boolean addAll (Collection<? super T> c, T... elements)`` 
+    - ``public static <T> void sort(List<T> list)``  默认是升序
+    - ``public static <T> void sort(List<T> list, Comparator<? super T> c)``  默认是升序
 
-> 常用方法:  **都是静态方法，没有构造函数** 
-
-1. ``public static void shuffle(List<?> list)`` 打乱集合顺序
-2. ``public static void shuffle(List<?> list, Random rnd)`` 打乱集合顺序 
-3. ``public static <T> boolean addAll (Collection<? super T> c, T... elements)`` 
-4. ``public static <T> void sort(List<T> list)``  默认是升序
-5. ``public static <T> void sort(List<T> list, Comparator<? super T> c)``  默认是升序
-
-### sort 方法扩展
-
-> 如果集合存放的是自定义对象， ``sort(List<T> list)`` 是解决不了的，有2种方式
-
-a:	要求这个自定义对象必须实现 ``Comparable<T>`` 接口，同时，必须实现接口中默认的排序抽象方法 ``int compareTo(T o)``
-
-``` java
-public class Student implements Comparable<Student>{
-    private String name;
-    private int age;
-  
-	// ......
-  
-    @Override
-    public int compareTo(Student o) {
-		//return this.age - o.age;// 升序
-        return o.age - this.age;// 降序
+- sort 方法扩展
+    - > 如果集合存放的是自定义对象， ``sort(List<T> list)`` 是解决不了的，有2种方式
+    - 要求这个自定义对象必须实现 ``Comparable<T>`` 接口，同时，必须实现接口中默认的排序抽象方法 ``int compareTo(T o)``
+    
+    ``` java
+    public class Student implements Comparable<Student>{
+        private String name;
+        private int age;
+      
+        // ......
+      
+        @Override
+        public int compareTo(Student o) {
+            //return this.age - o.age;// 升序
+            return o.age - this.age;// 降序
+        }
     }
-}
-```
+    ```
+
+    - `public static <T> void sort(List<T> list，Comparator<? super T> c)` 将集合中元素按照指定规则排序
+    
+    ```javascript 
+    Collections.sort(list, new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            //降序：o2 - o1
+            //return o2.compareTo(o1);
+            returen o2.getAge() - o1.getAge();
+        }
+    });
+    ```
 
 
 
-b:	`public static <T> void sort(List<T> list，Comparator<? super T> c)` 将集合中元素按照指定规则排序
+### Map
 
-```javascript 
-Collections.sort(list, new Comparator<String>() {
-  	@Override
-  	public int compare(String o1, String o2) {
-    	//降序：o2 - o1
-    	//return o2.compareTo(o1);
-      	returen o2.getAge() - o1.getAge();
-  	}
-});
-```
-
-
-
-## 二、Map
-
-> **Map 是双列集合，Collection是单列集合，它们都是超级父接口**
-
-- 1.特点：由哈希控制键，能保证唯一性
-- 2.区别：单列集合一次只能存一个对象，对象之间没有任何关系。双列集合一次可以存两个对象，两个对象只有有映射关系。
-- 3.常用方法：
-   - `put`
-   - `remove`
-   - `get`
-   - `clear`
-   - `containsKey` `containsValue`
-   - `keySet`   `entrySet`
+- Map 是双列集合，Collection是单列集合，它们都是超级父接口
+    - 特点：由哈希控制键，能保证唯一性
+    - 区别：单列集合一次只能存一个对象，对象之间没有任何关系。双列集合一次可以存两个对象，两个对象只有有映射关系。
+    - 常用方法：
+       - `put`
+       - `remove`
+       - `get`
+       - `clear`
+       - `containsKey` `containsValue`
+       - `keySet`   `entrySet`
 
 ```java
 // keySet
@@ -557,99 +533,71 @@ public class Case {
 ```
 
 
-# 0205
+### 异常
+- 异常概述
+    - java异常： 程序中出现的bug，或者不正常现象。开发过程中，需要对这些问题进行预先的判断和处理
+    - 异常并不是语法错误，语法错了编译是不通过的，代码不能运行。
 
-## 一、异常
+- 异常体系 (Throwable)
+    - Error
+    - Exception
 
-1. java异常： 程序中出现的bug，或者不正常现象。开发过程中，需要对这些问题进行预先的判断和处理
-2. 异常并不是语法错误，语法错了编译是不通过的，代码不能运行。
+- 异常分类(Exception)
+    - 编译异常``checked``
+    - 运行异常``runtime``
 
-
-
-### 1.异常体系 （Throwable)
-
-1. **Error**
-2. **Exception**
-
-
-
-### 2.异常分类	(Exception)
-
-1. **编译异常**``checked``
-2. **运行异常** ``runtime``
-
-> **小结：** 
->
-> 1. Exception是编译异常，编译器会检测到异常是否有处理方案，如果没有处理方案不能通过
-> 2. RuntimeException是运行异常，编译器不会检测该异常是否有处理方案，不需要声明
+-  **小结：** 
+    - Exception是编译异常，编译器会检测到异常是否有处理方案，如果没有处理方案不能通过
+    - RuntimeException是运行异常，编译器不会检测该异常是否有处理方案，不需要声明
 
 
 
-## 二、异常的处理
+### 异常的处理
 
-### 1.抛出异常	（throw)
+- 抛出异常	（throw)
 
+- 声明异常	（throws)
 
+- 捕获异常   	  (try...catch)
 
-### 2.声明异常	（throws)
+- 代码块		  (finally)
 
+- 异常注意事项
 
+### 自定义异常
 
-### 3.捕获异常   	  (try...catch)
+- 为什么需要自定义异常
+- 自定义异常格式及使用
 
-
-
-### 4.代码块		  (finally)
-
-
-
-### 5.异常注意事项
-
-
-
-## 三、自定义异常
-
-1. 为什么需要自定义异常
-2. 自定义异常格式：
-3. ​
-
-
-# 0206
-
-## 一、进程
+### Process 进程
 
 
 
-## 二、线程
+### Threads 线程
 
-> 创建线程：操作线程需要用到 ``java.lang.Thread`` 
+> **创建线程：操作线程需要用到 ``java.lang.Thread``** 
 
-**1.、构造方法**
+- **构造方法**
+    - `public Thread()`:分配一个新的线程对象。
+    - `public Thread(String name)`:分配一个指定名字的新的线程对象。
+    - `public Thread(Runnable target)`:分配一个带有指定目标新的线程对象。
+    - `public Thread(Runnable target,String name)`:分配一个带有指定目标新的线程对象并指定名字。
 
-- `public Thread()`:分配一个新的线程对象。
-- `public Thread(String name)`:分配一个指定名字的新的线程对象。
-- `public Thread(Runnable target)`:分配一个带有指定目标新的线程对象。
-- `public Thread(Runnable target,String name)`:分配一个带有指定目标新的线程对象并指定名字。
-
-**2、常用方法**
-
-- `public String getName()`:获取当前线程名称。
-- `public void start()`:表示此线程开始执行; java虚拟机调用此线程的run方法。
-- `public void run()`:此线程要执行的任务在此处定义代码。
-- `public static void sleep(long millis)`:使当前正在执行的线程以指定的毫秒数暂停（暂时停止执行）。
-- `public static Thread currentThread()  `:返回对当前正在执行的线程对象的引用。
+- **常用方法**
+    - `public String getName()`:获取当前线程名称。
+    - `public void start()`:表示此线程开始执行; java虚拟机调用此线程的run方法。
+    - `public void run()`:此线程要执行的任务在此处定义代码。
+    - `public static void sleep(long millis)`:使当前正在执行的线程以指定的毫秒数暂停（暂时停止执行）。
+    - `public static Thread currentThread()  `:返回对当前正在执行的线程对象的引用。
 
 
 
-### 1、创建线程方式一
+> **创建线程方式一**
 
-**步骤：**
-
-1. 自定义**线程类**继承 `Thread`
-2. 重写 `Thread` 类的 `run` 方法
-3. 实例化自定义**线程类**
-4. 调用 ``start()``
-
+- 自定义**线程类**继承 `Thread`
+- 重写 `Thread` 类的 `run` 方法
+- 实例化自定义**线程类**
+- 调用 ``start()``
 
 
 ```java
@@ -686,14 +634,12 @@ public class R01 {
 
 
 
-### 2、创建线程方式二
+> **创建线程方式二**
 
-**步骤：**
-
-1. 自定义**任务类**实现接口 ``Runnable`` 
-2. 重写 ``run`` 方法
-3. 实例化 ``Thread`` ，同时实例化 **任务类** ，当做参数
-4. 再调用 ``start（）`` 
+- 自定义**任务类**实现接口 ``Runnable`` 
+- 重写 ``run`` 方法
+- 实例化 ``Thread`` ，同时实例化 **任务类** ，当做参数
+- 再调用 ``start（）`` 
 
 ```java
 public class Task implements Runnable {// **这里是实现 Runnable**
@@ -741,24 +687,19 @@ public class R01 {
 }
 ```
 
-**注意事项:**
+> **注意事项:**
 
->实际开发用的是第二种方式，有以下好处
->
->1. 避免了单继承的局限性
->2. 松散耦合
-
+- 实际开发用的是第二种方式，有以下好处
+    - 避免了单继承的局限性
+    - 松散耦合
 
 
 
+> **并行、并发**
 
 
 
-## 三、并行、并发
-
-
-
-## 四、线程控制
+### Thread Control 线程控制
 
 使用Thread类中的sleep()函数可以让线程休眠
 
@@ -804,7 +745,7 @@ public class R01 {
 
 
 
-## 五、线程安全
+### Thread safety 线程安全
 
 ```java
 public class Task implements Runnable{
@@ -838,37 +779,29 @@ public class R01 {
         t4.start();
     }
 }
-// 以上代码执行，会出现重票和跳票的现象，这就是线程的安全问题。
+
 ```
 
-**原因如下：**
+- **出现问题：** 会出现重票和跳票的现象，这就是线程的安全问题。
+    - 如果是单线程就不会出现上述问题。
+    - 多个线程操作共享资源。
+    - 操作资源的代码有多行，如果是一行或者是很少的情况下，代码执行很快，也不会出现上述问题。
+    - CPU的随机切换。本质原因是CPU在处理多个线程的时候，在操作共享数据的多条代码之间进行切换导致的。
 
-1. 如果是单线程就不会出现上述问题。
-2. 多个线程操作共享资源。
-3. 操作资源的代码有多行，如果是一行或者是很少的情况下，代码执行很快，也不会出现上述问题。
-4. CPU的随机切换。本质原因是CPU在处理多个线程的时候，在操作共享数据的多条代码之间进行切换导致的。
+- **解决方案**
+    - 无法改变，就是多线程程序。
+    - 无法改变，多个线程就是要操作同一个资源。
+    - 无法改变，因为就是有多行大妈
+    - CPU的运行时无法解决的，针对CPU的切换，是由操作系统去控制的，人为是无法干预的。
 
-**解决方案 :**
-
-1. 无法改变，就是多线程程序。
-2. 无法改变，多个线程就是要操作同一个资源。
-3. 无法改变，因为就是有多行大妈
-4. CPU的运行时无法解决的，针对CPU的切换，是由操作系统去控制的，人为是无法干预的。
-
-**总结 :**
-
-解决线程安远问题，可以人为的控制CPU在执行某个线程操作共享数据的时候，不让其他线程进入到操作共享数据的代码中区，这样就可以保证安全了。这种解决方案称为 **线程同步** 。 
-
-**线程同步** 有3种方式：
-
-> 提示：线程同步需要一个锁，锁是任意对象，但必须是唯一的。
+- **总结：** 解决线程安远问题，可以人为的控制CPU在执行某个线程操作共享数据的时候，不让其他线程进入到操作共享数据的代码中区，这样就可以保证安全了。这种解决方案称为 **线程同步** 。
+线程同步有3种方式。提示：线程同步需要一个锁，锁是任意对象，但必须是唯一的。
 
 
 
-### 1、同步代码块
+> **同步代码块**
 
 - 同步代码块的**锁**是**任意对象**
-
 ```java
 public class Task implements Runnable{
     private int tickets = 100;
@@ -889,7 +822,7 @@ public class Task implements Runnable{
 
 
 
-### 2、非静态同步方法
+> **非静态同步方法**
 
 - 非静态同步方法的**锁**是**this**
 
@@ -917,7 +850,7 @@ public class Task implements Runnable {
 
 
 
-### 3、静态同步方法
+> **静态同步方法**
 
 - 通过结果发现静态方法也是有锁的，但是静态方法和对象是没有关系的。静态方法是类加载到静态区以后就可以是用类名直接调用的，说明锁对象此时已经存在了，这个锁对象就是 **当前类的字节码文件对象**。
 
@@ -948,7 +881,7 @@ public class Task implements Runnable {
 
 
 
-### 4、jdk1.5以后锁的升级
+> **jdk1.5以后锁的升级**
 
 - Lock属于接口，不能创建对象，所以我们可以使用它的子类[ReentrantLock](mk:@MSITStore:C:\javaee\开发资料\API\JDK_API_1_6_zh_CN.CHM::/java/util/concurrent/locks/../../../../java/util/concurrent/locks/ReentrantLock.html)来创建对象并使用Lock接口中的函数；
 
@@ -981,48 +914,42 @@ public class Task implements Runnable {
 ```
 
 
-# 0207
+### Multithreading 多线程
 
-## 一、多线程
+- 线程状态
+    - `new` 新创建	
+    - `run` 可运行
+    - `teminated` 被终止：死亡状态或者终止状态。出现异常或者任务结束
+    - `blocked` 锁阻塞：就是一个线程获取锁对象，其他线程都是处于等待锁的状态。
+    - `waiting` 无线等待
+    - `tiemd waiting` 计时等待：使用`sleep(long time)` 处于计时等待状态
 
-### 1、线程状态
-
-1. `new` 新创建	
-2. `run` 可运行
-3. `teminated` 被终止：死亡状态或者终止状态。出现异常或者任务结束
-4. `blocked` 锁阻塞：就是一个线程获取锁对象，其他线程都是处于等待锁的状态。
-5. `waiting` 无线等待
-6. `tiemd waiting` 计时等待：使用`sleep(long time)` 处于计时等待状态
-
-> 关于CPU执行线程的概念
->
-> 1. CPU的执行资格：在CPU执行的队列中等待。还没有被CPU执行。
-> 2. CPU的执行权：当前持有CPU资源，正在被执行
+- 关于CPU执行线程的概念
+    - CPU的执行资格：在CPU执行的队列中等待。还没有被CPU执行。
+    - CPU的执行权：当前持有CPU资源，正在被执行
 
 
 
-### 2、线程通信
+- 线程通信
+    - ``wait()`` 
+        - 处于无限等待的状态，就会立刻释放锁
+        - 分为带参和不带参
+        - 该线程必须使用`notify()`方法或者`notifyAll()`方法唤醒，如果被唤醒没有锁就回到 `blocked` 状态
+        - 和 ``sleep()`` 的区别
+            - `sleep()` 方法不能保证该线程睡眠到期后就开始立刻执行。
+            - `sleep()` 和锁无关，只能回到 `Run` 状态
+            - `wait()` 和锁有关，没有锁就回到 `blocked` 状态
+    - ``notify()`` ：唤醒随机的一个等待线程
+        - 如果一个等待的线程被唤醒了，但是没有获取到锁对象，那么CPU也不会执行该线程，此时该线程处于 Blocked 锁阻塞状态
+    - `notifyAll()`  ：唤醒所有等待线程
 
-- ``wait()`` 
-  - 处于无限等待的状态，就会立刻释放锁
-  - 分为带参和不带参
-  - 该线程必须使用`notify()`方法或者`notifyAll()`方法唤醒，如果被唤醒没有锁就回到 `blocked` 状态
-  - 和 ``sleep()`` 的区别
-    - `sleep()` 方法不能保证该线程睡眠到期后就开始立刻执行。
-    - `sleep()` 和锁无关，只能回到 `Run` 状态
-    - `wait()` 和锁有关，没有锁就回到 `blocked` 状态
-- ``notify()`` ：唤醒随机的一个等待线程
-  - 如果一个等待的线程被唤醒了，但是没有获取到锁对象，那么CPU也不会执行该线程，此时该线程处于 Blocked 锁阻塞状态
-- `notifyAll()`  ：唤醒所有等待线程
-
-**重点**
-
-- 线程通信必须要有锁，必须同步，以上方法只能在同步中使用
-- 以上的方法都定义在`Object` 中，锁对象是任意的对象，所以必须位于所有的类的共同父类Object中。
+- **重点**
+    - 线程通信必须要有锁，必须同步，以上方法只能在同步中使用
+    - 以上的方法都定义在`Object` 中，锁对象是任意的对象，所以必须位于所有的类的共同父类Object中。
 
 
 
-### 3、案列
+- **案列**
 
 ```java
 public class Factory {
@@ -1110,13 +1037,11 @@ public class R01 {
 
 
 
-## 二、线程池
+### thread pool 线程池
 
-在JDK5之前，我们必须手动实现自己的线程池，从JDK5开始，Java内置支持线程池。
+> 在JDK5之前，我们必须手动实现自己的线程池，从JDK5开始，Java内置支持线程池。Java里面线程池的顶级接口是`java.util.concurrent.Executor`，但是严格意义上讲`Executor`并不是一个线程池，而只是一个执行线程的工具。真正的线程池接口是`java.util.concurrent.ExecutorService`。
 
-Java里面线程池的顶级接口是`java.util.concurrent.Executor`，但是严格意义上讲`Executor`并不是一个线程池，而只是一个执行线程的工具。真正的线程池接口是`java.util.concurrent.ExecutorService`。
-
-**案例**
+- **案例**
 
 ```java
 import java.util.concurrent.ExecutorService;
@@ -1145,9 +1070,9 @@ public class R01 {
 
 
 
-## 三、Lambda
+### Lambda
 
-**案例**
+- **案例**
 
 ```java
 import java.util.Arrays;
@@ -1181,16 +1106,13 @@ public class R01 {
 ```
 
 
-# 0208	File类
+# File
 
-### 1. construction
-
-> 共有6种构造方法，其中有2个是私有的。
-
-1. `public File (String pathname)`
-2. `public File (File parent, String child)`
-3. `public File (String parent, String child)`
-4. `public File (URI uri)` 
+- construction 共有6种构造方法，其中有2个是私有的。
+    - `public File (String pathname)`
+    - `public File (File parent, String child)`
+    - `public File (String parent, String child)`
+    - `public File (URI uri)` 
 
 
 ```java

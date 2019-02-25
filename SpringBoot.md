@@ -1,3 +1,615 @@
+# SpringBoot
+
+> SpringBoot是基于Spring来构建，可以理解是对Spring的简化，快速构建Spring应用。SpringCloud是利用SpringBoot简化构建分布式应用。
+
+
+### overview
+- spring体系的一部分，创建独立的spring应用程序，
+    - 内置了servlet容器，内嵌tomcat，jetty，undertow，不需要打包成war包部署 
+    - 提供了默认配置，自动配置spring和第三方库，简化配置文件
+    - 启动器依赖，不会有版本冲突，不会出现混乱的依赖关系
+
+- 入门
+    - 多个controller，多个main方法，多个入口，tomcat只有一个，=> 基类, 注解扫描
+    
+
+
+### starter启动器
+- `pom.xml`
+- `引导类`
+- `Controller`
+    - ```java
+        @RestController// @Rest
+        @RequestMapping("hello1")
+        public class HelloController1 {
+
+            @GetMapping("one")
+            public String test1 () {
+                return "1 - one";
+            }
+
+            @GetMapping("two")
+            public String test2() {
+                return "1 - two";
+            }
+        }
+    ```
+   
+
+
+### java配置   
+- **配置文件**注入
+    - `pom.xml`
+    ```xml
+        <dependency>
+            <groupId>com.github.drtrang</groupId>
+            <artifactId>druid-spring-boot2-starter</artifactId>
+            <version>1.1.10</version>
+        </dependency>
+    ```
+    - `jdbc.properties`
+    ```xml
+        jdbc.driverClassName=com.mysql.jdbc.Driver
+        jdbc.url=jdbc:mysql://127.0.0.1:3306/youyou
+        jdbc.username=root
+        jdbc.password=123456
+    ```
+    - `JdbcConfig.java`
+    ```java
+        @Configuration
+        @PropertySource("classpath:jdbc.properties")
+        public class JavaConfiguration {
+            @Value("${jdbc.url}")
+            private String url;
+
+            @Value("${jdbc.driverClassName}")
+            private String driveClassName;
+
+            @Value("${jdbc.username}")
+            private String username;
+
+            @Value("${jdbc.password}")
+            private String password;
+            @Bean
+            public DataSource dataSource() {
+                DruidDataSource dds = new DruidDataSource();
+                dds.setUrl(this.url);
+                dds.setDriverClassName(this.driveClassName);
+                dds.setUsername(this.username);
+                dds.setPassword(this.password);
+                return dds;
+            }
+        }
+    ```
+    - `TestApplication.java`
+    - `HelloController1.java`
+
+
+### SpringBoot的属性注入
+
+> java配置方式。属性注入使用的是`@Value`注解。这种方式虽然可行，但是不够强大，因为它只能注入**基本类型值**。在SpringBoot中，提供了新的属性注入方式，支持各种java**基本数据**及**复杂数据**的注入。
+
+- **属性类**读取资源配置文件
+    - `SpringBoot`在启动时会默认读取`application.properties`或`application.yml`文件，属性类添加`@ConfiguratiionProperties(prefix = "jdbc")`读取资源文件的前缀数据
+
+- **构造方法**
+    - 不用`@Autowired`注入，通过构造方法注入
+    
+- `@Bean`方法形参的方式注入
+    - 连`全局属性`都不需要了
+
+- `@Bean`配合`@ConfigurationProperties(prefix = "jdbc")`
+    - **属性类**都不需要了
+    - `@EnableConfigurationProperties(JdbcProperties.class)`不需要了
+    - `@Bean`的**形参**不需要了
+    - `@Bean`的`get, set`方法不需要了
+    - **但是**， `get, set`的后缀名一定要和配置文件的字段名一样
+    - 
+    ```java
+        @Configuration
+        public class JdbcConfiguration {
+
+            @Bean
+            @ConfigurationProperties(prefix = "jdbc")// 声明要注入的属性前缀，SpringBoot会自动把相关属性通过set方法注入到DataSource中
+            public DataSource dataSource() {
+                DruidDataSource dataSource = new DruidDataSource();
+                return dataSource;
+            }
+        }
+    ```
+
+### SpringBoot全局配置
+- `server.port=80`
+- `logging.level.org.springframework=DEBUG`
+
+### SpringBoot-user
+
+- **spring-web-mvc**
+> 如果你想要保持Spring Boot 的一些默认MVC特征，同时又想自定义一些MVC配置（包括：拦截器，格式化器, 视图控制器、消息转换器 等等），你应该让一个类实现WebMvcConfigurer，并且添加@Configuration注解，但是千万不要加@EnableWebMvc注解。如果你想要自定义HandlerMapping、HandlerAdapter、ExceptionResolver等组件，你可以创建一个WebMvcRegistrationsAdapter实例 来提供以上组件。
+>
+> 如果你想要完全自定义SpringMVC，不保留SpringBoot提供的一切特征，你可以自己定义类并且添加@Configuration注解和@EnableWebMvc注解
+
+    - pom
+    - 拦截器
+
+- **jdbc**
+    - pom
+    - 内置`HikariCP`连接池，不用配置`className`
+    - mysql
+
+- **mybatis**
+    - pom
+    - 通用mapper
+    - 覆盖默认配置
+
+- **transaction**
+ 
+
+### mapper
+- jdbc
+    - mysql驱动
+    - jdbc启动器
+        - `spring-boot-starter-jdbc` 内置连接池 `Starter for using JDBC with the HikariCP connection pool`, 只需要配置内置的jdbc启动器就可以了
+        - `application.properties` 配置连接信息 
+- mybatis
+    - mybatis启动器
+    - 通用Mapper启动器：pojo使用了通用mapper的注解
+    - `UserMapper.java`继承通用Mapper`Mapper<User>`
+    - 加注解，实现接口扫描 `org.apache.ibatis.annotations.Mapper`
+
+
+
+
+
+
+
+
+
+
+# SpringCloud
+
+- `Eureka` 
+    - `Eureka Server`
+    - `Eureka Client`
+    - `Eureka 高可用`
+    - `服务发现机制`
+- `Config` 同一配置中心
+    - `Config Server`
+    - `Config Client`
+    - `Spring Cloud Bus` 结合`RabibtMQ`实现自动刷新
+- `Ribbon` 服务通信，负载均衡
+    - `RestTemplate` 
+    - `Feign`
+    - `分析源码，了解底层`
+- `Hystrix` 微服务API
+    - 动态路由，校验
+- `Zuul`
+    - 熔断机制
+
+**容器编排，服务追踪**
+- `docker`
+- `RANCHER`    
+
+### Eureka
+- `/jʊ'rikə/`
+- 服务注册中心
+    - `Eureka`的服务端应用，提供服务**注册和发现**功能
+- 服务提供者
+    - 提供服务的应用，可以是`SpringBoot`应用，也可以是其他技术实现，只要对外提供的Rest风格的服务就行。
+- 服务消费者
+    - 消费应用从注册中心获取服务列表，得知每个服务提供者的信息，知道去哪里调用服务
+
+> **provider_service: 服务提供者**
+
+> **consumer_service: 服务消费者**
+
+> **eureka_service: 服务注册中心**
+
+- 导入依赖
+- `application.yml` 覆盖默认配置
+    - `server.port` : `10086`
+    - `spring.application.name` : `eureka_service`
+    - `eureka.client.service-url.defaultZone` : `http://localhost:10086/eureka`
+- `ServiceEurekaApplication.java` 添加开启服务端注解
+    - `@EnableEurekaServer` 
+
+#### 从服务中心获取服务
+
+> **service-provider**
+
+- `provider.pom`
+    - 版本号
+        - ```xml
+            <spring-cloud.version>Finchley.SR2</spring-cloud.version>
+        ```
+    - 依赖管理
+        - ```xml
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework.cloud</groupId>
+                        <artifactId>spring-cloud-dependencies</artifactId>
+                        <version>${spring-cloud.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+        ```
+    - 组件
+        - ```xml
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            </dependency>
+        ```
+- `application.yml` 注册到服务中心
+    - `spring.application.name` : `provider_service`
+    - `erueka.client.service-url.defaultZone` : `http://localhost:10086/eureka`
+- `ProviderApplication.java` 启动客户端功能
+    - `@EnableDiscoveryClient` : `SpringCloud`
+
+> **service-consumer**    
+
+- 和 **provider_service**配置一样，但是消费服务要动态的从服务列表中获取服务实例
+    - 在`UserController.java`使用`DiscoveryClient`类
+        - `import org.springframework.cloud.client.discovery.DiscoveryClient;`
+    - 获取对应的服务实例，需要知道服务名字`provider_service`
+    - ```java
+        @Controller
+        @RequestMapping("customer/user")
+        public class UserController {
+            @Autowired
+            private RestTemplate restTemplate;
+
+            @Autowired
+            private DiscoveryClient discoveryClient; // eureka客户端，可以获取到eureka中服务的信息
+
+            @GetMapping
+            @ResponseBody
+            public User queryUserById(@RequestParam("id") Long id){
+                // 根据服务名称，获取服务实例。有可能是集群，所以是service实例集合
+                List<ServiceInstance> instances = discoveryClient.getInstances("provider_service");
+                // 因为只有一个UserService。所以获取第一个实例
+                System.out.println(id);
+                ServiceInstance instance = instances.get(0);
+                // 获取ip和端口信息，拼接成服务地址
+                String baseUrl = "http://" + instance.getHost() + ":" + instance.getPort() + "/user/" + id;
+                User user = this.restTemplate.getForObject(baseUrl, User.class);
+                return user;
+            }
+        }
+    ```
+
+#### 高可用的Eureka Server
+
+> **EurekaServer**也可以是一个集群，形成高可用的**Eureka**中心
+
+- 当**服务提供者**注册到Eureka Server集群中的某个节点时，这个节点会把服务的信息同步给集群中的每个节点，就可以实现**数据同步**，无论客户端访问到Eureka Server集群中的任意节点，都可以获取到完整的**服务列表**信息
+
+- 重复部署同一个注册中心，只是修改端口，相互配置地址
+
+> **服务提供者**
+
+- 服务提供者要想EurekaServer注册服务，并且完成服务续约等工作
+
+- **服务注册**：服务提供者在启动的时候，会检测配置属性中的`eureka.client.register-with-eureka`的值是否为`true`, 默认是`true`, 如果为`true`，就会想EurekaServer发起Rest请求，并携带自己的**元数据**信息，EurekaServer会把这些信息保存到一个双层Map结构中
+    - 第一层Map的Key是**服务id**，一般是配置中的的`spring.application.name`属性值
+    - 第二层Map的Key是服务的**实例id**，一般是`host`+`serviceID`+`port`, 例：`localhot:user_service:8081`
+        - Value是服务的**实例对象**，就是一个服务，可以同时启动多个不同实例，形成集群
+
+- **服务续约**：就是心跳机制，注册服务完成以后，服务提供者会维持一个心跳，就是定时想EurekaServer发起Rest请求，告诉EurekaServer，"我还活着"。这种状态称为服务续约`renew`, 有两个重要参数可以修改服务续约的行为
+    - ```yaml
+        eureka:
+            instance:
+                lease-expiration-duration-in-seconds: 90
+                lease-renewal-interval-in-seconds: 30
+    ```
+    - `lease-renewal-interval-in-seconds` ：服务续约(renew)的间隔，默认为30秒
+    - `lease-expiration-duration-in-seconds` ：服务失效时间，默认值90秒
+
+    
+默认情况下，间隔30秒服务会向注册中心发送一次心跳，证明自己还活着。如果超过90秒没有发送心跳，EurekaServer会认为这个服务宕机，会从服务列表中移除，这个两个值在生产环境不需要修改，默认就行。但是在开发环境中，时间太长，我们会关掉一个服务，会返现EurekaServer依然认为服务还活着。
+    
+
+> **服务消费者**
+
+- **获取服务列表**，当服务消费者启动时，会检测`eureka.client.fetch-registry`的值是否为`true`, 默认是`true`。如果为`true`, 就会拉取EurekaServer的服务列表只读备份，缓存在本地。并且间隔30秒重新获取并更新数据。在开发阶段，依然设置的小点。生产环境中不需要修改。
+    - ```yaml
+        eureka:
+            client:
+                registry-fetch-interval-seconds: 5
+    ```
+
+- **服务下线**：服务正常关闭，会触发一个服务下线的Rest请求给EurekaServer，通知服务中心自己已经下线，服务中心接到通知会把该服务设置为下线状态。
+
+- **失效剔除**：但是服务的关闭一般是非正常的，大多数是因为内存溢出，网络故障等原因导致无法工作。所以EurekaServer会开启一个定时任务，间隔60秒对所有失效的服务(超过90秒未响应)进行剔除。这个时间值在开发阶段极不方便，你重启服务了，EurekaServer需要60秒才能反应过来，所以需要重置时间值。
+    - ```yaml
+        server:
+            eviction-interval-timer-in-ms: 10000 #单位是毫秒
+    ```     
+
+- **自我保护**：当服务未按时进行心跳续约时，EurekaServer会统计最近15分钟心跳失败的服务实例的比例是否超过了85%。因为在线上环境下，因为网络延迟等原因，心跳失败的比例很有可能超标，此时把服务从列表中剔除是不妥当的，因为服务可能并没有宕机。这时候，EurekaServer就会把当前实例的注册信息保护起来，不会剔除。在生产环境下这种方式很有效，保证了大多数服务依然可用。
+    - 但是这种机制，在开发阶段会很麻烦，因此，在开发阶段需要关闭自我保护
+    - `service_eureka`
+    - ```yaml
+        eureka:
+        server:
+            enable-self-preservation: false # 关闭自我保护模式（缺省为打开）
+            eviction-interval-timer-in-ms: 1000 # 扫描失效服务的间隔时间（缺省为60*1000ms）
+    ```
+
+    - 当关停一个服务，会在EurekaServer面板看到一条警告
+    - ```bash
+        emergency! eureka may be incorrectly claiming instances are up when they're not. 
+        renewals are lesser than threshold and hence the instances are not being expired judt to be safe. 
+        DS replicas
+
+        紧急！ eureka可能会错误地声称实例在不存在的情况下会被启动。 
+        续订小于阈值，因此实例未过期判断为安全。
+        DS副本
+    ```    
+
+### Ribbon
+- Ribbon是Netflix发布的负载均衡器，助于控制HTTP合同TCP客户端的行为。为Ribbon配置服务提供者地址列表以后，可以基于算法，自动地帮助服务消费者去请求。Ribbon默认提供了一些算法，轮询、随机...
+
+- 在`public RestTemplate restTemplate() {`上注解`@LoadBalanced` 就是开启了ribbon的负载均衡
+- `this.restTemplate.getForObject("http://provider_service/user/" + id, User.class)`
+- 测试
+    - 启动多个服务提供者
+    - ip，端口的配置，在`provider-service`
+        - `instance: prefer-ip-address: false`,  `instance: ip-address: 192.168.150.1`
+    - 随机的测试，在`consumer.yml`配置
+        - ```yaml
+            provider-service: #提供者的id
+                ribbon:
+                    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+        ```        
+
+### Hystrix
+- Hystix是Netflix开源的一个延迟和容错库，用于隔离访问远程服务、第三方库，防止出现级联失败。
+
+> **熔断现象**：一个请求需要很多个微服务协同完成，如果卡在某个服务会造成内存溢出。需要采取**线程隔离**、**服务降级**的技术手段来解决。熔断的触发有2中情况，一种线程池满了，另一种请求超时。
+
+- 如果一个服务经常熔断，那么这个服务就是故障服务，Hystrix会主动切断服务，处于`open`状态，**5秒**之内不再接受请求，之后处于半开状态`half open`，然后放行部分请求，查看还能不能连接上服务，如果能连上就进入闭合状态`closed`, 如果还连接又回到`open`状态，周而复始。
+    - `closed`: 请求正常访问
+    - `open`: 请求都会被降级。Hystrix会对请求计数，当一定时间请求的失败比例超过阈值，就会触发熔断，进入`open`状态。默认失败比例的阈值是50%，请求次数不低于20次。
+    - `half open`: 
+
+- 熔断的参数
+    - ```xml
+        requestVolumeThreshold：触发熔断的最小请求次数，默认20
+        errorThresholdPercentage：触发熔断的失败请求最小占比，默认50%
+        sleepWindowInMilliseconds：休眠时长，默认是5000毫秒
+    ```    
+
+
+> **服务降级**：优先保证核心服务，而非核心服务不可用或弱可用。用户的请求故障时，不会被阻塞，更不会无休止的等待或看到系统崩溃，至少可以看到一个执行结果(返回友好提示)。服务降级虽然会导致**请求失败**，但是不会导致阻塞，最多对这个依赖服务对应的线程池中的资源造成影响，**最主要**的是不会对其他服务有影响，更快的释放资源，不至于宕机。
+
+- 消费方处理请求超时
+- `依赖`
+```xml
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+    </dependency>
+```
+- `覆盖默认配置`
+- `添加注解`: 在`ServiceConsumerApplication.java`上添加`@EnableCircuitBreaker`, 开启熔断注解 
+    - 组合注解：`@SpringCloudApplication`
+- 首先，熔断是对远程调用进行熔断，    
+
+> **线程隔离**：
+
+### Feign
+- Feign是Netflix开发的声明式、模板化的HTTP客户端。Feign可以把Rest请求进行隐藏，伪装成SpringMVC的Controller一样。不用拼接URL、参数等操作，一切可以交给Feign去做。
+- Spring Cloud对Feign进行了增强，使得Feign支持了SpringMVC注解，并且整理Ribbon和Eureka，让Feign的使用更加方便
+- Spring Cloud中使用Feign非常简单，创建一个接口，并且在接口上添加一些注解，代码就完成了
+- 不需要`RestTemplate` == 远程调用，也不需要`@DefaultProperties` == 熔断功能
+
+> **远程访问** 消费者从服务列表获取服务, 
+
+- 依赖
+- 注解`@EnableFeignClients`， 在引导类加
+- 覆盖配置
+- 定义**接口**，添加注解`@FeignClient("[服务名]")` ，接口里面定义的方法不用方法体，熔断方法来重写
+- 通过注入接口的动态代理对象使用，底层也是`RestTemplate`
+
+> Feign集成了Hystrix, 默认是关闭的
+
+- `feign.hystrix.enabled: true`, 开启Feign的负载均衡功能，只需要继承
+- Feign接口添加实现类，给哪个方法添加熔断方法，就实现哪个方法，
+- 产生关联，添加注解`@FeignClient(value = "[服务名]", fallback = "[clazz]")`
+
+### Zuul
+
+
+# FastDFS
+
+> 分布式文件系统（Distributed File System）是指文件系统管理的物理存储资源不一定直接连接在本地节点上，而是通过计算机网络与节点相连。
+
+
+
+
+ 
+# RabbitMQ
+
+- MQ是消息通信的模型，并不是具体实现。是一种**应用程序**对**应用程序**的通信方法。应用程序通过读写出入队列的消息来通信，。同于直接调用彼此来通信，例如`feign`的**远程过程调用**技术。MQ的有两种主流方式
+    - AMQP: Advanced Message Queuing Protocol
+    - JMS: Java Message Service
+    - **区别**
+        - JMS是定义了统一的接口，来对消息操作进行统一；AMQP是通过规定协议来统一数据交互的格式
+        - JMS限定了必须使用Java语言；AMQP只是协议，不规定实现方式，因此是跨语言的。
+        - JMS规定了两种消息模型；而AMQP的消息模型更加丰富
+
+- 常见MQ
+    - ActiveMQ：基于JMS
+    - RabbitMQ：基于AMQP协议，erlang语言开发，稳定性好
+    - RocketMQ：基于JMS，阿里巴巴产品，目前交由Apache基金会
+    - Kafka：分布式消息系统，高吞吐量
+
+- RabbitMQ
+    - RabbitMQ是一个开源的，在AMQP基础上完整的，可服用的企业消息系统
+    - 支持主流的操作系统柜，Linux，Windows，MacOX
+    - 多种开发语言支持，Java，Python，PHP，Node.js..
+
+> **5种消息模型**
+
+
+-  **消息持久化:**消息队列默认是放在内存，如果宕机，怎么保证消息不丢失
+- 消息 - 交换机 - 队列
+
+
+
+
+
+
+
+
+# ElasticSearch
+
+- 介绍
+- 安装
+    - **不支持 root 用户**
+    - 在`youyou`用户的权限下上传`elastic`，在`root`用户下修改tar包的权限
+        - `chown youyou:youyou elasticsearch-6.3.0.tar.gz`
+        - `chmod 777 elasticsearch-6.3.0.tar.gz`
+    - 解压：切换到`youyou`用户下解压
+        - `tar -zxvf elasticsearch-6.3.0.tar.gz`
+    - 重命名，任何地方都可以用
+- 修改配置
+    - `jvm.options` 内存占用太多了，调小一些
+        ```text
+          -Xms512m
+          -Xmx512m
+        ```
+    - `elasticsearch.yml`
+        - 日志目录
+            - `path.logs:/home/youyou/elasticsearch/logs`
+        - 数据保存在某个目录(索引库)
+            - `path:data:/home/youyou/elasticsearch/data`
+        - **mkdir data** 一定记住要创建这个目录，
+        - 默认情况只允许本地连接
+            - `network.host: 0.0.0.0`(允许所有ip访问)
+- 运行
+    - `bin`目录执行`./elasticsearch`, 会有**4**个报错
+
+```text
+    [o.e.b.JNANatives         ] unable to install syscall filter: 
+    java.lang.UnsupportedOperationException: seccomp unavailable: requires kernel 3.5+ with CONFIG_SECCOMP and CONFIG_SECCOMP_FILTER compiled in ......
+
+
+    ERROR: [4] bootstrap checks failed
+    [1]: max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]
+    [2]: max number of threads [1024] for user [youyou] is too low, increase to at least [4096]
+    [3]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+    [4]: system call filters failed to install; check the logs and fix your configuration or disable system call filters at your own risk
+```
+- 处理运行报错
+    - `4` 过滤器需要高版本的内核，所以禁用。
+        - `elasticsearch.yml`禁用配置，最下方添加
+            - `bootstrap.system_call_filter: false`
+    - `1` 文件权限不足, 当前用户是`youyou`不是`root`
+        - **切换到root用户**，修改配置文件
+            - `vim /etc/security/limits.conf`, 添加一下内容
+            ```yaml
+                * soft nofile 65536
+                * hard nofile 131072
+                * soft nproc 4096
+                * hard nproc 4096
+            ```
+    - `2` 线程数量不够        
+        - `vim /etc/security/limits.d/90-nproc.conf`
+            - `soft nproc 1024` 修改为 `4096`
+    - `3` 虚拟内存不够: `vm.max_map_count`限制一个进程可以拥有的VMA(虚拟内存区域)的数量
+        - `vim /etc/sysctl.conf` 添加 `vm.max_map_count=655360` 执行 `sysctl -p` 刷新
+    - **切换youyou用户**再次执行， 部分用户修改完毕需要重启终端，否则配置无效
+    - 启动很慢，成功以后`publish_address {192.168.150.129:9200}, bound_addresses {[::]:9200}`
+        - `9200`：独立端口，`9300`：云服务端口
+
+### Kibana   
+- 修改配置，`config\kibana.yml`
+    - `elasticsearch.url: "http://192.168.150.129:9200"`
+- 双击`bin\kibana.bat`启动
+
+- 测试分词
+    - ```text
+        POST _analyze
+        {
+            "text":     "我是中国人"
+        }
+    ```
+    - 发现不能中文分词
+- 安装`ik-analysis`
+    - 复制到`/home/youyou/elasticsearch/plugins`目录下
+    - `unzip elasticsearch.6.3.0.zip -d ik-analyzer`：解压到当前新建的`ik-analyzer`目录下
+        - **一定要删除解压包**, 再重新启动
+    - 测试ik分词器
+    - ```text
+        POST _analyze
+        {
+            "analyzer": "ik_max_word",
+            "text":     "我是中国人"
+        }
+    ```
+
+### API
+
+- 索引库 `indices`
+    - 类型 `type`
+        - 文档 `document`
+            - 字段 `field`
+
+> 索引库
+
+- 创建索引库: 请求方式，索引库名，json格式
+    - ```text
+        PUT second
+        {
+            "settings": {
+                "number_of_shards": 1,
+                "number_of_replicas": 0
+            }
+        }
+    ```
+
+- 查看索引库：`GET second`
+    - 查看所有的索引库：`GET *`
+- 删除索引库：`DELETE second`
+    -     
+
+
+
+> 映射配置
+
+映射就是定义文档的过程，文档包含哪些字段，字段是否索引，是否分词，是否保存...
+
+
+
+> 
+
+> 
+
+### 高级查询
+
+# 页面静态化
+
+
+
+# RabbitMQ
+
+- simple
+- work
+- fanout
+- direct
+- topic
+
+
+
+
+
+
+
 # Lucene
 
 > 文档列表
@@ -512,595 +1124,3 @@ solr
 - 11:59
 - jsp
 - scr
-
-# SpringBoot
-
-> SpringBoot是基于Spring来构建，可以理解是对Spring的简化，快速构建Spring应用。SpringCloud是利用SpringBoot简化构建分布式应用。
-
-
-### overview
-- spring体系的一部分，创建独立的spring应用程序，
-    - 内置了servlet容器，内嵌tomcat，jetty，undertow，不需要打包成war包部署 
-    - 提供了默认配置，自动配置spring和第三方库，简化配置文件
-    - 启动器依赖，不会有版本冲突，不会出现混乱的依赖关系
-
-- 入门
-    - 多个controller，多个main方法，多个入口，tomcat只有一个，=> 基类, 注解扫描
-    
-
-
-### starter启动器
-- `pom.xml`
-- `引导类`
-- `Controller`
-    - ```java
-        @RestController// @Rest
-        @RequestMapping("hello1")
-        public class HelloController1 {
-
-            @GetMapping("one")
-            public String test1 () {
-                return "1 - one";
-            }
-
-            @GetMapping("two")
-            public String test2() {
-                return "1 - two";
-            }
-        }
-    ```
-   
-
-
-### java配置   
-- **配置文件**注入
-    - `pom.xml`
-    ```xml
-        <dependency>
-            <groupId>com.github.drtrang</groupId>
-            <artifactId>druid-spring-boot2-starter</artifactId>
-            <version>1.1.10</version>
-        </dependency>
-    ```
-    - `jdbc.properties`
-    ```xml
-        jdbc.driverClassName=com.mysql.jdbc.Driver
-        jdbc.url=jdbc:mysql://127.0.0.1:3306/youyou
-        jdbc.username=root
-        jdbc.password=123456
-    ```
-    - `JdbcConfig.java`
-    ```java
-        @Configuration
-        @PropertySource("classpath:jdbc.properties")
-        public class JavaConfiguration {
-            @Value("${jdbc.url}")
-            private String url;
-
-            @Value("${jdbc.driverClassName}")
-            private String driveClassName;
-
-            @Value("${jdbc.username}")
-            private String username;
-
-            @Value("${jdbc.password}")
-            private String password;
-            @Bean
-            public DataSource dataSource() {
-                DruidDataSource dds = new DruidDataSource();
-                dds.setUrl(this.url);
-                dds.setDriverClassName(this.driveClassName);
-                dds.setUsername(this.username);
-                dds.setPassword(this.password);
-                return dds;
-            }
-        }
-    ```
-    - `TestApplication.java`
-    - `HelloController1.java`
-
-
-### SpringBoot的属性注入
-
-> java配置方式。属性注入使用的是`@Value`注解。这种方式虽然可行，但是不够强大，因为它只能注入**基本类型值**。在SpringBoot中，提供了新的属性注入方式，支持各种java**基本数据**及**复杂数据**的注入。
-
-- **属性类**读取资源配置文件
-    - `SpringBoot`在启动时会默认读取`application.properties`或`application.yml`文件，属性类添加`@ConfiguratiionProperties(prefix = "jdbc")`读取资源文件的前缀数据
-
-- **构造方法**
-    - 不用`@Autowired`注入，通过构造方法注入
-    
-- `@Bean`方法形参的方式注入
-    - 连`全局属性`都不需要了
-
-- `@Bean`配合`@ConfigurationProperties(prefix = "jdbc")`
-    - **属性类**都不需要了
-    - `@EnableConfigurationProperties(JdbcProperties.class)`不需要了
-    - `@Bean`的**形参**不需要了
-    - `@Bean`的`get, set`方法不需要了
-    - **但是**， `get, set`的后缀名一定要和配置文件的字段名一样
-    - 
-    ```java
-        @Configuration
-        public class JdbcConfiguration {
-
-            @Bean
-            @ConfigurationProperties(prefix = "jdbc")// 声明要注入的属性前缀，SpringBoot会自动把相关属性通过set方法注入到DataSource中
-            public DataSource dataSource() {
-                DruidDataSource dataSource = new DruidDataSource();
-                return dataSource;
-            }
-        }
-    ```
-
-### SpringBoot全局配置
-- `server.port=80`
-- `logging.level.org.springframework=DEBUG`
-
-### SpringBoot-user
-
-- **spring-web-mvc**
-> 如果你想要保持Spring Boot 的一些默认MVC特征，同时又想自定义一些MVC配置（包括：拦截器，格式化器, 视图控制器、消息转换器 等等），你应该让一个类实现WebMvcConfigurer，并且添加@Configuration注解，但是千万不要加@EnableWebMvc注解。如果你想要自定义HandlerMapping、HandlerAdapter、ExceptionResolver等组件，你可以创建一个WebMvcRegistrationsAdapter实例 来提供以上组件。
->
-> 如果你想要完全自定义SpringMVC，不保留SpringBoot提供的一切特征，你可以自己定义类并且添加@Configuration注解和@EnableWebMvc注解
-
-    - pom
-    - 拦截器
-
-- **jdbc**
-    - pom
-    - 内置`HikariCP`连接池，不用配置`className`
-    - mysql
-
-- **mybatis**
-    - pom
-    - 通用mapper
-    - 覆盖默认配置
-
-- **transaction**
- 
-
-### mapper
-- jdbc
-    - mysql驱动
-    - jdbc启动器
-        - `spring-boot-starter-jdbc` 内置连接池 `Starter for using JDBC with the HikariCP connection pool`, 只需要配置内置的jdbc启动器就可以了
-        - `application.properties` 配置连接信息 
-- mybatis
-    - mybatis启动器
-    - 通用Mapper启动器：pojo使用了通用mapper的注解
-    - `UserMapper.java`继承通用Mapper`Mapper<User>`
-    - 加注解，实现接口扫描 `org.apache.ibatis.annotations.Mapper`
-
-
-
-
-
-
-
-
-
-
-# SpringCloud
-
-- `Eureka` 
-    - `Eureka Server`
-    - `Eureka Client`
-    - `Eureka 高可用`
-    - `服务发现机制`
-- `Config` 同一配置中心
-    - `Config Server`
-    - `Config Client`
-    - `Spring Cloud Bus` 结合`RabibtMQ`实现自动刷新
-- `Ribbon` 服务通信，负载均衡
-    - `RestTemplate` 
-    - `Feign`
-    - `分析源码，了解底层`
-- `Hystrix` 微服务API
-    - 动态路由，校验
-- `Zuul`
-    - 熔断机制
-
-**容器编排，服务追踪**
-- `docker`
-- `RANCHER`    
-
-### Eureka
-- `/jʊ'rikə/`
-- 服务注册中心
-    - `Eureka`的服务端应用，提供服务**注册和发现**功能
-- 服务提供者
-    - 提供服务的应用，可以是`SpringBoot`应用，也可以是其他技术实现，只要对外提供的Rest风格的服务就行。
-- 服务消费者
-    - 消费应用从注册中心获取服务列表，得知每个服务提供者的信息，知道去哪里调用服务
-
-> **provider_service: 服务提供者**
-
-> **consumer_service: 服务消费者**
-
-> **eureka_service: 服务注册中心**
-
-- 导入依赖
-- `application.yml` 覆盖默认配置
-    - `server.port` : `10086`
-    - `spring.application.name` : `eureka_service`
-    - `eureka.client.service-url.defaultZone` : `http://localhost:10086/eureka`
-- `ServiceEurekaApplication.java` 添加开启服务端注解
-    - `@EnableEurekaServer` 
-
-#### 从服务中心获取服务
-
-> **service-provider**
-
-- `provider.pom`
-    - 版本号
-        - ```xml
-            <spring-cloud.version>Finchley.SR2</spring-cloud.version>
-        ```
-    - 依赖管理
-        - ```xml
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.springframework.cloud</groupId>
-                        <artifactId>spring-cloud-dependencies</artifactId>
-                        <version>${spring-cloud.version}</version>
-                        <type>pom</type>
-                        <scope>import</scope>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-        ```
-    - 组件
-        - ```xml
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            </dependency>
-        ```
-- `application.yml` 注册到服务中心
-    - `spring.application.name` : `provider_service`
-    - `erueka.client.service-url.defaultZone` : `http://localhost:10086/eureka`
-- `ProviderApplication.java` 启动客户端功能
-    - `@EnableDiscoveryClient` : `SpringCloud`
-
-> **service-consumer**    
-
-- 和 **provider_service**配置一样，但是消费服务要动态的从服务列表中获取服务实例
-    - 在`UserController.java`使用`DiscoveryClient`类
-        - `import org.springframework.cloud.client.discovery.DiscoveryClient;`
-    - 获取对应的服务实例，需要知道服务名字`provider_service`
-    - ```java
-        @Controller
-        @RequestMapping("customer/user")
-        public class UserController {
-            @Autowired
-            private RestTemplate restTemplate;
-
-            @Autowired
-            private DiscoveryClient discoveryClient; // eureka客户端，可以获取到eureka中服务的信息
-
-            @GetMapping
-            @ResponseBody
-            public User queryUserById(@RequestParam("id") Long id){
-                // 根据服务名称，获取服务实例。有可能是集群，所以是service实例集合
-                List<ServiceInstance> instances = discoveryClient.getInstances("provider_service");
-                // 因为只有一个UserService。所以获取第一个实例
-                System.out.println(id);
-                ServiceInstance instance = instances.get(0);
-                // 获取ip和端口信息，拼接成服务地址
-                String baseUrl = "http://" + instance.getHost() + ":" + instance.getPort() + "/user/" + id;
-                User user = this.restTemplate.getForObject(baseUrl, User.class);
-                return user;
-            }
-        }
-    ```
-
-#### 高可用的Eureka Server
-
-> **EurekaServer**也可以是一个集群，形成高可用的**Eureka**中心
-
-- 当**服务提供者**注册到Eureka Server集群中的某个节点时，这个节点会把服务的信息同步给集群中的每个节点，就可以实现**数据同步**，无论客户端访问到Eureka Server集群中的任意节点，都可以获取到完整的**服务列表**信息
-
-- 重复部署同一个注册中心，只是修改端口，相互配置地址
-
-> **服务提供者**
-
-- 服务提供者要想EurekaServer注册服务，并且完成服务续约等工作
-
-- **服务注册**：服务提供者在启动的时候，会检测配置属性中的`eureka.client.register-with-eureka`的值是否为`true`, 默认是`true`, 如果为`true`，就会想EurekaServer发起Rest请求，并携带自己的**元数据**信息，EurekaServer会把这些信息保存到一个双层Map结构中
-    - 第一层Map的Key是**服务id**，一般是配置中的的`spring.application.name`属性值
-    - 第二层Map的Key是服务的**实例id**，一般是`host`+`serviceID`+`port`, 例：`localhot:user_service:8081`
-        - Value是服务的**实例对象**，就是一个服务，可以同时启动多个不同实例，形成集群
-
-- **服务续约**：就是心跳机制，注册服务完成以后，服务提供者会维持一个心跳，就是定时想EurekaServer发起Rest请求，告诉EurekaServer，"我还活着"。这种状态称为服务续约`renew`, 有两个重要参数可以修改服务续约的行为
-    - ```yaml
-        eureka:
-            instance:
-                lease-expiration-duration-in-seconds: 90
-                lease-renewal-interval-in-seconds: 30
-    ```
-    - `lease-renewal-interval-in-seconds` ：服务续约(renew)的间隔，默认为30秒
-    - `lease-expiration-duration-in-seconds` ：服务失效时间，默认值90秒
-
-    
-默认情况下，间隔30秒服务会向注册中心发送一次心跳，证明自己还活着。如果超过90秒没有发送心跳，EurekaServer会认为这个服务宕机，会从服务列表中移除，这个两个值在生产环境不需要修改，默认就行。但是在开发环境中，时间太长，我们会关掉一个服务，会返现EurekaServer依然认为服务还活着。
-    
-
-> **服务消费者**
-
-- **获取服务列表**，当服务消费者启动时，会检测`eureka.client.fetch-registry`的值是否为`true`, 默认是`true`。如果为`true`, 就会拉取EurekaServer的服务列表只读备份，缓存在本地。并且间隔30秒重新获取并更新数据。在开发阶段，依然设置的小点。生产环境中不需要修改。
-    - ```yaml
-        eureka:
-            client:
-                registry-fetch-interval-seconds: 5
-    ```
-
-- **服务下线**：服务正常关闭，会触发一个服务下线的Rest请求给EurekaServer，通知服务中心自己已经下线，服务中心接到通知会把该服务设置为下线状态。
-
-- **失效剔除**：但是服务的关闭一般是非正常的，大多数是因为内存溢出，网络故障等原因导致无法工作。所以EurekaServer会开启一个定时任务，间隔60秒对所有失效的服务(超过90秒未响应)进行剔除。这个时间值在开发阶段极不方便，你重启服务了，EurekaServer需要60秒才能反应过来，所以需要重置时间值。
-    - ```yaml
-        server:
-            eviction-interval-timer-in-ms: 10000 #单位是毫秒
-    ```     
-
-- **自我保护**：当服务未按时进行心跳续约时，EurekaServer会统计最近15分钟心跳失败的服务实例的比例是否超过了85%。因为在线上环境下，因为网络延迟等原因，心跳失败的比例很有可能超标，此时把服务从列表中剔除是不妥当的，因为服务可能并没有宕机。这时候，EurekaServer就会把当前实例的注册信息保护起来，不会剔除。在生产环境下这种方式很有效，保证了大多数服务依然可用。
-    - 但是这种机制，在开发阶段会很麻烦，因此，在开发阶段需要关闭自我保护
-    - `service_eureka`
-    - ```yaml
-        eureka:
-        server:
-            enable-self-preservation: false # 关闭自我保护模式（缺省为打开）
-            eviction-interval-timer-in-ms: 1000 # 扫描失效服务的间隔时间（缺省为60*1000ms）
-    ```
-
-    - 当关停一个服务，会在EurekaServer面板看到一条警告
-    - ```bash
-        emergency! eureka may be incorrectly claiming instances are up when they're not. 
-        renewals are lesser than threshold and hence the instances are not being expired judt to be safe. 
-        DS replicas
-
-        紧急！ eureka可能会错误地声称实例在不存在的情况下会被启动。 
-        续订小于阈值，因此实例未过期判断为安全。
-        DS副本
-    ```    
-
-### Ribbon
-- Ribbon是Netflix发布的负载均衡器，助于控制HTTP合同TCP客户端的行为。为Ribbon配置服务提供者地址列表以后，可以基于算法，自动地帮助服务消费者去请求。Ribbon默认提供了一些算法，轮询、随机...
-
-- 在`public RestTemplate restTemplate() {`上注解`@LoadBalanced` 就是开启了ribbon的负载均衡
-- `this.restTemplate.getForObject("http://provider_service/user/" + id, User.class)`
-- 测试
-    - 启动多个服务提供者
-    - ip，端口的配置，在`provider-service`
-        - `instance: prefer-ip-address: false`,  `instance: ip-address: 192.168.150.1`
-    - 随机的测试，在`consumer.yml`配置
-        - ```yaml
-            provider-service: #提供者的id
-                ribbon:
-                    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
-        ```        
-
-### Hystrix
-- Hystix是Netflix开源的一个延迟和容错库，用于隔离访问远程服务、第三方库，防止出现级联失败。
-
-> **熔断现象**：一个请求需要很多个微服务协同完成，如果卡在某个服务会造成内存溢出。需要采取**线程隔离**、**服务降级**的技术手段来解决。熔断的触发有2中情况，一种线程池满了，另一种请求超时。
-
-- 如果一个服务经常熔断，那么这个服务就是故障服务，Hystrix会主动切断服务，处于`open`状态，**5秒**之内不再接受请求，之后处于半开状态`half open`，然后放行部分请求，查看还能不能连接上服务，如果能连上就进入闭合状态`closed`, 如果还连接又回到`open`状态，周而复始。
-    - `closed`: 请求正常访问
-    - `open`: 请求都会被降级。Hystrix会对请求计数，当一定时间请求的失败比例超过阈值，就会触发熔断，进入`open`状态。默认失败比例的阈值是50%，请求次数不低于20次。
-    - `half open`: 
-
-- 熔断的参数
-    - ```xml
-        requestVolumeThreshold：触发熔断的最小请求次数，默认20
-        errorThresholdPercentage：触发熔断的失败请求最小占比，默认50%
-        sleepWindowInMilliseconds：休眠时长，默认是5000毫秒
-    ```    
-
-
-> **服务降级**：优先保证核心服务，而非核心服务不可用或弱可用。用户的请求故障时，不会被阻塞，更不会无休止的等待或看到系统崩溃，至少可以看到一个执行结果(返回友好提示)。服务降级虽然会导致**请求失败**，但是不会导致阻塞，最多对这个依赖服务对应的线程池中的资源造成影响，**最主要**的是不会对其他服务有影响，更快的释放资源，不至于宕机。
-
-- 消费方处理请求超时
-- `依赖`
-```xml
-    <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-    </dependency>
-```
-- `覆盖默认配置`
-- `添加注解`: 在`ServiceConsumerApplication.java`上添加`@EnableCircuitBreaker`, 开启熔断注解 
-    - 组合注解：`@SpringCloudApplication`
-- 首先，熔断是对远程调用进行熔断，    
-
-> **线程隔离**：
-
-### Feign
-- Feign是Netflix开发的声明式、模板化的HTTP客户端。Feign可以把Rest请求进行隐藏，伪装成SpringMVC的Controller一样。不用拼接URL、参数等操作，一切可以交给Feign去做。
-- Spring Cloud对Feign进行了增强，使得Feign支持了SpringMVC注解，并且整理Ribbon和Eureka，让Feign的使用更加方便
-- Spring Cloud中使用Feign非常简单，创建一个接口，并且在接口上添加一些注解，代码就完成了
-- 不需要`RestTemplate` == 远程调用，也不需要`@DefaultProperties` == 熔断功能
-
-> **远程访问** 消费者从服务列表获取服务, 
-
-- 依赖
-- 注解`@EnableFeignClients`， 在引导类加
-- 覆盖配置
-- 定义**接口**，添加注解`@FeignClient("[服务名]")` ，接口里面定义的方法不用方法体，熔断方法来重写
-- 通过注入接口的动态代理对象使用，底层也是`RestTemplate`
-
-> Feign集成了Hystrix, 默认是关闭的
-
-- `feign.hystrix.enabled: true`, 开启Feign的负载均衡功能，只需要继承
-- Feign接口添加实现类，给哪个方法添加熔断方法，就实现哪个方法，
-- 产生关联，添加注解`@FeignClient(value = "[服务名]", fallback = "[clazz]")`
-
-### Zuul
-
-
-# FastDFS
-
-> 分布式文件系统（Distributed File System）是指文件系统管理的物理存储资源不一定直接连接在本地节点上，而是通过计算机网络与节点相连。
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ElasticSearch
-
-- 介绍
-- 安装
-    - **不支持 root 用户**
-    - 在`youyou`用户的权限下上传`elastic`，在`root`用户下修改tar包的权限
-        - `chown youyou:youyou elasticsearch-6.3.0.tar.gz`
-        - `chmod 777 elasticsearch-6.3.0.tar.gz`
-    - 解压：切换到`youyou`用户下解压
-        - `tar -zxvf elasticsearch-6.3.0.tar.gz`
-    - 重命名，任何地方都可以用
-- 修改配置
-    - `jvm.options` 内存占用太多了，调小一些
-        ```text
-          -Xms512m
-          -Xmx512m
-        ```
-    - `elasticsearch.yml`
-        - 日志目录
-            - `path.logs:/home/youyou/elasticsearch/logs`
-        - 数据保存在某个目录(索引库)
-            - `path:data:/home/youyou/elasticsearch/data`
-        - **mkdir data** 一定记住要创建这个目录，
-        - 默认情况只允许本地连接
-            - `network.host: 0.0.0.0`(允许所有ip访问)
-- 运行
-    - `bin`目录执行`./elasticsearch`, 会有**4**个报错
-
-```text
-    [o.e.b.JNANatives         ] unable to install syscall filter: 
-    java.lang.UnsupportedOperationException: seccomp unavailable: requires kernel 3.5+ with CONFIG_SECCOMP and CONFIG_SECCOMP_FILTER compiled in ......
-
-
-    ERROR: [4] bootstrap checks failed
-    [1]: max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]
-    [2]: max number of threads [1024] for user [youyou] is too low, increase to at least [4096]
-    [3]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
-    [4]: system call filters failed to install; check the logs and fix your configuration or disable system call filters at your own risk
-```
-- 处理运行报错
-    - `4` 过滤器需要高版本的内核，所以禁用。
-        - `elasticsearch.yml`禁用配置，最下方添加
-            - `bootstrap.system_call_filter: false`
-    - `1` 文件权限不足, 当前用户是`youyou`不是`root`
-        - **切换到root用户**，修改配置文件
-            - `vim /etc/security/limits.conf`, 添加一下内容
-            ```yaml
-                * soft nofile 65536
-                * hard nofile 131072
-                * soft nproc 4096
-                * hard nproc 4096
-            ```
-    - `2` 线程数量不够        
-        - `vim /etc/security/limits.d/90-nproc.conf`
-            - `soft nproc 1024` 修改为 `4096`
-    - `3` 虚拟内存不够: `vm.max_map_count`限制一个进程可以拥有的VMA(虚拟内存区域)的数量
-        - `vim /etc/sysctl.conf` 添加 `vm.max_map_count=655360` 执行 `sysctl -p` 刷新
-    - **切换youyou用户**再次执行， 部分用户修改完毕需要重启终端，否则配置无效
-    - 启动很慢，成功以后`publish_address {192.168.150.129:9200}, bound_addresses {[::]:9200}`
-        - `9200`：独立端口，`9300`：云服务端口
-
-### Kibana   
-- 修改配置，`config\kibana.yml`
-    - `elasticsearch.url: "http://192.168.150.129:9200"`
-- 双击`bin\kibana.bat`启动
-
-- 测试分词
-    - ```text
-        POST _analyze
-        {
-            "text":     "我是中国人"
-        }
-    ```
-    - 发现不能中文分词
-- 安装`ik-analysis`
-    - 复制到`/home/youyou/elasticsearch/plugins`目录下
-    - `unzip elasticsearch.6.3.0.zip -d ik-analyzer`：解压到当前新建的`ik-analyzer`目录下
-        - **一定要删除解压包**, 再重新启动
-    - 测试ik分词器
-    - ```text
-        POST _analyze
-        {
-            "analyzer": "ik_max_word",
-            "text":     "我是中国人"
-        }
-    ```
-
-### API
-
-- 索引库 `indices`
-    - 类型 `type`
-        - 文档 `document`
-            - 字段 `field`
-
-> 索引库
-
-- 创建索引库: 请求方式，索引库名，json格式
-    - ```text
-        PUT second
-        {
-            "settings": {
-                "number_of_shards": 1,
-                "number_of_replicas": 0
-            }
-        }
-    ```
-
-- 查看索引库：`GET second`
-    - 查看所有的索引库：`GET *`
-- 删除索引库：`DELETE second`
-    -     
-
-
-
-> 映射配置
-
-映射就是定义文档的过程，文档包含哪些字段，字段是否索引，是否分词，是否保存...
-
-
-
-> 
-
-> 
-
-### 高级查询
-
-# 页面静态化
-
-
-
-# RabbitMQ
-
-- simple
-- work
-- fanout
-- direct
-- topic
-
-
-
-
-
-
-

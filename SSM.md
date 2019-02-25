@@ -1,29 +1,6 @@
-- performance logs
-
 # Mybatis
  `font-family: 'Source Code Pro','DejaVu Sans Mono','Ubuntu Mono','Anonymous Pro','Droid Sans Mono',Menlo,Monaco,Consolas,Inconsolata,Courier,monospace,"PingFang SC","Microsoft YaHei",sans-serif;`
 
-```
-    │─user
-    │─software
-    │     
-    │─dev_env      
-    │   ├─jdk
-    │   ├─maven
-    │   ├─tomcat
-    │   ├─mysql
-    │   ├─redis
-    │   ├─nginx
-    │ 
-    │─dev_tools
-    │   ├─IDEA
-    │   ├─VMware
-    │   ├─liunx
-    │   ├─iso
-    │   ├─navicat
-    │   ├─vscode
-          
-```
 
 - 持久层
 - 业务层
@@ -1138,15 +1115,68 @@ public void jdk () {
     }
 ```
 
-### SpringTest
 
 ### Spring的web集成
+- `缺点`：在创建Spring容器同时，需要对容器中对象初始化。而每次初始化容器的时候，都创建了新的容器对象，消耗了资源，降低了性能。
+- `思路`：保证容器对象只有一个。
+- `方案`：将Spring容器绑定到Web Servlet容器上，让Web容器来管理Spring容器的创建和销毁。
+- `分析`：ServletContext在Web服务运行过程中是唯一的， 其初始化的时候，会自动执行ServletContextListener 监听器 （用来监听上下文的创建和销毁），
+- `步骤`：
+    - 编写一个`ServletContextListener`监听器，在监听`ServletContext`到创建的时候，创建Spring容器，并将其放到`ServletContext`的属性中保存`setAttribute`(Spring容器名字，Spring容器对象) 。 
+    - 无需手动创建该监听器，因为Spring提供了一个叫`ContextLoaderListener`的监听器，它位于`spring-web-4.3.13.RELEASE.jar`中。
+
 
 ### Spring JdbcTemplate
 
-### Spring 事务管理机制
+- 手动使用 JdbcTemplate
+    - 数据源
+    - 配置信息
+    - 获取JdbcTemplate
+    - 执行sql
+
+- Spring装载JdbcTemplate
+
+- 配置信息使用外部文件
+
+- **每个Dao都需要注入JdbcTemplate**
+    - 继承Spring框架封装的JdbcDaoSupport类获得jdbctemplate对象操作数据库
+    - 配置spring核心配置文件，注入jdbcTemplate到Dao
+
+
+
+### Spring事务管理机制
+
+> Spring事务管理高层抽象主要包括3个`接口`，Spring的事务主要是由他们共同完成的
+
+- `PlatformTransactionManager`：事务管理器
+    - `connection.commit()`：提交事务
+    - `connection.rollback()`：回滚事务
+    - `connection.getTransaction`：获取事务状态
+
+- `TransactionDefinition`：	事务定义信息(隔离、传播、超时、只读) — 通过配置如何进行事务管理。
+    - `getIsolationLevel`：隔离级别获取
+        - 脏读:一个事务读取了另一个事务改写但还未提交的数据,如果这些数据被回滚，则读到的数据是无效的。
+        - 不可重复读：在同一事务中，多次读取同一数据返回的结果有所不同。换句话说就是，后续读取可以读到另一事务已提交的更新数据。
+        - 可复读: 在同一事务中多次读取数据时，能够保证所读数据一样，也就是，后续读取不能读到另一事务已提交的更新数据。
+        - 幻读：一个事务读取了几行记录后，另一个事务插入一些记录，幻读就发生了。再后来的查询中，第一个事务就会发现有些原来没有的记录。
+
+    - `getPropagationBehavior`：传播行为获取
+        - 一个业务调用多个方法，合并成一个事务
+        - 多个事务合并成一个事务
+        - 嵌套事务，大的事务嵌套小的事务，try...catch
+    - `getTimeout`：获取超时时间（事务的有效期）
+    - `isReadOnly`: 是否只读(保存、更新、删除—对数据进行操作-变成可读写的，查询-设置这个属性为true，只能读不能写)，事务管理器能够根据这个返回值进行优化。
+
+- `TransactionStatus`：获取事务具体运行状态信息。
+    - 只回滚：测试性能，并不存入数据，
+
 
 ### 声明式事务管理
+
+- 目标对象：`tranfer`方法需要事务管理，需要增强，
+    - 配置`事务管理器`
+    - 配置spring提供的`事务通知`
+    - 配置`切入点和切面`
 
 
 # SpringMVC
