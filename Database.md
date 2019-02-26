@@ -89,65 +89,72 @@
     - `<> !=` 不相等 
     - `and` =>         `select name, age from person where age = 23 and name = 'lisi';`
     - `between and` => `select name, score from person where score between 81 and 93;`
-    - `in` => 指定值中任意取值 `where age in (val1, val2, val3)`
-    - `or` =>               `where age = val1 or age = val2 or age = val3`
+    - `in` => `select * from person where age in (17， 18， 19)`
+    - `or` => `select * from person where age = 17 or age = 18 or age = 19`
 
 - 模糊查询 
-    - `like '%刘%'`, 只要有刘就可以, => `%` => 表示任意个数的字符： >=0
-    - `like '%刘‘` , 结尾
-    - `like '刘%‘`, 开始
-    - `like '_刘_`, 前后只能有一个， `where name like '_刘_'`
-    - `like '_刘`
-    - `like '刘_`
-    - `is null`         `where birthday is null`
-    - `is not null`     `where name is not null`
+    - `like '%刘%'`： 只要有刘就可以
+    - `like '%明'`： 以明结尾
+    - `like '刘%'`： 姓刘的
+    - `like '_晓_`： 姓名中间是晓
+    - `like '_冲`： 单名叫冲
+    - `like '张_`： 姓张单名
+    - `is null`：`where birthday is null`
+    - `is not null`：`where name is not null`
 
 - 过滤重复  
-    - `distinct` => `select distinct age from person`, => 显示不重复的年龄
+    - `distinct`：`select distinct age from person`：显示不重复的年龄
+    - `SELECT DISTINCT role_name FROM tbl_cop2sys_role`: 查询所有的角色
+    - `SELECT COUNT(temp.role_name) FROM`
+	    - `(SELECT DISTINCT role_name FROM tbl_cop2sys_role) as temp`: 查询所有角色的数量
 
 - 结果排序  
-    - `order by` 对结果进行排序，默认是升序，=> `asc` 
-    - `null`  在排序是最小的
-    - `select * from person order by age asc`
+    - `order by`：对结果进行排序，`null`在排序是最小的
+    - `select * from person order by age asc`：默认是升序
     - `select * from person order by age dasc`
 
 - 起别名  
-    - `as` , 也可以省略
+    - `as`：也可以省略
     - `select name as 姓名, age as 年龄 from person;`
 
 ### 6.  SQL聚合函数
 
-- count
+- **count**
     - 统计多少条记录, `null` 不参与统计
     - `select count(name) from person`
     - `select count(name) from person where age > 18`
 
-- sum
+- **sum**
     - 多列求和, `null` 不参与计算 
         - `select sum(score) from students`
-    - `ifnull (列值，整体返回值)`  
+    - `ifnull`：列值，整体返回值  
         - `select sum( ifnull(score, 0)) from students` : 如果分数为 null, 提供默认值0
     - `truncate (数值，保留位数)`
         - `select truncate(sum(score), 2) from students`
 
-- avg
+- **avg**
     - 平均数 `select avg(score) / count(*) from students`
 
-- max, min
+- **max**, **min**
     - `null` 不参与计算
     - `select max(score) 最高分, min(score) 最低分 from students;`
-- group by 
+
+- **group by**
     - `select product, sum(price) from shoppingcart group by product`
     - `having`
         - `select product, sum(price) from shoppingcart group by product having sum(price) > 10;`
         - `having` 是在分组之后进行过滤，`where`是在分组之前进行过滤，
+
 - 查询的执行顺序：
-    - `from`     = 表名     
-    - `where`    = 条件过滤  
-    - `group by` = 分组              
-    - `having`   = 分组之后进行过滤          
-    - `select`   = 执行完毕之后显示内容          
-    - `order by` = 把内容进行排序输出          
+    
+| - | - |    
+| :--- | :--- |
+| `from`     | 表名     
+| `where`    | 条件过滤  
+| `group by` | 分组              
+| `having`   | 分组之后进行过滤          
+| `select`   | 执行完毕之后显示内容          
+| `order by` | 把内容进行排序输出          
 
 ### 7.  MYSQL备份和恢复
 
@@ -158,7 +165,7 @@
     - 已经存在的表添加外键约束
         - `alter table coder_project add foreign key(coder_id) references coder(id);`
     - 新建表的时候添加外键约束
-        ``` 
+        ``` sql
         create table coder_project (
             coder_id int,
             project_id int,
@@ -178,25 +185,25 @@
 
 ### 10. 多表查询
 
-- 避免笛卡尔积 => 内连接
-    - 隐式 `select * from a,b where a.id = b.id;`
-    - 显示 `select * from a inner join b on a.id = b.id;`        
-
-- 外连接
-    - 左外连接  `select * from a left outer join b on a.id = b.id`
-    - 右外连接  `select * from a right outer join b on a.id = b.id;`
-    - 全外连接： 不去掉重复 => `union all`
-    ``` 
-    select * from a left outer join b  on a.id = b.id
-    union
-    select * from a right outer join b on a.id = b.id;
-    ```
+- 避免笛卡尔积：
+    - 内连接
+        - 隐式 `select * from a,b where a.id = b.id;`
+        - 显示 `select * from a inner join b on a.id = b.id;`        
+    - 外连接
+        - 左外连接  `select * from a left outer join b on a.id = b.id`
+        - 右外连接  `select * from a right outer join b on a.id = b.id;`
+        - 全外连接： 不去掉重复 => `union all`
+        ```sql 
+        select * from a left outer join b  on a.id = b.id
+        union
+        select * from a right outer join b on a.id = b.id;
+        ```
 
 ### 11. 关联子查询
 
-- `in`
+- **in**
 
-``` mysql
+``` sql
     select * from student where id in (
         select student_id from studentcourse where score <= 60);
     
@@ -206,38 +213,40 @@
             select id from coder where coder = 'jack'));
 ```
 
-- `exists`
+- **exists**
 
-```mysql
+```sql
     // 主表查询不及格的学生
     // student 和 temp 的所有字段
     select * from 
-        student, (select * from studentcourse where score < 70) as temp 
+        student, (select * from student_course where score < 70) as temp 
     where student.id = temp.student_id order by temp.score;
     
     // 只有 student 的字段，  ↓ :意注 
     select * from student where exists (
-        select * from studentcourse where score < 70 and studentcourse.student_id = student.id
+        select * from student_course where score < 70 and student_course.student_id = student.id
 ```
 
-- `all`
+- **all**
 
-- `any`  `some`
+- **any**, **some**
 
-- `as`
+- **as**
 
-- `limit`
+- **limit**
     `select * from stu_info order by stu_id limit 0, 300;`// 前300条数据排序
 
-- `as` 临时表
-
-```mysql
-    select student.name '姓名', course.name '课程', temp.score '分数' 
-    from student, course,
-    (select * from studentcourse where score between 60 and 70) as temp
-    where temp.student_id = student.id and temp.course_id = course.id
-    order by temp.score;
-```
+- **查询所有分数在60 - 70的学生对应的学科**
+    - 
+    ```sql
+        select student.name '姓名', course.name '课程', temp.score '分数' from 
+            student, 
+            course,
+            (select * from student_course where score between 60 and 70) as temp
+        where 
+            temp.student_id = student.id and temp.course_id = course.id
+        order by temp.score;
+    ```
 
 ### 12. MYSQL自带函数
 
