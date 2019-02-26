@@ -1,3 +1,53 @@
+# RESTful 
+- **REST**: `Representational State Transfer`表述性状态转移
+    - web服务的一种**架构风格**
+    - 使用HTTP、URI、JSON、HTML等广泛流行的**标准和协议**
+    - 轻量级、跨平台、跨语言的**架构设计**
+    - 是一种设计风格或思想，并不是一种标准，更不是一种软件
+- **REST**架构的主要原则
+    - 网络上的所有事物都可以被抽象为资源`resource`
+    - 每个资源都有唯一的资源标识符`resource identifier`    
+    - 每个资源有多种表现形式`xml`, `json`
+    - 对资源操作不会改变资源的标识符
+    - 所有的操作都是无状态的
+- 接口设计
+    - `URL`的组成
+        - 网络协议`http`, `https`
+        - 服务器地址
+        - 接口名称
+        - 参数列表`?`
+    - `URI`的限定
+        - 不要使用大写字母
+        - `-`代替`_`
+        - 参数列表应该被`encode`
+- 响应设计        
+    - `Content body`仅仅用来传输数据
+    - 数据拿来就用的原则，不需要"拆箱"，不需要冗余数据
+    - 描述数据或请求的元数据放在`Header`种，例：`X-Result-Fields`
+        - 错误响应
+        ```json
+            {
+                "status": 200,
+                "data": {
+                    "trade_id": 1234,
+                    "trade_name": "lucy"
+                }
+            }
+        ```
+        - 正确响应
+        ```json
+            Response Headers:
+                Status: 200
+            Response Body:
+                {
+                    "trade_id": 1234,
+                    "trade_name": "lucy"
+                }                
+        ```
+
+
+
+
 # SpringBoot
 
 > SpringBoot是基于Spring来构建，可以理解是对Spring的简化，快速构建Spring应用。SpringCloud是利用SpringBoot简化构建分布式应用。
@@ -423,10 +473,36 @@
 
 ### Zuul
 
+- 没有zuul网关的缺点
+    - 无法直接复用既有接口：
+    当需要对一个即有的集群内访问接口，实现外部服务访问时，不得不通过在原有接口上增加校验逻辑，或增加一个代理调用来实现权限控制，无法直接复用原有的接口。
+    - 破坏了服务无状态特点：
+    保证对外服务的安全性，需要对服务访问的权限控制，
+    而开放服务的权限控制破坏了服务集群中REST API无状态的特点。
+    所以还需要考虑对接口访问的控制处理。
+    
+- zuul的核心是一系列的过滤器
+    - 身份验证与安全：识别每个资源的验证要求，拒绝不符的请求
+    - 动态路由：根据请求路径路由到不同的微服务，`/user`, `/search`
+    - 负载均衡：每个服务都是一个集群，需要分配到指定的机器上
+    - 压力测试：所有的路径都是经过zuul，可以向指定集群增加流量，做测试，了解性能
+    - 审查监控：每个服务都要经过zuul，可以监控每个服务的并发边界，在边界位置追踪有意义的数据和统计结果。
+    - 多区域弹性：类似负载均衡         
+    - 静态响应处理：
+
 
 # FastDFS
 
-> 分布式文件系统（Distributed File System）是指文件系统管理的物理存储资源不一定直接连接在本地节点上，而是通过计算机网络与节点相连。
+- 分布式文件系统（Distributed File System）是指文件系统管理的物理存储资源不一定直接连接在本地节点上，而是通过计算机网络与节点相连。
+    - 传统文件系统管理的文件就存储在本机。
+    - 分布式文件系统管理的文件存储在很多机器，这些机器通过网络连接，要被统一管理。无论是上传或者访问文件，都需要通过管理中心来访问
+    
+- FastDFS两个主要的角色：Tracker Server 和 Storage Server 。
+    - Tracker Server：跟踪服务器，主要负责调度storage节点与client通信，在访问上起负载均衡的作用，和记录storage节点的运行状态，是连接client和storage节点的枢纽。
+    - Storage Server：存储服务器，保存文件和文件的meta data（元数据），每个storage server会启动一个单独的线程主动向Tracker cluster中每个tracker server报告其状态信息，包括磁盘使用情况，文件同步情况及文件上传下载次数统计等信息
+    - Group：文件组，多台Storage Server的集群。上传一个文件到同组内的一台机器上后，FastDFS会将该文件即时同步到同组内的其它所有机器上，起到备份的作用。不同组的服务器，保存的数据不同，而且相互独立，不进行通信。
+    - Tracker Cluster：跟踪服务器的集群，有一组Tracker Server（跟踪服务器）组成。
+    - Storage Cluster ：存储集群，有多个Group组成。    
 
 
 
@@ -453,16 +529,117 @@
     - 支持主流的操作系统柜，Linux，Windows，MacOX
     - 多种开发语言支持，Java，Python，PHP，Node.js..
 
+- 组成部分
+    - `Connections`: 连接
+    - `Channels`: 管道，声明**队列**和**交换机**，使消费者绑定到队列。所有的API都是通过管道来完成的。
+    - `Exchanges`：交换机, 不具备存储消息，只负责转发消息，简单模型和工作模型使用的是默认交换机。交换机的名字不能重复，如果重复，会检查参数是否和已存在的是否一样，如果一样，就复用存在的，不一样的话，就会报错。
+    - `Queues`: 队列，接收存储转发消息。
+
+
+
 > **5种消息模型**
 
+- 简单模型
+    - 连接
+    - 管道
+    - 队列：声明队列名字相同的时候，只会存在一个，没有声明，有的话就使用存在的队列
+    - 消费者监听队列, 消费者没有释放资源，所以不会停止监听
+    - 消费者出现异常不能消费到队列里的消息，导致消息丢失
+    - `ACK`消息确认机制 == `channel.basicConsume(QUEUE_NAME, false, consumer);` 重要的消息需要使用手动ACK
+        - 自动`ACK`，消费方出现异常，消息状态会从`Ready`变成`Unacked`, 停止消费方程序，又变回`Ready`状态
+    
+- 工作模型：一个生产者，多个消费者
+    - 如果生产方生产很多的消息，消费方需要长时间处理，消息多了以后会造成内存溢出。MQ默认是平均分配消息给消费者处理，对性能高的服务器是浪费，
+        - `channel.basicQos(1);` == 实现能者多劳
+    - **此时的消息只能被消费一次**
 
--  **消息持久化:**消息队列默认是放在内存，如果宕机，怎么保证消息不丢失
-- 消息 - 交换机 - 队列
+- 发布/订阅：
+    - **消息需要被消费多次** == 生产者需要把一个消息发送到多个队列、指定队列或都不发送。此时需要**交换机**，交换机有三种类型：
+    -  声明exchange: `channel.exchangeDeclare(EXCHANGE_NAME, "fanout");`
+        - `Fanout`：广播，`channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes());`
+        - `Direct`：定向，`channel.basicPublish(EXCHANGE_NAME, "delete", null, message.getBytes());`
+        - `Topic`：通配符,
+            - 通配符规则：  
+                - `#`：匹配一个或多个词
+                - `*`：匹配不多不少恰好1个词     
+            - 举例：
+                - `audit.#`：能够匹配`audit.irs.corporate` 或者 `audit.irs`
+                - `audit.*`：只能匹配`audit.irs`
 
 
 
+> **消息持久化**
+
+- 消息队列默认是放在内存，如果宕机，怎么保证消息不丢失
+    - 交换机持久：`channel.exchangeDeclare(EXCHANGE_NAME, "topic", true);`
+    - 队列持久化：`channel.queueDeclare(QUEUE_NAME, true, false, false, null);`
+    - 消息持久化：`channel.basicPublish(EXCHANGE_NAME, "item.insert", MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());`
 
 
+> **改造**
+
+- pom.xml
+- application.yml -- template
+
+- 生产方
+```java
+private void sendMsg(String type, Long spuId) {
+    try {
+        this.amqpTemplate.convertAndSend("item." + type, spuId);
+    } catch (AmqpException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+- 消费方
+```java
+@Component
+public class GoodsListener {
+
+    @Autowired
+    private GoodsHtmlService goodsHtmlService;
+
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(value = "LEYOU.ITEM.SAVE.QUEUE", durable = "true"),
+            exchange = @Exchange(value = "LEYOU.ITEM.EXCHANGE", ignoreDeclarationExceptions = "true", type = ExchangeTypes.TOPIC),
+            key = {"item.insert", "item.update"}
+    ))
+    public void saveListener(Long spuId){
+        if (spuId == null) {
+            return ;
+        }
+        this.goodsHtmlService.createHtml(spuId);
+    }
+
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(value = "LEYOU.ITEM.DELETE.QUEUE", durable = "true"),
+            exchange = @Exchange(value = "LEYOU.ITEM.EXCHANGE", ignoreDeclarationExceptions = "true", type = ExchangeTypes.TOPIC),
+            key = {"item.delete"}
+    ))
+    public void deleteListener(Long spuId){
+        if (spuId == null) {
+            return ;
+        }
+        this.goodsHtmlService.deleteHtml(spuId);
+    }
+}
+```
+
+
+
+# JWT
+- **JWT**: `json web token`, json风格轻量级的授权和身份认证的规范，可实现无状态、分布式的应用程序。
+
+- **JWT**的组成部分
+    - `Header` 头部：声明类型，这里是JWT, 会对头部进行base64编码，得到第一部分数据。
+    - `Payload` 载荷：有效数据(身份信息，也是base64编码，可解码，不要放敏感信息)，注册声明过程，token的签发时间，过期时间，签发人..
+    - `Signature` 签名：是整个数据的认证信息，根据前两步的数据和服务端的密钥`secret`再加上精密算法生成，用于验证整个数据的完整性和可靠性。
+
+- **JWT**的交互过程    
+
+
+# RSA
 
 
 

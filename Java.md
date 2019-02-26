@@ -37,7 +37,7 @@
 | 双精度浮点 | double (默认) | 8         | `4.9E-324` ~ `1.7977E+308` |
 | 布尔型   | boolean     | 1         | `true` `false`  |
 
-### 基本数据类、包装类
+### -基本数据类、包装类
 
 ### java develop kit
 
@@ -584,7 +584,7 @@ public class Case {
 
 
 
-### 异常的处理
+### exception handler 异常的处理
 
 - 抛出异常	（throw)
 
@@ -596,7 +596,7 @@ public class Case {
 
 - 异常注意事项
 
-### 自定义异常
+### custom exception 自定义异常
 
 - 为什么需要自定义异常
 - 自定义异常格式及使用
@@ -1102,42 +1102,6 @@ public class R01 {
 
 
 
-### Lambda
-
-- **案例**
-
-```java
-import java.util.Arrays;
-import java.util.Comparator;
-
-public class R01 {
-    public static void main(String[] args) {
-        Student[] stu = {
-                new Student("lili", 18),
-                new Student("lucy", 20),
-                new Student("jim", 17),
-                new Student("green", 19),
-        };
-
-//        Arrays.sort(stu, new Comparator<Student>() {
-//            @Override
-//            public int compare(Student o1, Student o2) {
-//                return o2.getAge() - o1.getAge();
-//            }
-//        });
-
-//        Arrays.sort(stu, (Student o1, Student o2) -> {// lambda格式
-//            return o1.getAge() - o2.getAge();
-//        });
-		// lambda简化格式
-        Arrays.sort(stu, (Student o1, Student o2) -> o2.getAge() - o1.getAge());
-
-        System.out.println(Arrays.toString(stu));
-    }
-}
-```
-
-
 # File
 
 - construction 共有6种构造方法，其中有2个是私有的。
@@ -1167,7 +1131,7 @@ public class P01 {
 ```
 
 
-### 2. API
+### API
 
 - 创建和删除
     - `public boolean createNewFile() throws IOException`
@@ -1227,7 +1191,7 @@ public class P01 {
 ```
 
 
-### 3. Filter
+### Filter
 
 - `public File[] listFiles (FilenameFilter filter)`
 
@@ -1243,7 +1207,7 @@ public class P01 {
 }
 ```
 
-### 4. 递归
+### 递归
 
 ```java
 public class P01 {
@@ -1266,30 +1230,28 @@ public class P01 {
     }
 }
 ```
-
-# 0209	I/O流
+# Stream
+### I/O流
 
 - 字节流：输入、输出
 - 字符流：输入、输出
 - 注意：细节点，区别
 - io异常
 
-### 1. 字节输出流
-
+#### -字节输出流
 - ``public abstract class OutputStream extends Object implements Closeable, Flushable``  : 抽象类， **比输入流多实现一个接口**
-  -  `public class FileOutputStream extends OutputStream` ：通过子类实现
-     -  `FileOutputStream (String name）`
-     -  `FileOutputStream (File file)` 
-
+    -  `public class FileOutputStream extends OutputStream` ：通过子类实现
+        -  `FileOutputStream (String name）`
+        -  `FileOutputStream (File file)` 
 - **常用方法**
-  - `void close()`
-  - `void write (int b)`
-  - `void write (byte[] b)`
-  - `void write (byte[] b, int off, int len)` 
+    - `void close()`
+    - `void write (int b)`
+    - `void write (byte[] b)`
+    - `void write (byte[] b, int off, int len)` 
 - **数据的追加和换行**
-  - `\r\n`
-  - `System.lineSparator()` 
-  - 追加： `new FileOutputStream (String name, Boolean append)`  
+    - `\r\n`
+    - `System.lineSparator()` 
+    - 追加： `new FileOutputStream (String name, Boolean append)`  
 
 ```java
 public class a_OutputStream {
@@ -1310,19 +1272,19 @@ public class a_OutputStream {
 }
 ```
 
-#### 2. 字节输入流
+#### -字节输入流
 - ``public abstract class InputStream extends Object implements Closeable``  ：抽象类
-  - ``public class FileInputStream extends InputStream`` ：通过子类实现
-    - `FileInputStream(File file) throws FileNotFoundException`
-    - `FileInputStream(String name) throws FileNotFoundException`  
-      - 一定是文件，不能是目录
-      - 如果是不存在的文件会报错
+    - ``public class FileInputStream extends InputStream`` ：通过子类实现
+        - `FileInputStream(File file) throws FileNotFoundException`
+        - `FileInputStream(String name) throws FileNotFoundException`  
+            - 一定是文件，不能是目录
+            - 如果是不存在的文件会报错
 - **常用方法**
-  - `void close()`
-  - `abstract in read ()` ：一次只能读取一个字节，调用一次移动一次光标，读完之后返回 **-1** 
-  - `abstract int read (byte[] b)` 
-    - 返回的是读取的个数。
-    - 使用前要先定义 **byte** 数组的长度，建议是1024 的整倍数。
+    - `void close()`
+    - `abstract in read ()` ：一次只能读取一个字节，调用一次移动一次光标，读完之后返回 **-1** 
+    - `abstract int read (byte[] b)` 
+        - 返回的是读取的个数。
+        - 使用前要先定义 **byte** 数组的长度，建议是1024 的整倍数。
 
 
 
@@ -1354,9 +1316,11 @@ public class b_InputStream {
 }
 ```
 
-- **byte** 数组转字符串，也可以用偏移量
+```
+byte 数组转字符串，也可以用偏移量
+```
 
-#### 复制歌曲
+#### -复制歌曲
 
 ```java
 public class d_FileReader {
@@ -1379,14 +1343,12 @@ public class d_FileReader {
 }
 ```
 
-#### 3. 字符流输入
+#### -字符流输入
 
 - `public abstract class Reader extends Object implements Readable, Closeable` ：抽象类
-  - ``public class InputStreamReader extends Reader`` ：子类
-    - ``public class FileReader extends InputStreamReader`` ：通过**孙子类**实现
-
-
-
+    - ``public class InputStreamReader extends Reader`` ：子类
+        - ``public class FileReader extends InputStreamReader`` ：通过**孙子类**实现
+        
 ```java
 public class d_FileReader {
     public static void main(String[] args) throws Exception {
@@ -1403,12 +1365,10 @@ public class d_FileReader {
 }
 ```
 
-#### 4. 字符流输出
-
+#### -字符流输出
 - `public abstract class Writer extends Object implements Appendable, Closeable, Flushable`  ：抽象类，  **和字符流输入的接口不一样** 
-  - ``public class OutputStreamWriter extends Writer`` ： 子类
-    - `public class FileWriter extends OutputStreamWriter`  ：通过**孙子类**实现
-
+    - ``public class OutputStreamWriter extends Writer`` ： 子类
+        - `public class FileWriter extends OutputStreamWriter`  ：通过**孙子类**实现
 
 
 ```java
@@ -1423,7 +1383,7 @@ public class e_FileWriter {
 }
 ```
 
-#### 5. I/O异常
+#### I/O异常
 
 ```java
 public class io_Exception {
@@ -1499,9 +1459,8 @@ public class io_Exception {
 }// end
 ```
 
-# 0210	
 
-### 1. 缓冲流
+### -缓冲流
 - 字节缓冲流
     - 输入： ``public class BufferedInputStream extends FilterInputStream``
     - 输出： ``public class BufferedOutputStream extends FilterOutputStream``
@@ -1625,7 +1584,8 @@ public class C_case {
 }
 ```
 
-### 2. 转换流
+
+### -转换流
 - 两个类名
 ```java
 public class D_exchange {
@@ -1656,7 +1616,7 @@ public class D_exchange {
 ```
 
 
-### 3. 序列化，反序列化
+### -序列化，反序列化
 - `java.io.InvalidClassException`
 
 - 概述
@@ -1722,7 +1682,7 @@ public class E_serializable {
 ```
 
 
-### 4.	打印流
+###	>打印流
 
 - 可以向硬盘文件输出内容
 
@@ -1751,7 +1711,7 @@ public class A_PrintStream {
 ```
 
 
-### 5. 属性流
+### 属性流>
 
 ```
 java.lang.Object
@@ -1787,7 +1747,7 @@ public class B_Properties {
 }
 ```
 
-# Socket-0211	
+# Socket	
 
 - **复制文件：字节流 -> 字符流 -> 字符缓冲流** 
 
@@ -1829,13 +1789,13 @@ public class D_client {
 ```
 
 
-
-1.  文件只有一个，多人上传只会看到最后一个人的。（随机文件名）
-2.  服务器运行一次就关闭。（while 循环）
-3.  ServerSocket不能重复创建，多个端口冲突，所以不能关闭。
-4.  多人上传要排队。（多线程）
-5.  给Client反馈接收完毕信息。（卡主了）
-6.  数据丢失
+- 缺点：
+    - 文件只有一个，多人上传只会看到最后一个人的。（随机文件名）
+    - 服务器运行一次就关闭。（while 循环）
+    - ServerSocket不能重复创建，多个端口冲突，所以不能关闭。
+    - 多人上传要排队。（多线程）
+    - 给Client反馈接收完毕信息。（卡主了）
+    - 数据丢失
 
 ```java
 public class F_server {
@@ -1889,11 +1849,44 @@ public class F_client {
 ```
 
 
-# 0212
+# jdk1.8
 
-## 一、函数式编程
 
-### 1. lambda实现
+### Lambda
+
+```java
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class R01 {
+    public static void main(String[] args) {
+        Student[] stu = {
+                new Student("lili", 18),
+                new Student("lucy", 20),
+                new Student("jim", 17),
+                new Student("green", 19),
+        };
+
+//        Arrays.sort(stu, new Comparator<Student>() {
+//            @Override
+//            public int compare(Student o1, Student o2) {
+//                return o2.getAge() - o1.getAge();
+//            }
+//        });
+
+//        Arrays.sort(stu, (Student o1, Student o2) -> {// lambda格式
+//            return o1.getAge() - o2.getAge();
+//        });
+		// lambda简化格式
+        Arrays.sort(stu, (Student o1, Student o2) -> o2.getAge() - o1.getAge());
+
+        System.out.println(Arrays.toString(stu));
+    }
+}
+```
+
+
+- lambda实现
 
 ```java
 public interface Inter {
@@ -1924,31 +1917,24 @@ public class R01 {
 ```
 
 
-
-### 2. lambda作为参数
-
+- lambda作为参数
 
 
-
-
-### 3. lambda作为返回值
+- lambda作为返回值
 
 
 
-## 二、方法引用
+### 方法引用
 
 
-# 0213
+### 函数式接口
 
-## 一、函数式接口
-
-### 1. 	Supplier	生产对象
+- Supplier	生产对象
 
 
 
-### 2.	Consumer	消费对象
-
-- `void accept (T t)` 
+- Consumer	消费对象
+    - `void accept (T t)` 
 
 ```java
 public class B_Consumer {
@@ -1973,12 +1959,11 @@ public class B_Consumer {
 
 
 
-### 3.	Predicte	判断接口
-
-- `boolean test(T t);`
-- `default Predicate<T> and (Predicate<? super T> other)`
-- `default Predicate<T> or (Predicate<? super T> other)`
-- `default Predicate<T> negate ()`
+- Predicte	判断接口
+    - `boolean test(T t);`
+    - `default Predicate<T> and (Predicate<? super T> other)`
+    - `default Predicate<T> or (Predicate<? super T> other)`
+    - `default Predicate<T> negate ()`
 
 
 
@@ -2022,9 +2007,8 @@ public class C_Predicate {
 
 
 
-### 4.	Function	转换接口
-
-- `R apply (T t)`
+- Function	转换接口
+    - `R apply (T t)`
 
 ```java
 public class D_Function {
@@ -2052,11 +2036,10 @@ public class D_Function {
 
 
 
-## 二、Stream流
+### Stream流
 
-> `Interface Stream<T>` 
->
-> Stream本身并不存储任何元素，也不存储地址，是一个集合元素的函数模型。
+- `Interface Stream<T>` 
+    - Stream本身并不存储任何元素，也不存储地址，是一个集合元素的函数模型。
 
 - **函数式编程**
 
@@ -2081,20 +2064,14 @@ public class F_Stream {
 
 
 
-### 1.	获取流
-
-- 单列集合
-    - 在单列集合的父接口 `Collection` 里有个默认方法 `default Stream<E> stream()` 
-    
-- 双列集合
-    - 转化成单列集合 `keySet`  `entrySet` 
-    
-- 数组
-    - 使用 `Stream` 接口中的方法： `static <T> Stream<T> of (T... values)` ，参数是可变参数，就是数组
-    - 数组类型是 **引用类型**
-    
-
-
+- 获取流
+    - 单列集合
+        - 在单列集合的父接口 `Collection` 里有个默认方法 `default Stream<E> stream()` 
+    - 双列集合
+        - 转化成单列集合 `keySet`  `entrySet` 
+    - 数组
+        - 使用 `Stream` 接口中的方法： `static <T> Stream<T> of (T... values)` ，参数是可变参数，就是数组
+        - 数组类型是 **引用类型**
 
 ```java
 public class E_Stream_get {
@@ -2132,17 +2109,15 @@ public class E_Stream_get {
 
 
 
-### 2.	常用方法
-
-> Stream只能消费一次
-
-- `long concat ()` ：返回流中元素的个数。
-- `static <T> Stream<T> concat (Stream<? extends T> a, Stream<? extends T> b)`  ：创建一个新的懒惰连接流
-- `Stream<T> limit (long maxSize) ` 
-- `Stream<T> skip (long n)` 
-- `void forEach (Consumer<? super T> action)`  
-- `Stream <T> filter (Predicate<? super T> predicate)` 
-- `<R> Stream<R> map (Function<? super T,? extends R> mapper)` 
+- 常用方法
+    - > Stream只能消费一次
+    - `long concat ()` ：返回流中元素的个数。
+    - `static <T> Stream<T> concat (Stream<? extends T> a, Stream<? extends T> b)`  ：创建一个新的懒惰连接流
+    - `Stream<T> limit (long maxSize) ` 
+    - `Stream<T> skip (long n)` 
+    - `void forEach (Consumer<? super T> action)`  
+    - `Stream <T> filter (Predicate<? super T> predicate)` 
+    - `<R> Stream<R> map (Function<? super T,? extends R> mapper)` 
 
 
 
@@ -2191,28 +2166,23 @@ public class G_Stream_methods {
 
 
 
-**拼接方法和终结方法** 
-
-- 终结方法
-  - `count`	`filter`
-- 拼接方法
-
-
-
-### 3.	并发流
-
-> 当需要对集合或数组中的元素进行并发操作时，需要仔细考虑多线程环境下的竞争和锁的问题。
-
-**关键字：parallel , parallelStream**
+- **拼接方法和终结方法** 
+    - 终结方法
+      - `count`	`filter`
+    - 拼接方法
 
 
 
-#### 1. 	获取方式
+### 并发流
 
-1.   转换获取
-   - `Stream` 的父接口 `java.util.stream.BaseStream` 中定义了 `parallel` 方法。
-2.   直接获取
-   - 使用集合 `Collection` 中的 `parallelStream` 方法直接获取支持并发操作的流。
+- > 当需要对集合或数组中的元素进行并发操作时，需要仔细考虑多线程环境下的竞争和锁的问题。
+- > **关键字：parallel , parallelStream**
+
+- 获取方式
+    - 转换获取
+       - `Stream` 的父接口 `java.util.stream.BaseStream` 中定义了 `parallel` 方法。
+    - 直接获取
+       - 使用集合 `Collection` 中的 `parallelStream` 方法直接获取支持并发操作的流。
 
 ```java
 public class H_concurrence {
@@ -2240,27 +2210,18 @@ public class H_concurrence {
 
 
 
-#### 2.	收集结果
+- 收集结果: **关键字：collect , Collectors**
+    - 收集到集合中
+        - `Stream` 流提供方法 `R collect (Collector c)` 
+        - 参数是确定收集到哪种集合中，`List` 、`Set` 
+            - `public static <T> Collector<T, ?, List<T>> toList()`：转换为`List`集合。
+            - `public static <T> Collector<T, ?, Set<T>> toSet()`：转换为`Set`集合。
+    - 收集到数组中
+        - `Stream` 内部有 `toArray()` 方法，根据**参数列表**分为两种 
+            - `Object[] toArray();` 不传参返回的是 Object 类型，不建议使用。
+            - `<A> A[] toArray (IntFunction<A[]> generator);` 参数传什么类型的数组，那么返回的就是对应类型的数组
 
-**关键字：collect , Collectors**
-
-1.   收集到集合中
-
-    - `Stream` 流提供方法 `R collect (Collector c)` 
-    - 参数是确定收集到哪种集合中，`List` 、`Set` 
-        - `public static <T> Collector<T, ?, List<T>> toList()`：转换为`List`集合。
-        - `public static <T> Collector<T, ?, Set<T>> toSet()`：转换为`Set`集合。
-
-2.   收集到数组中
-
-    - `Stream` 内部有 `toArray()` 方法，根据**参数列表**分为两种 
-
-        - `Object[] toArray();` 不传参返回的是 Object 类型，不建议使用。
-
-        - `<A> A[] toArray (IntFunction<A[]> generator);` 参数传什么类型的数组，那么返回的就是对应类型的数组
-
-       ​
-
+       
 ```java
 public class J_collect {
     public static void main(String[] args) {
@@ -2302,15 +2263,12 @@ public class J_collect {
 ```
 
 
-# 0214
+# Class对象
 
-## 一、	Class对象 获取方式
-
-1.  所有类中有都有一个静态成员变量 `class => Person.class`
-2.  `Object`类中有个`getClass(); => Person.getClass()`
-3.  `Class`类中有个静态方法 `static Class forName (String className) => Class.forName("类的全名")`
-
-
+-  Class对象 获取方式
+    - 所有类中有都有一个静态成员变量 `class => Person.class`
+    - `Object`类中有个`getClass(); => Person.getClass()`
+    - `Class`类中有个静态方法 `static Class forName (String className) => Class.forName("类的全名")`
 
 
 ```java
@@ -2328,10 +2286,8 @@ public class A_forName {
 }
 ```
 
-
-## 二、	预定义对象
-
-> 任何一种数据都有自己的字节码对象
+- 预定义对象
+    - 任何一种数据都有自己的字节码对象
 
 
 
@@ -2351,34 +2307,31 @@ public class A_forName {
 ```
 
 
-## 三、	reflect 反射
+# Reflect 反射
 
 > 反射是通过一个**类的Class对象**把类中的各种成员映射成对应的java类。 类的Class对象 == 字节码对象
 
-### 1. 	反射获取类中的构造函数
-
+- > 反射获取类中的构造函数
 - `public Constructor<T> getDeclaredConstructor (Class<?>... parameterTypes)`
-  - params: 是Class的类型
-  - return： 返回的构造方法是Construction类型
+    - params: 是Class的类型
+    - return： 返回的构造方法是Construction类型
 - 访问私有的Filed、Method、Construction => 权限检测 => 爷爷类`AccessibleObject` 的方法解除
-  - `c.setAccessible(true)`
+    - `c.setAccessible(true)`
 
-### 2.	反射获取成员变量
-
+- > 反射获取成员变量
 - `Field getDeclaredField (String name)`  
-  - params:	字段名
-  - return:   返回的字段是 Field类型，有`get` 和 `set` 方法
-  - `Object get (Object obj)` 
-    - params: 实例
-    - return：对应的值
-  - `void set (Object obj, Object value)`
-    - params: 实例， 对应的值
+    - params:	字段名
+    - return:   返回的字段是 Field类型，有`get` 和 `set` 方法
+    - `Object get (Object obj)` 
+        - params: 实例
+        - return：对应的值
+    - `void set (Object obj, Object value)`
+        - params: 实例， 对应的值
 
-### 3.	反射获取成员方法
-
+- > 反射获取成员方法
 - `Method getDeclaredMethod(String name, Class<?>... parameterTypes)`
-  - params: 方法名， 方法参数类型 - 必须是Class类型；
-  - return：执行方法的返回值，如果没有则返回null
+    - params: 方法名， 方法参数类型 - 必须是Class类型；
+    - return：执行方法的返回值，如果没有则返回null
 
 
 
@@ -2415,16 +2368,11 @@ public class A_forName {
 ```
 
 
-## 四、	JUnit 单元测试
-- test
-- before
-- after
+# annotation 注解
 
+- JDK注解
 
-## 五、	annotation 注解
-
-### 1.	自定义注解
-
+- 自定义注解
 ```java
 // 1. public abstract 可以省略，属于固定修饰符
 // 2. 数组形式的赋值
@@ -2432,83 +2380,23 @@ public class A_forName {
 // 4. 同一个方法或类上只能使用一次同一个注解，可以使用多个不同的注解
 public @interface G_annotation {
     public abstract String name();
-
     String gender() default "male";// 给默认值
-
     String[] interest();// 可以用数组
-
     int    age();
 }
 ```
 
-### 2.	元注解
+- 元注解
+    - `@target` 修饰注解使用的位置
+    - `@retention` 修饰注解的生命周期
 
-- `@target` 修饰注解使用的位置
-- `@retention` 修饰注解的生命周期
-
-
-
-### 3.	反射获取注解及使用
-
-
-# proxy-0215
-## 1.  Class对象的介绍
-
-## 2.  Class对象获取的方式
-- 所有类中有都有一个静态成员变量 `class` => `Person.class`
-- `Object` 类中有个 `getClass()` => `Person.getClass()`
-- `Class` 类中有个静态方法 `static Class forName (String className)` => `Class.forName("类的全名")`
-
-## 3.  预定义对象
-- 任何一种数据都有自己的字节码，
-
-## 4.  反射的概念
-> 反射是通过一个`类的Class对象`把类中的各种成员映射成对应的java类。 类的Class对象 == 字节码对象
-
-- 1.反射获取类中的构造函数
-
-- 2.反射获取成员变量
-    - Field getDeclaredField (String name): 获取某个类中的成员变量
-    - 参数：name = 字段名
-    - 返回值：返回成员变量的所属类型
-        - 获取值：Object get (Object obj)
-            - params: 获取哪个实例的值
-            - return: 返回对应的值
-        - 设置值：void set (Object obj, Object value)
-        
-- 3.反射获取成员方法
-    - Method getDeclaredMethod(String name, Class<?>... parameterTypes)
-        - params:
-            - name: 方法的名字
-            - Type: 方法参数的类型，=> 必须Class的类型
-        - return: 执行方法的返回值，如果没有，返回null。
-
-## 5.  Junit 单元测试
-
-## 6.  注解
-- JDK注解
-- 自定义注解
-- 源注解
 - 解析注解
-    
-## 7.  ClassLoader 类加载器
-- `.java`(内存) => `jvm` => `.class文件`(硬盘) => `ClassLoader` => `Class类`的对象(内存)
 
-- Bootstrap         = 根类加载器
-    - 最顶级的类加载器，加载的都是sun公司定义好的类，ex: String, Integer, File...
+### 反射获取注解及使用
 
-- ExtClassLoader    = 扩展类加载器
-    - 加载的是JDK内部自己使用的类
 
-- APPClassLoader    = 应用类加载器
-    - 加载ClassPath指定的jar或目录，ClassPath存放的是路径，默认是IDEA工程下的out目录，里面存放的是我们写好的.class文件
-
-- classLoader获取方式
-    - clazz.getClassLoader()
-
-- classLoader加载文件的路径是相对`src`, File文件加载的路径是相对 `project`
-
-## 8.  动态代理
+# proxy
+### 动态代理
 - 动态代理是哪个版本的 ? = jdk1.6 和 jdk9.0 不一样
 
 - 1.获取某个被代理类的代理对象，使用java中的 Proxy 类完成
@@ -2522,7 +2410,7 @@ public @interface G_annotation {
                 - interfaces: 被代理对象的所有接口的数组
                 - InvocationHandler h: 调用处理器，是一个接口，就是代理过程
 
-## 9.  XML
+# XML
 - 作用: XML就是一种数据格式，自定义的数据格式
     
 - 如何写XML
@@ -2555,13 +2443,13 @@ that may have their access modifier narrowed down
 
 
 
-# Servlet-0501
+# Servlet
 
-### 1. Tomcat
+### Tomcat
 
-### 2. Web
+### Web
  
-### 3. Servlet
+### Servlet
 > Servlet是运行在服务端的小程序，是SUN公司提供的一套规范，用来处理客户端请求、响应动态web资源给浏览器
 
 ```java
@@ -2644,7 +2532,7 @@ public interface Servlet {
     - `tomcat`获得匹配路径时的优先级，1 > 2 > 3 > 4
     
 
-### 4.注解开发
+### 注解开发
 - **Servlet3.0新特性**
     - 支持注解：用于简化`Servlet`, `Filter`, `Listener`,  
     - 支持 web模块
