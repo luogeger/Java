@@ -1,11 +1,9 @@
 - jdk1.8, method: abstract, default, static
     - lambda, 方法引用，函数式接口，Stream流
-- servlet name
 - design model
 - api document
 - annotation
 - method: get, post, put, delete
-- reflect，proxy
 
 
 # Base
@@ -37,7 +35,7 @@
 | 双精度浮点 | double (默认) | 8         | `4.9E-324` ~ `1.7977E+308` |
 | 布尔型   | boolean     | 1         | `true` `false`  |
 
-### -基本数据类、包装类
+### base 基本数据类、包装类
 
 ### java develop kit
 
@@ -2540,13 +2538,33 @@ public interface Servlet {
     - 文件上传 API简化
  
  
+### Filter
+- 再`tomcat`启动时创建
+- 在servlet之前执行，拦截请求，将servlet中一些共同的业务代码抽取出来，这就是过滤器作用。比如：请求乱码处理。
+- 过滤器本质是Java中预先定义好了的不同的接口，和Servlet类似。具体怎么过滤，需要定义一个实现类，实现接口中的过滤方法。
+
+- `Filter`是`javax.servlet`包下面的一个接口，接口中定义了3个方法
+    -
+    ```java 
+        package javax.servlet;
+        import java.io.IOException;
+        
+        public interface Filter {
+            void init(FilterConfig var1) throws ServletException;
+            void doFilter(ServletRequest var1, ServletResponse var2, FilterChain var3) throws IOException, ServletException;
+            void destroy();
+        }
+    ```
+
+
+### 执行流程
+
+### 映射路径 
  
- 
-# Request-0502
- ### 1. HTTP协议
- > HTTP：HyperText Transfer Protocol, 超文本传输协议
- <br>
- > HTTP/1.0 获得一个web资源，连接断开，HTTP/1.1 可以获得多个web资源，连接断开
+# Request
+### HTTP协议
+- HTTP：HyperText Transfer Protocol, 超文本传输协议
+- HTTP/1.0 获得一个web资源，连接断开，HTTP/1.1 可以获得多个web资源，连接断开
  
 - 请求方式：
     - 1.`OPTIONS`: 
@@ -2571,7 +2589,7 @@ public interface Servlet {
             
  
  
- ### 2. HttpServletRequest
+ ### HttpServletRequest
  > **HttpServletRequest**对象代表客户端的请求，HTTP请求中的所有信息都封装在这个对象中
  
 - 获取请求行信息
@@ -2605,7 +2623,7 @@ public interface Servlet {
  
  
  
- ### 3. request 作用域
+ ### request 作用域
 - request 生命周期
     - 1.浏览器向 `Servlet`发送请求
     - 2.`Tomcat`收到请求，创建`Request`和`Response`对象，将请求参数封装到`Request`对象中，然后传递给`Servlet`
@@ -2636,7 +2654,7 @@ public interface Servlet {
             ```
  
  
-### 4. HttpServletResponse
+### HttpServletResponse
 - 响应行
     - `setStatus (int code)` , 发送状态码, 配合设置响应头完成重定向
         - ```javascript
@@ -2680,10 +2698,9 @@ public interface Servlet {
     
 - `String encode = URLEncoder.encode(fileName, "utf-8");`    
 
-### 5. ServletContext
-> 1. 存储网站的访问量
-<br>
-> 2. 存储整个项目的配置信息，相当于项目对象，可以获取项目资源的真实路径和类型
+### ServletContext
+- 存储网站的访问量
+- 存储整个项目的配置信息，相当于项目对象，可以获取项目资源的真实路径和类型
 
 - **API**
     - `getAttribute (String name)`
@@ -2708,8 +2725,8 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
  
  
  
-# cookie-session-0504
-> cookie 和 session 都是在会话期间产生，作用都是保存数据
+# cookie&session
+- cookie 和 session 都是在会话期间产生，作用都是保存数据
 
 ### cookie
 > cookie 是浏览器存储数据的一种方式，4K * 300,
@@ -2791,9 +2808,6 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
         request.getSession().invalidate("user");
     ```
-
-
-# jsp-0505
 
 ### JSP 
 > `Java Server Page`, 本质是**简化的Servlet**，一种**动态网页**的技术标准，其实就是一个既能书写**Servlet**代码，又能书写**HTML**代码的文件
@@ -2898,32 +2912,15 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 
 
-# Filter-0507
-
-### 1. Filter
-- 再`tomcat`启动时创建
-- 在servlet之前执行，拦截请求，将servlet中一些共同的业务代码抽取出来，这就是过滤器作用。比如：请求乱码处理。
-- 过滤器本质是Java中预先定义好了的不同的接口，和Servlet类似。具体怎么过滤，需要定义一个实现类，实现接口中的过滤方法。
-
-- `Filter`是`javax.servlet`包下面的一个接口，接口中定义了3个方法
-    -
-    ```java 
-        package javax.servlet;
-        import java.io.IOException;
-        
-        public interface Filter {
-            void init(FilterConfig var1) throws ServletException;
-            void doFilter(ServletRequest var1, ServletResponse var2, FilterChain var3) throws IOException, ServletException;
-            void destroy();
-        }
-    ```
 
 
-### 2. 执行流程
+# design model
 
-### 3. 映射路径
 
-# Redis-0509 
+
+
+
+# Redis 
 
 - 概述
 - 特点
@@ -3006,10 +3003,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 ### Jedis
 > 通过Jedis用Java代码连接Redis
 
-
-
-# maven-0510
-### maven
+# maven
 
 - `bin` : 该目录包含了mvn运行的脚本，分别为mvn、mvn.bat、mvnDebug、mvnDebug.bat和m2.conf，这些脚本用来配置 Java 命令，
     准备 CLASSPATH 和相关的 Java 系统属性，然后执行 Java 命令。其中，mvn是基于 UNIX 平台的shell脚本，
