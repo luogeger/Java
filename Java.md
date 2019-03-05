@@ -188,6 +188,11 @@
 
 ### Date
 - `Date`
+    ```java
+          SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+          System.out.println(df.format(new Date()));// new Date()为获取当前系统时间 == 2018-03-05 21:50:58
+    ```
+    
 - `DateFormat`
 - `Calendar`
 
@@ -2937,6 +2942,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 ### Create 创建型： 5种
 - `Factory Method`工厂方法模式
+    - 实例化时不会对暴露创建逻辑，通过使用共同的接口来指向实例。
 - `Abstract Factory`抽象工厂模式
 - `Singleton`单例模式
 - `Builder`建造者模式
@@ -2946,6 +2952,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 - `Adapter`适配器模式
 - `Decorator`装饰器模式
 - `Proxy`代理模式
+    - 真实对象存在就使用代理对象；不存在**先**初始化真实对象，**再**使用代理对象
 - `Facade`外观模式
 - `Bridge`桥接模式
 - `Composite`组合模式

@@ -1,17 +1,12 @@
-# 0301
+# SQL分类
 
-## 一、	SQL分类
-
-- DDL 
-    - 数据库定义语言 `Data Definition Language` ，用来定义数据库对象
+- **DDL** : 数据库定义语言 `Data Definition Language` ，用来定义数据库对象 
     - create , drop , alter, truncate
    
-- DML
-    - 数据操纵语言 `Data Manipulation Language` ，数据表中更新、增加、删除记录
+- **DML** : 数据操纵语言 `Data Manipulation Language` ，数据表中更新、增加、删除记录
     - update , insert , delete
    
-- DCL
-    - 数据控制语言 `Data Contrlol Language` ，设置用户权限和控制事务
+- **DCL** :数据控制语言 `Data Contrlol Language` ，设置用户权限和控制事务
     - `grant`, `revoke`, `start transaction`, `commit`, `rollback`
     - 1.创建用户
         - `create user '<username>'@'<ip>' identified by <pwd>`
@@ -29,18 +24,25 @@
         - `mysqladmin -u root -p password <pwd>` ：超级管理员修改密码
         - `set password for '<user>'@'<tableName>' = password('<pwd>')` ：普通用户使用超级管理员修改
    
-- DQL
-    - 数据查询语言 `Data Query Language` ，记录的查询
+- **DQL** : 数据查询语言 `Data Query Language` ，记录的查询
     - select ...
 
-## 二、	SQL语句	
+# SQL语句	
 
-### 1.  数据库的介绍、安装、卸载
+### database desgin
+
+- 范式
+    - 原子性，不可拆分
+    - 完全依赖主键    
+    - 不产生传递依赖
+    
+### DCL
 
 - 连接数据库     `mysql -h root -p`
 - 连接其他数据库 `mysql -h userIP -P userPORT -u root -p`
 
-### 2.  数据库的操作
+
+### DDL
 
 - 退出            `exit;`
 - 查询所有DB       `show databases;`
@@ -52,7 +54,7 @@
 - 切换DB         `use <first>`
 - 导入sql文件     `source <fileAbsolutePath>`
 
-### 3.  表的操作
+### TABLE
 
 - 查看所有表     `show tables`
 - 查看表结构     `desc <tableName>`
@@ -72,7 +74,7 @@
 - 字段(名字、类型、长度、约束)的添加和修改，都相当于是重写 
     - `alter table <tableName> modify id int(11) auto_increment;`
 
-### 4.  数据的操作(insert, delete, update)
+### DML
 
 - 查看表数据             `select* from <tableName>`
 - 插入数据(指定字段)      `insert into <tableName> (id, name) values (null, 'jim')`
@@ -82,7 +84,7 @@
 - 删除记录(where)        `delete from <tbaleName> where id=2;`
 - 删除表中所有记录        `delete from <tableName>` **表清空了**
 
-### 5.  查询语法    
+### DQL    
 - `null` 不参与运算
 
 - 运算符
@@ -117,7 +119,7 @@
     - `as`：也可以省略
     - `select name as 姓名, age as 年龄 from person;`
 
-### 6.  SQL聚合函数
+### aggregate function
 
 - **count**
     - 统计多少条记录, `null` 不参与统计
@@ -156,9 +158,8 @@
 | `select`   | 执行完毕之后显示内容          
 | `order by` | 把内容进行排序输出          
 
-### 7.  MYSQL备份和恢复
 
-### 8.  多表设计
+### multi-table
 
 - 外键约束
     - `foreign key(<currentFiled>) reference(<foreignFiled>)` , 约束从表，保证数据有效性， 
@@ -176,14 +177,8 @@
     - 删除：先删从表，再删主表
     - 添加：
 
-### 9.  数据库设计
 
-- 范式
-    - 原子性，不可拆分
-    - 完全依赖主键    
-    - 不产生传递依赖
-
-### 10. 多表查询
+### nulti-table queries
 
 - 避免笛卡尔积：
     - 内连接
@@ -199,7 +194,7 @@
         select * from a right outer join b on a.id = b.id;
         ```
 
-### 11. 关联子查询
+### subquery
 
 - **in**
 
@@ -248,7 +243,7 @@
         order by temp.score;
     ```
 
-### 12. MYSQL自带函数
+### native function
 
 - 获取当前系统时间 `select now()`
 
