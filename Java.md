@@ -169,7 +169,16 @@
 - `append`
 - `toString`    
 
+### StringBuffer
 
+> java中String、StringBuffer、StringBuilder的区别
+
+| 不同点| String | StringBuilder | StringBuffer |
+| :--- | :--- | :--- | :--- |
+| 可变也不可变 | 被`final`修饰，不可变 | 继承`AbstractStringBuilder`使用字符数组保存字符串 | 同`StringBuilder`一样 |
+| 是否多线程安全 | 被`final`修饰，安全 | 没有同步锁 | 加了同步锁或者对调用的方法加了同步锁，安全 |
+
+> **最后，如果程序不是多线程的，那么使用StringBuilder效率高于StringBuffer。**
 
 ### Objects
 - `equals`
@@ -409,6 +418,46 @@ public class T01 {
     - ``int size()``: 返回集合中元素的个数
     - ``Object[] toArray()``:  把集合中的元素，存储到数组中，可以**间接**对集合进行遍历。 
 
+### Collections 工具类
+
+-  常用方法:  **都是静态方法，没有构造函数** 
+    - ``public static void shuffle(List<?> list)`` 打乱集合顺序
+    - ``public static void shuffle(List<?> list, Random rnd)`` 打乱集合顺序 
+    - ``public static <T> boolean addAll (Collection<? super T> c, T... elements)`` 
+    - ``public static <T> void sort(List<T> list)``  默认是升序
+    - ``public static <T> void sort(List<T> list, Comparator<? super T> c)``  默认是升序
+
+- sort 方法扩展
+    - > 如果集合存放的是自定义对象， ``sort(List<T> list)`` 是解决不了的，有2种方式
+    - 要求这个自定义对象必须实现 ``Comparable<T>`` 接口，同时，必须实现接口中默认的排序抽象方法 ``int compareTo(T o)``
+    
+    ``` java
+    public class Student implements Comparable<Student>{
+        private String name;
+        private int age;
+      
+        // ......
+      
+        @Override
+        public int compareTo(Student o) {
+            //return this.age - o.age;// 升序
+            return o.age - this.age;// 降序
+        }
+    }
+    ```
+
+    - `public static <T> void sort(List<T> list，Comparator<? super T> c)` 将集合中元素按照指定规则排序
+    
+    ```javascript 
+    Collections.sort(list, new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            //降序：o2 - o1
+            //return o2.compareTo(o1);
+            returen o2.getAge() - o1.getAge();
+        }
+    });
+    ```
 ### List
 
 - List
@@ -460,46 +509,6 @@ public class T01 {
 - TreeSet
 
 
-### Collections 工具类
-
--  常用方法:  **都是静态方法，没有构造函数** 
-    - ``public static void shuffle(List<?> list)`` 打乱集合顺序
-    - ``public static void shuffle(List<?> list, Random rnd)`` 打乱集合顺序 
-    - ``public static <T> boolean addAll (Collection<? super T> c, T... elements)`` 
-    - ``public static <T> void sort(List<T> list)``  默认是升序
-    - ``public static <T> void sort(List<T> list, Comparator<? super T> c)``  默认是升序
-
-- sort 方法扩展
-    - > 如果集合存放的是自定义对象， ``sort(List<T> list)`` 是解决不了的，有2种方式
-    - 要求这个自定义对象必须实现 ``Comparable<T>`` 接口，同时，必须实现接口中默认的排序抽象方法 ``int compareTo(T o)``
-    
-    ``` java
-    public class Student implements Comparable<Student>{
-        private String name;
-        private int age;
-      
-        // ......
-      
-        @Override
-        public int compareTo(Student o) {
-            //return this.age - o.age;// 升序
-            return o.age - this.age;// 降序
-        }
-    }
-    ```
-
-    - `public static <T> void sort(List<T> list，Comparator<? super T> c)` 将集合中元素按照指定规则排序
-    
-    ```javascript 
-    Collections.sort(list, new Comparator<String>() {
-        @Override
-        public int compare(String o1, String o2) {
-            //降序：o2 - o1
-            //return o2.compareTo(o1);
-            returen o2.getAge() - o1.getAge();
-        }
-    });
-    ```
 
 
 
@@ -2914,7 +2923,48 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 
 
-# design model
+# Design Pattern
+
+> **设计模式遵循原则：6种**
+
+- **Open Close**开闭原则
+- **Liskov Substitution**里氏代换原则
+- **Dependence Inversion**依赖倒转原则
+- **Interface Segregation**接口隔离原则
+- **Demeter**迪米特原则
+- **Composite Reuse**合成复用原则
+
+
+### Create 创建型： 5种
+- `Factory Method`工厂方法模式
+- `Abstract Factory`抽象工厂模式
+- `Singleton`单例模式
+- `Builder`建造者模式
+- `Prototype`原型模式
+
+### Structure 结构型：7种
+- `Adapter`适配器模式
+- `Decorator`装饰器模式
+- `Proxy`代理模式
+- `Facade`外观模式
+- `Bridge`桥接模式
+- `Composite`组合模式
+- `Flyweight`享元模式
+
+### Behavior 行为型：11种
+- 策略模式
+- 模板方法模式
+- `Observer`观察者模式
+- 迭代子模式
+- 责任链模式
+- 命令模式
+- 备忘录模式
+- 状态模式
+- 访问者模式
+- 中介者模式
+- 解释器模式。
+
+
 
 
 

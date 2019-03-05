@@ -9,5 +9,12 @@ public class JunitTest {
         System.out.println("test1");
     }
 
+    @Test
+    public void test2() {
+        int x = 10;
+        x += x= x-x;
+        System.out.println(x);
+    }
+
 
 }
