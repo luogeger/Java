@@ -201,45 +201,6 @@
 - `arraycopy`
 
 
-### Iterator
-- `/ɪtə'retɚ/` 迭代器
-    - List 有 索引， Set没有，所以不能用遍历
-    - 集合遍历的时候，有些数据类型需要向下转型
-
-```javascript 
-    Collection<String> coll = new ArrayList<String>();
-
-    coll.add("aaaa");
-    coll.add("bbb");
-    coll.add("cc");
-
-	for(Iterator<String> it = coll.iterator();it.hasNext();) {
-        String name = it.next();
-        System.out.println(name);//输出
-    }
-```
-
-### for
-
-> jdk1.5之后对遍历数组和集合进行优化
-
-```javascript
-    Collection<String> coll = new ArrayList<String>();
-
-    coll.add("aaaa");
-    coll.add("bbb");
-    coll.add("cc");
-    coll.add(123);
-    coll.add(true);
-
-	for (Object o : coll) {
-         //Object o = "aaaa" 多态  
-         String s=(String)o;//强转 
-         System.out.println(s.length());//输出每个元素长度
-     }
-
-```
-
 ### Generic  
 - `/dʒə'nɛrɪk/` 泛型
 > 泛型不支持基本类型
@@ -391,7 +352,7 @@ public class T01 {
 ```
 
 
-###Collection  
+## Collection  
 
 - Collection `/kə'lɛkʃən/` 
   - List (Interface)
@@ -399,8 +360,12 @@ public class T01 {
 
 
 - 集合概述
-
-1. 集合体系是从 ``jdk1.2`` 以后开始的
+    - 集合是用来存储数据的容器，
+    -集合体系是从 ``jdk1.2`` 以后开始的
+    
+- 集合和数组区别
+    - 数组长度固定
+    - 数组存储的统一类型的元素    
 
 | List （单列）  | Set （双列） |
 | :----         | :----       |
@@ -408,7 +373,7 @@ public class T01 {
 | 具有索引       |             |
 | 数据不唯一，可以重复 |       **  |
 
-- 集合和数组区别
+
 
 
 
@@ -422,6 +387,66 @@ public class T01 {
     - ``boolean isEmpty()``:  判断集合是否为空
     - ``int size()``: 返回集合中元素的个数
     - ``Object[] toArray()``:  把集合中的元素，存储到数组中，可以**间接**对集合进行遍历。 
+    
+    
+
+
+### Iterator
+- `/ɪtə'retɚ/` 迭代器
+    - List 有 索引， Set没有，所以不能用遍历
+    - 集合遍历的时候，有些数据类型需要向下转型
+
+- code
+```java
+    public class Demo02 {
+        public static void main(String[] args) {
+            // 使用多态方式 创建对象
+            Collection<String> coll = new ArrayList<String>();
+            // 添加元素到集合
+            coll.add("aaaa");
+            coll.add("bbbb");
+            coll.add("cccc");
+            //根据当前集合对象生成迭代器对象
+            Iterator<String> it = coll.iterator();
+            //获取数据
+            System.out.println(it.next());
+            System.out.println(it.next());
+            System.out.println(it.next());
+            System.out.println(it.next());
+        }
+    }
+```
+
+- 运行结果
+```bash
+    aaaa
+    bbbb
+    cccc
+    Exception in thread "main" java.util.NoSuchElementException
+        at java.base/java.util.ArrayList$Itr.next(ArrayList.java:896)
+        at com.itheima.sh.demo_03.Demo02.main(Demo02.java:22)
+```
+
+### for
+
+> jdk1.5之后对遍历数组和集合进行优化
+
+```java
+    Collection<String> coll = new ArrayList<String>();
+
+    coll.add("aaaa");
+    coll.add("bbb");
+    coll.add("cc");
+    coll.add(123);
+    coll.add(true);
+
+	for (Object o : coll) {
+         //Object o = "aaaa" 多态  
+         String s=(String)o;//强转 
+         System.out.println(s.length());//输出每个元素长度
+     }
+
+```    
 
 ### Collections 工具类
 
@@ -463,9 +488,10 @@ public class T01 {
         }
     });
     ```
+    
 ### List
 
-- List
+- `List`是`Collection`的子接口,
     - ArrayList
     - LinkedList
     - Vector
@@ -474,9 +500,9 @@ public class T01 {
     - `void add(int index, E element)` 将指定的元素插入此列表中的指定位置（可选操作）。
     - `E set(int index, E element)` `返回旧值`用指定的元素（可选操作）替换此列表中指定位置的元素。
 
-- ArrayList
+> **ArrayList**
 
-- LinkedList
+> **LinkedList**
 
 - 常用方法
     - public void addFirst(E e):将指定元素插入此列表的开头。
@@ -493,7 +519,7 @@ public class T01 {
 
 ### Set
 
-- Set (Interface)
+- `Set`也是`Collection`的子接口,
     - HashSet 
         - LinkedHashSet 
     - TreeSet
@@ -503,32 +529,64 @@ public class T01 {
 
 
 
-- HashSet
-    - jdk1.8以前 哈希表 = 数组 + 链表，1.8以后，哈希表 = 数组 + 链表 + 红黑树；（为了提高查询效率）
+- **HashSet**：jdk1.8以前 哈希表 = 数组 + 链表，1.8以后，哈希表 = 数组 + 链表 + 红黑树；（为了提高查询效率）
+    - HashSet集合不能存储重复的元素；
+    - HashSet集合存储元素的顺序不固定；
+    - code
+    ```java
+    public class HashSetDemo {
+        public static void main(String[] args) {
+            //创建HashSet集合对象
+            HashSet set=new HashSet();
+            //向集合中添加数据
+            set.add("JavaSe");
+            set.add("JavaSE");
+            set.add("JavaEE");
+            set.add("AAAA");
+            set.add("AAAA");
+            set.add("bbbb");
+            set.add("bbbb");
+            //遍历集合
+            for (Iterator it = set.iterator(); it.hasNext();) {
+                //输出集合中的数据
+                System.out.println(it.next());
+            }
+        }
+    }
+    ```
+    - 结果
+    ```bash
+    JavaSe
+    JavaSE
+    JavaEE
+    AAAA
+    bbbb
+    ```
 
 
-- LinkedHashSet
+- **LinkedHashSet**
     - 底层是链表 + 哈希
     - 链表：存储有序，哈希：保证数据唯一。
 
-- TreeSet
+- **TreeSet**
 
 
 
-
-
-### Map
+## Map
 
 - Map 是双列集合，Collection是单列集合，它们都是超级父接口
-    - 特点：由哈希控制键，能保证唯一性
-    - 区别：单列集合一次只能存一个对象，对象之间没有任何关系。双列集合一次可以存两个对象，两个对象只有有映射关系。
-    - 常用方法：
-       - `put`
-       - `remove`
-       - `get`
-       - `clear`
-       - `containsKey` `containsValue`
-       - `keySet`   `entrySet`
+    - `hashMap`
+    - `LinkedHashMap`
+    
+- 特点：由哈希控制键，能保证唯一性
+- 区别：单列集合一次只能存一个对象，对象之间没有任何关系。双列集合一次可以存两个对象，两个对象只有有映射关系。
+- 常用方法：
+   - `put`
+   - `remove`
+   - `get`
+   - `clear`
+   - `containsKey` `containsValue`
+   - `keySet`   `entrySet`
 
 ```java
 // keySet
@@ -3062,27 +3120,40 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 # maven
 
-- `bin` : 该目录包含了mvn运行的脚本，分别为mvn、mvn.bat、mvnDebug、mvnDebug.bat和m2.conf，这些脚本用来配置 Java 命令，
-    准备 CLASSPATH 和相关的 Java 系统属性，然后执行 Java 命令。其中，mvn是基于 UNIX 平台的shell脚本，
-    mvn.bat是基于 Windows 平台的bat脚本；同理，mvnDebug是基于 UNIX 平台的shell脚本，
-    mvnDebug.bat是基于 Windows 平台的bat脚本。在命令行输入任何一条mvn命令时，实际上就是调用这些脚本。
-    而mvn和mvnDebug的区别就在于后者比前者多了一条MAVEN_DEBUG_OPTS配置，
-    其作用就是在运行 Maven 时开启debug，以便调试 Maven 本身。此外，m2.conf是classworlds的配置文件。
-- `boot` : 该目录只包含一个文件，以maven 3.0为例，该文件为plexus-classworlds-2.2.3.jar。plexus-classworlds是一个类加载器框架，
+> **maven的内部结构**
+
+- `bin` : 
+    - 该目录包含了mvn运行的脚本，分别为mvn、mvn.bat、mvnDebug、mvnDebug.bat和m2.conf，这些脚本用来配置 Java 命令，
+    准备 CLASSPATH 和相关的 Java 系统属性，然后执行 Java 命令。
+    - mvn是基于 UNIX 平台的shell脚本，
+    - mvn.bat是基于 Windows 平台的bat脚本；同理，mvnDebug是基于 UNIX 平台的shell脚本，
+    - mvnDebug.bat是基于 Windows 平台的bat脚本。在命令行输入任何一条mvn命令时，实际上就是调用这些脚本。
+    - mvn和mvnDebug的区别就在于后者比前者多了一条MAVEN_DEBUG_OPTS配置，作用就是在运行 Maven 时开启debug，方便调试Maven
+    - m2.conf是classworlds的配置文件。
+- `boot` : 
+    - 该目录只包含一个文件，以maven 3.0为例，该文件为plexus-classworlds-2.2.3.jar。plexus-classworlds是一个类加载器框架，
     相对于默认的 Java 类加载器，它提供了更丰富的语法以方便配置，Maven 使用该框架加载自己的类库。
-- `conf` : 该目录包含了要给非常重要的文件settings.xml。直接修改该文件，就能再机器上全局地定制 Maven 的行为。
-    一般情况下，我们更偏向于复制该文件至~/.m2/目录下（~表示用户目录），然后修改该文件，在用户范围定制 Maven 的行为。
-- `lib` : 该目录包含了所有 Maven 运行时需要的 Java 类库，Maven 本身是分模块开发的，
-    因此用户能看到诸如maven-core-3.0.jar和maven-model-3.0.jar之类的文件。此外，
-    这里还包含一些 Maven 用到的第三方依赖，如common-cli-1.2.jar和google-collection-1.0.jar等。
-    对于 Maven 2 来说，该目录只包含一个如maven-2.2.1-uber.jar的文件，原本各为独立的 JAR 文件
-    的 Maven 模块和第三方类库都被拆解后重新合并到了这个 JAR 文件中。可以说，lib目录就是真正的 Maven。
-    还有一点值得一提的是，用户可以在这个目录中找到 Maven 内置的超级 POM。
-- `LICENSE.txt` : 该文件记录了 Maven 使用的软件许可证 Apache License Version 2.0。
-- `NOTICE.txt` : 该文件记录了 Maven 包含的第三方软件。
-- `README.txt` : 该文件则包含了 Maven 的简要介绍，包括安装需求以及如何安装的简要指令等。
+- `conf` : 
+    - 该目录包含了要给非常重要的文件`settings.xml`。直接修改该文件，就能再机器上全局地定制 Maven 的行为。
+    - 一般情况下，更偏向于复制该文件至~/.m2/目录下（~表示用户目录），然后修改该文件，在用户范围定制 Maven 的行为。
+- `lib` : 
+    - 该目录包含了所有 Maven 运行时需要的 Java 类库，Maven 本身是分模块开发的，因此用户能看到诸如maven-core-3.0.jar和maven-model-3.0.jar之类的文件。
+    - 此外，这里还包含一些 Maven 用到的第三方依赖，如common-cli-1.2.jar和google-collection-1.0.jar等。
+    - 对于 Maven 2 来说，该目录只包含一个如maven-2.2.1-uber.jar的文件，原本各为独立的 JAR 文件的 Maven 模块和第三方类库都被拆解后重新合并到了这个 JAR 文件中。
+    - 可以说，lib目录就是真正的 Maven。
+    - 还有一点，可以在这个目录中找到 Maven 内置的超级 POM。
+- `LICENSE.txt` : 
+    - 该文件记录了 Maven 使用的软件许可证 Apache License Version 2.0。
+- `NOTICE.txt` : 
+    - 该文件记录了 Maven 包含的第三方软件。
+- `README.txt` : 
+    - 该文件则包含了 Maven 的简要介绍，包括安装需求以及如何安装的简要指令等。
     
-    
+> **mven的作用**
+
+- **项目构建管理**： maven提供一套对项目生命周期管理的标准，开发人员、和测试人员统一使用maven进行项目构建。项目生命周期管理：编译、测试、打包、部署、运行。
+- **管理依赖**（jar包）： maven能够帮我们统一管理项目开发中需要的jar包；
+- **管理插件**： maven能够帮我们统一管理项目开发过程中需要的插件；    
     
 - 安装maven
     - `repository` : 本地仓库
@@ -3107,25 +3178,6 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - 管理依赖
     - 管理插件
             
-
-
-
-- 04
-    - first
-        - 动态sql
-        - 页面跳转携带参数
-        - `Spring org.lang3.StringUtils`
-    - second
-        - 线路详情             
-            - 结果是联表查询，不能用instance封装，>>           
-    - third
-        - 收藏，外键只能查询到一个数据           
-- 05
-    - first
-        - 添加收藏 -- 事务       
-        - 事务只添加在批量的DML中         
-        - `Spring JDBCTemplate 控制事务`  
-
 # linux
 ### VMware
 

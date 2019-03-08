@@ -14,6 +14,8 @@ public class JunitTest {
         int x = 10;
         x += x= x-x;
         System.out.println(x);
+
+
     }
 
 

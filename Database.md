@@ -86,13 +86,17 @@
 
 ### DQL    
 - `null` 不参与运算
+- `is null`：`where birthday is null`
+- `is not null`：`where name is not null`
 
 - 运算符
     - `<> !=` 不相等 
     - `and` =>         `select name, age from person where age = 23 and name = 'lisi';`
     - `between and` => `select name, score from person where score between 81 and 93;`
-    - `in` => `select * from person where age in (17， 18， 19)`
+        - 分数在81-93之间的人的姓名及分数
+    - `in` => `select * from person where age in (17， 18， 19)` 
     - `or` => `select * from person where age = 17 or age = 18 or age = 19`
+        - 和上面`in`的结果一样
 
 - 模糊查询 
     - `like '%刘%'`： 只要有刘就可以
@@ -101,38 +105,47 @@
     - `like '_晓_`： 姓名中间是晓
     - `like '_冲`： 单名叫冲
     - `like '张_`： 姓张单名
-    - `is null`：`where birthday is null`
-    - `is not null`：`where name is not null`
 
 - 过滤重复  
     - `distinct`：`select distinct age from person`：显示不重复的年龄
     - `SELECT DISTINCT role_name FROM tbl_cop2sys_role`: 查询所有的角色
-    - `SELECT COUNT(temp.role_name) FROM`
-	    - `(SELECT DISTINCT role_name FROM tbl_cop2sys_role) as temp`: 查询所有角色的数量
+    - 查询所有角色的数量
+    ```sql
+        SELECT COUNT(temp.role_name) FROM
+            (SELECT DISTINCT role_name FROM tbl_cop2sys_role) as temp
+    ```
 
 - 结果排序  
     - `order by`：对结果进行排序，`null`在排序是最小的
-    - `select * from person order by age asc`：默认是升序
-    - `select * from person order by age dasc`
+    - 分数不为`null`的降序
+        - `SELECT * FROM a_student WHERE score IS NOT NULL ORDER BY age DESC`
 
 - 起别名  
-    - `as`：也可以省略
-    - `select name as 姓名, age as 年龄 from person;`
+    - `select name, score from a_student`, 只需要`student`里的2个字段
+    - `select name as 姓名, age as 年龄 from a_student`, 给这个2个字段起别名
+    - `select name score from a_student`, 省略之后就意思相当给`name`起了个`score`的别名
+        - 等同于`select name 姓名 from a_student`
+    
 
 ### aggregate function
 
 - **count**
-    - 统计多少条记录, `null` 不参与统计
-    - `select count(name) from person`
-    - `select count(name) from person where age > 18`
+    - `null` 不参与统计
+    - `SELECT COUNT(SCORE) FROM A_STUDENT`, 
+    - `SELECT COUNT(*) FROM PERSON WHERE AGE > 18`
 
 - **sum**
     - 多列求和, `null` 不参与计算 
         - `select sum(score) from students`
+    - 分别统计总人数，总年龄，总分数，`null`不参与计算
+        - `SELECT COUNT(NAME) 总人数, SUM(AGE) 总年龄, SUM(SCORE) 总分数 FROM A_STUDENT`  
+    - `sum()`可以参与计算
+        - `select sum(age + score) from a_student`, 这里是先把`age`和`score`相加，如果有值为`null`就返回`null`了，总和会变小
+        - `select sum(age) + sum(score) from a_student`, 这里才是正确的              
     - `ifnull`：列值，整体返回值  
-        - `select sum( ifnull(score, 0)) from students` : 如果分数为 null, 提供默认值0
-    - `truncate (数值，保留位数)`
-        - `select truncate(sum(score), 2) from students`
+        - `select sum(ifnull(age, 0) + ifnull(score, 0)) from a_student` : 如果值为 null, 提供默认值0
+    - `truncate (数值，保留小数位)`
+        - `select truncate(sum(ifnull(age, 0) + ifnull(score, 0)), 2) from a_student`
 
 - **avg**
     - 平均数 `select avg(score) / count(*) from students`
@@ -142,12 +155,19 @@
     - `select max(score) 最高分, min(score) 最低分 from students;`
 
 - **group by**
-    - `select product, sum(price) from shoppingcart group by product`
-    - `having`
-        - `select product, sum(price) from shoppingcart group by product having sum(price) > 10;`
-        - `having` 是在分组之后进行过滤，`where`是在分组之前进行过滤，
+    - 按照某列或某几列，把相同的数据进行合并输出
+    - `SELECT * FROM A_COURSE GROUP BY COURSE DESC`， 默认是降序, 有过滤重复字段的效果
+    - `SELECT ID, COURSE, SUM(SCORE) FROM A_COURSE GROUP BY COURSE`
+    - `SELECT ID, COURSE, SUM(SCORE) FROM A_COURSE GROUP BY COURSE, SCORE`, 如果语文成绩的分数不一样，达不到分类的效果
+        - 先按照科目名分组，在按分数进行分组，再合并输出
+    
+- **having**
+    - `having`必须和`group by`一起使用，用法和`where`一样，但是`where`后面不可以跟聚合函数
+    - `SELECT COURSE, SUM(SCORE) FROM A_COURSE WHERE SCORE > 5 GROUP BY COURSE HAVING SUM(SCORE) > 20`
+        - `select`后面是输出形式，`group by`后面只根据科目名分类，不需要再根据分数分类，不然分数不相同科目相同也会被分类出来
+    - `having` 是在分组之后进行过滤，`where`是在分组之前进行过滤，
 
-- 查询的执行顺序：
+- **查询的执行顺序:**
     
 | - | - |    
 | :--- | :--- |
@@ -178,23 +198,37 @@
     - 添加：
 
 
-### nulti-table queries
+### multi-table queries
 
-- 避免笛卡尔积：
-    - 内连接
-        - 隐式 `select * from a,b where a.id = b.id;`
-        - 显示 `select * from a inner join b on a.id = b.id;`        
-    - 外连接
-        - 左外连接  `select * from a left outer join b on a.id = b.id`
-        - 右外连接  `select * from a right outer join b on a.id = b.id;`
-        - 全外连接： 不去掉重复 => `union all`
-        ```sql 
-        select * from a left outer join b  on a.id = b.id
-        union
-        select * from a right outer join b on a.id = b.id;
-        ```
+- 笛卡尔积：
+```sql
+    # 笛卡尔积
+    SELECT * FROM B_PRODUCT, B_PRICE
+    
+    # 隐式内连接
+    SELECT * FROM B_PRODUCT AS A, B_PRICE AS B WHERE A.ID = B.B_PRODUCT_ID 
+    
+    # 显示内连接
+    SELECT * FROM B_PRODUCT AS A INNER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+    
+    # 左外连接
+    SELECT * FROM B_PRODUCT AS A LEFT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+    
+    # 右外连接
+    SELECT * FROM B_PRODUCT AS A RIGHT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+    
+    # 全连接 会自动去重
+    SELECT * FROM B_PRODUCT AS A LEFT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+    UNION 
+    SELECT * FROM B_PRODUCT AS A RIGHT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+    
+    # 全连接 不会去重
+    SELECT * FROM B_PRODUCT AS A LEFT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+    UNION ALL
+    SELECT * FROM B_PRODUCT AS A RIGHT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+```
 
-### subquery
+### subQuery
 
 - **in**
 
@@ -209,18 +243,18 @@
 ```
 
 - **exists**
-
-```sql
-    // 主表查询不及格的学生
-    // student 和 temp 的所有字段
-    select * from 
-        student, (select * from student_course where score < 70) as temp 
-    where student.id = temp.student_id order by temp.score;
-    
-    // 只有 student 的字段，  ↓ :意注 
-    select * from student where exists (
-        select * from student_course where score < 70 and student_course.student_id = student.id
-```
+    - 主表查询不及格的学生, `student`和`temp`的所有字段
+    ```sql
+        select * from 
+            student, (select * from student_course where score < 70) as temp 
+        where student.id = temp.student_id order by temp.score;
+    ```    
+    - 只有 student 的字段，  ↓ :意注       
+    ```sql    
+        // 
+        select * from student where exists (
+            select * from student_course where score < 70 and student_course.student_id = student.id
+    ```
 
 - **all**
 
@@ -250,7 +284,7 @@
 - alter table <> drop foreign key (field) 
 
 
-# 0304 JDBC
+# JDBC
 
 - **java database connection**
 - JDBC有关的类和接口：``java.sql`` , ``javax.sql`` (扩展包)  
@@ -533,9 +567,7 @@ public class Dinject {
 }
 ```
 
-# 0305
-
-## 1. 事务
+# transaction
 
 - MYSQL5.5以后支持事务，存储引擎`InnoDB`支持事务，特点是自动提交
 - 概念：事务指的是逻辑上的一组操作，组成这组操作的各个单元，要么全部成功，要么全部失败(业务上市最小的工作单元，不可拆分)。
@@ -609,7 +641,7 @@ public class Transaction {
 }
 ```
 
-## 2. 数据库连接池
+# connection pool
 - 优化获取连接，主要是从性能上优化
 - `public interface DataSource extends CommonDataSource, Wrapper` : 厂商实现这个规定的接口
     - `Connection getConnection()`
@@ -680,11 +712,10 @@ public class D_comboPooled_test {
 }
 ```
 
-### 常用连接池
-#### C3P0
+### C3P0
 - 基本用法：
 
-```javascript 1.5
+```java
     ComboPooledDataSource cpds = new ComboPooledDataSource();
     cpds.setDriverClass("com.mysql.jdbc.Driver");
     cpds.setJdbcUrl("jdbc:mysql://localhost:3306/fourth");
@@ -726,7 +757,7 @@ ResultSet rs =null;
 ```
 
 
-#### DRUID
+### DRUID
 - 配置文件的参数，通常放在`src`目录下
     - `url` : `"jdbc:mysql://localhost:3306/third"`
     - `username` : `"root"`
@@ -774,7 +805,7 @@ ResultSet rs =null;
 
     _jdbc.release(rs, pst, conn);
 ```
-#### DBCP
+### DBCP
 
 ### JDBCTemplate
 - `JDBCTemplate` 是 `Spring` 对 `JDBC`的封装，目的是使`JDBC` 更加易于使用，处理了资源的建立和释放。
