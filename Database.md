@@ -179,8 +179,7 @@
 | `order by` | 把内容进行排序输出          
 
 
-### multi-table
-
+### multi-table queries
 - 外键约束
     - `foreign key(<currentFiled>) reference(<foreignFiled>)` , 约束从表，保证数据有效性， 
     - 已经存在的表添加外键约束
@@ -196,9 +195,6 @@
         ```
     - 删除：先删从表，再删主表
     - 添加：
-
-
-### multi-table queries
 
 - 笛卡尔积：
 ```sql
@@ -228,42 +224,51 @@
     SELECT * FROM B_PRODUCT AS A RIGHT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
 ```
 
-### subQuery
+### subquery
 
-- **in**
-
-``` sql
-    select * from student where id in (
-        select student_id from studentcourse where score <= 60);
-    
-    
-    select project from project where id in (
-        select project_id from coder_project where coder_id in (
-            select id from coder where coder = 'jack'));
-```
+- `in`
+```sql
+    # 不及格的学生的信息 -- student
+    SELECT * FROM STUDENT WHERE ID IN (
+        SELECT STUDENT_ID FROM STUDENTCOURSE WHERE SCORE <= 60)
+        
+    # jack参与了哪些项目 -- project        
+    SELECT PROJECT FROM PROJECT WHERE ID IN (
+        SELECT PROJECT_ID FROM CODER_PROJECT WHERE CODER_ID IN (
+            SELECT ID FROM CODER WHERE CODER = 'jack'))
+```    
 
 - **exists**
-    - 主表查询不及格的学生, `student`和`temp`的所有字段
+    - 不及格的学生的所有信息, `student`和`temp`的所有字段
     ```sql
         select * from 
             student, (select * from student_course where score < 70) as temp 
         where student.id = temp.student_id order by temp.score;
     ```    
     - 只有 student 的字段，  ↓ :意注       
-    ```sql    
-        // 
+    ```sql
         select * from student where exists (
             select * from student_course where score < 70 and student_course.student_id = student.id
     ```
 
 - **all**
+    - 查询年龄最大的学生的信息
+    ```sql
+      SELECT MAX(AGE) FROM STUDENT 
+      
+      SELECT * FROM STUDENT WHERE AGE =(SELECT MAX(AGE) FROM STUDENT)
+      
+      # 必须用 >=
+      SELECT * FROM STUDENT WHERE AGE >= ALL(SELECT AGE FROM STUDENT)
+    ```
+    
 
 - **any**, **some**
 
 - **as**
 
 - **limit**
-    `select * from stu_info order by stu_id limit 0, 300;`// 前300条数据排序
+    - `select * from stu_info order by stu_id limit 0, 300` 前300条数据排序
 
 - **查询所有分数在60 - 70的学生对应的学科**
     - 
@@ -276,12 +281,32 @@
             temp.student_id = student.id and temp.course_id = course.id
         order by temp.score;
     ```
+    
+### index
+    
 
 ### native function
+- 日期
+```sql
+    select now(); -- 2017-06-26 11:07:24
+    select current_date(); -- 2017-06-26
+    select current_time(); -- 11:08:23
+    select year(now()); -- 2017
+``` 
 
-- 获取当前系统时间 `select now()`
+- 字符串
+```sql
+    select substring('黑旋风',0,1); -- 
+    select substring('黑旋风',1,1); -- 黑
+    select substring('黑旋风',2,1); -- 旋
+```
 
-- alter table <> drop foreign key (field) 
+- 数学
+```sql
+    select ceiling(1.2); -- 向上取整: 2
+    select floor(1.2);	-- 向下取整: 1
+    select format(3.1415926, 4); -- 截取位数: 3.1416, 有四舍五入的功能
+```
 
 
 # JDBC
@@ -833,46 +858,56 @@ ResultSet rs =null;
     public class H_query {
         private JdbcTemplate jt = new JdbcTemplate(_jdbc.getComboPooled("DRUID"));
     
-        @Test// 单个字段
-        public void queryForObject_onlyFile () {
-            String pwd = jt.queryForObject("select password from user where id = ?", String.class, 1);
-            // 返回的是 String
+        @Test// 一个字段
+        public void test1 () {
+            String pwd = jt.queryForObject("select password from user where id = ?", String.class, 1);// 返回的是 String
             System.out.println("pwd = " + pwd);
         }
-        
-        @Test// 聚合函数
-        public void queryForObject_function () {
-            Integer count = jt.queryForObject("select count(*) from user", Integer.class);
-            // 返回的是 Integer
-            System.out.println("count = " + count);
-        }
-        
-        @Test // 单行返回实例// 返回的是 instance
-        public void queryForObject_object () {
-            User u = jt.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), user.getEmail(), user.getPassword());
+    
+        @Test// 多个字段 == List集合对象
+        public void test4 () {
+            List<String> list = jt.queryForList("select password from user", String.class);
+            System.out.println("list = " + list);
         }
     
-        @Test// 单行返回对象
-        public void row () {
+        @Test// 一行记录 == 返回对象
+        public void test2 () {
             Map<String, Object> map = jt.queryForMap("select * from user where id = ?", 1);
             Set<String> keys = map.keySet();
             for (String key : keys) {
                 System.out.println(key + map.get(key));
             }
         }
-    
-        @Test// 单列
-        public void column () {
-            List<String> list = jt.queryForList("select password from user", String.class);
-            System.out.println("list = " + list);
+        
+        @Test // 一行记录 == 返回实例
+        public void test3 () {
+            User u = jt.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), user.getEmail(), user.getPassword());
+        }
+
+        @Test// 多行记录 == queryForList
+        public void test5 () {
+            JdbcTemplate jt = before();
+            String sql = "SELECT * FROM tab_user";
+            List<Map<String, Object>> list = jt.queryForList(sql);
+            for (Map<String, Object> user : list) {
+                System.out.println(user);
+            }
         }
     
-        @Test// 所有
-        public void all () {
-            List<User> users = jt.query("select * from user", new BeanPropertyRowMapper<>(User.class));
+        @Test// 多行记录 == query
+        public void test6 () {
+            JdbcTemplate jt = before();
+            String sql = "select * from tab_user";
+            List<User> users = jt.query(sql, new BeanPropertyRowMapper<>(User.class));
             for (User user : users) {
-                System.out.println("user = " + user);// user = javabean
+                System.out.println(user);
             }
+        }
+        
+        @Test// 聚合函数
+        public void test7 () {
+            Integer count = jt.queryForObject("select count(*) from user", Integer.class);// 返回的是 Integer
+            System.out.println("count = " + count);
         }
         
     }
@@ -911,7 +946,5 @@ ResultSet rs =null;
 
 - SELECT * FROM emp t1, emp t2 WHERE t1.sal > t2.sal AND ename = 'SCOTT';
 
-
-# H
 - 主键自增
 - 没有驼峰
