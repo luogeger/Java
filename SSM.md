@@ -1170,13 +1170,43 @@ public void jdk () {
 - `TransactionStatus`：获取事务具体运行状态信息。
     - 只回滚：测试性能，并不存入数据，
 
+- **超级接口和对象之间的关系**
+    - 1）首先用户管理事务，需要先配置TransactionManager（事务管理器）进行事务管理
+    - 2）然后根据TransactionDefinition(事务定义信息)，通过TransactionManager（事务管理器）进行事务管理；
+    - 3）最后事务运行过程中，每个时刻都可以通过获取TransactionStatus（事务状态）来了解事务的运行状态。
+
 
 ### 声明式事务管理
 
-- 目标对象：`tranfer`方法需要事务管理，需要增强，
-    - 配置`事务管理器`
-    - 配置spring提供的`事务通知`
-    - 配置`切入点和切面`
+> **一：编程式的事务管理**
+
+
+> **二：声明式事务管理**
+
+
+- **xml配置事务**
+    - 目标对象：`tranfer`方法需要事务管理，需要增强，
+        - 配置`事务管理器`
+        - 配置spring提供的`事务通知`
+        - 配置`切入点和切面`
+
+    - ```xml
+        <tx:method name="transfer" read-only="false" isolation="DEFAULT" propagation="REQUIRED" timeout="-1" no-rollback-for="" rollback-for="">
+    ```
+
+- **anno配置事务**
+    - 开启注解扫描
+        - `<context:component-scan base-package="com.ssm.service" />`
+    - dataSource 是支持类需要的`JdbcDaoSupport`需要的，并不是`mapper`层需要
+        - 调用父类的方法给父类赋值
+        ```java
+            public void setSuperDataSource(DataSource datasource){
+                super.setDataSource(datasource)
+            }
+        ```
+    - 开启事务注解驱动   
+        - `<tx:annotation-driven transaction-manage="transactionManager" />`
+
 
 
 # SpringMVC
