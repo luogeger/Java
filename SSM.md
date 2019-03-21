@@ -1415,11 +1415,16 @@ public void jdk () {
 
 | 区别点   | 拦截器   | 过滤器   |
 | :--- | :--- | :--- |
-| 配置文件| `web.xml` | `-servlet.xml` |
+| - | 反射机制 | 回调函数 |
+| - | 不依赖 | 依赖servlet容器 |
+| - | 只能对`action`请求起作用 | 几乎所有请求 |
+| 配置文件| `{name}-servlet.xml` | `web.xml` |
 | 复用性 | 可以 | - |
-| 生命周期 | tomcat启动时创建 | - |
-| - | 可以使用request, response对象 | - |
+| 生命周期 | action周期中可以多次调用 | tomcat启动时创建时调用一次 |
+| - | 可以获取IOC容器中的各个bean，可以使用request, response对象 | - |
 | 执行顺序 | - | - |
+
+![](imgs/filter-interceptor.jpg)
 
     
 # ssm
