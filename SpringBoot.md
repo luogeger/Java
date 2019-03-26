@@ -495,6 +495,341 @@
     - 多区域弹性：类似负载均衡         
     - 静态响应处理：
 
+#### 快速入门
+
+- 编写配置
+
+```yaml
+server:
+  port: 10010 #服务端口
+spring:
+  application:
+    name: api-gateway #指定服务名
+```
+
+
+
+- 编写引导类
+
+通过`@EnableZuulProxy `注解开启Zuul的功能：
+
+```java
+@SpringBootApplication
+@EnableZuulProxy // 开启网关功能
+public class ItcastZuulApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ItcastZuulApplication.class, args);
+    }
+}
+```
+
+
+
+- 编写路由规则
+
+我们需要用Zuul来代理service-provider服务，先看一下控制面板中的服务状态：
+
+![1542672192226](assets/1542672192226.png)
+
+- ip为：127.0.0.1
+- 端口为：8081
+
+映射规则：
+
+```yaml
+server:
+  port: 10010 #服务端口
+spring:
+  application:
+    name: api-gateway #指定服务名
+zuul:
+  routes:
+    service-provider: # 这里是路由id，随意写
+      path: /service-provider/** # 这里是映射路径
+      url: http://127.0.0.1:8081 # 映射路径对应的实际url地址
+```
+
+我们将符合`path` 规则的一切请求，都代理到 `url`参数指定的地址
+
+本例中，我们将 `/service-provider/**`开头的请求，代理到http://127.0.0.1:8081
+
+
+
+- 启动测试
+
+访问的路径中需要加上配置规则的映射路径，我们访问：http://127.0.0.1:10010/service-provider/user/1
+
+![1543054030005](assets/1543054030005.png)
+
+
+
+- 面向服务的路由
+
+在刚才的路由规则中，我们把路径对应的服务地址写死了！如果同一服务有多个实例的话，这样做显然就不合理了。我们应该根据服务的名称，去Eureka注册中心查找 服务对应的所有实例列表，然后进行动态路由才对！
+
+对itcast-zuul工程修改优化：
+
+- 添加Eureka客户端依赖
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+</dependency>
+```
+
+
+- 添加Eureka配置，获取服务信息
+
+```yaml
+eureka:
+  client:
+    registry-fetch-interval-seconds: 5 # 获取服务列表的周期：5s
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+```
+
+
+
+- 开启Eureka客户端发现功能
+
+```java
+@SpringBootApplication
+@EnableZuulProxy // 开启Zuul的网关功能
+@EnableDiscoveryClient
+public class ZuulDemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ZuulDemoApplication.class, args);
+	}
+}
+```
+
+
+
+- 修改映射配置，通过服务名称获取
+
+因为已经有了Eureka客户端，我们可以从Eureka获取服务的地址信息，因此映射时无需指定IP地址，而是通过服务名称来访问，而且Zuul已经集成了Ribbon的负载均衡功能。
+
+```yaml
+zuul:
+  routes:
+    service-provider: # 这里是路由id，随意写
+      path: /service-provider/** # 这里是映射路径
+      serviceId: service-provider # 指定服务名称
+```
+
+
+
+- 启动测试
+
+再次启动，这次Zuul进行代理时，会利用Ribbon进行负载均衡访问
+
+- 简化的路由配置
+
+在刚才的配置中，我们的规则是这样的：
+
+- `zuul.routes.<route>.path=/xxx/**`： 来指定映射路径。`<route>`是自定义的路由名
+- `zuul.routes.<route>.serviceId=service-provider`：来指定服务名。
+
+而大多数情况下，我们的`<route>`路由名称往往和服务名会写成一样的。因此Zuul就提供了一种简化的配置语法：`zuul.routes.<serviceId>=<path>`
+
+比方说上面我们关于service-provider的配置可以简化为一条：
+
+```yaml
+zuul:
+  routes:
+    service-provider: /service-provider/** # 这里是映射路径
+```
+
+省去了对服务名称的配置。
+
+
+- 默认的路由规则
+
+在使用Zuul的过程中，上面讲述的规则已经大大的简化了配置项。但是当服务较多时，配置也是比较繁琐的。因此Zuul就指定了默认的路由规则：
+
+- 默认情况下，一切服务的映射路径就是服务名本身。例如服务名为：`service-provider`，则默认的映射路径就	是：`/service-provider/**`
+
+也就是说，刚才的映射规则我们完全不配置也是OK的，不信就试试看。
+
+
+
+- 路由前缀
+
+配置示例：
+
+```yaml
+zuul:
+  routes:
+    service-provider: /service-provider/**
+    service-consumer: /service-consumer/**
+  prefix: /api # 添加路由前缀
+```
+
+我们通过`zuul.prefix=/api`来指定了路由的前缀，这样在发起请求时，路径就要以/api开头。
+
+![1543054221479](assets/1543054221479.png)
+
+
+
+
+
+- 过滤器: Zuul作为网关的其中一个重要功能，就是实现请求的鉴权。而这个动作我们往往是通过Zuul提供的过滤器来实现的。
+
+- ZuulFilter是过滤器的顶级父类。在这里我们看一下其中定义的4个最重要的方法：
+
+```java
+public abstract ZuulFilter implements IZuulFilter{
+
+    abstract public String filterType();
+
+    abstract public int filterOrder();
+    
+    boolean shouldFilter();// 来自IZuulFilter
+
+    Object run() throws ZuulException;// IZuulFilter
+}
+```
+
+- `shouldFilter`：返回一个`Boolean`值，判断该过滤器是否需要执行。返回true执行，返回false不执行。
+- `run`：过滤器的具体业务逻辑。
+- `filterType`：返回字符串，代表过滤器的类型。包含以下4种：
+  - `pre`：请求在被路由之前执行
+  - `route`：在路由请求时调用
+  - `post`：在route和errror过滤器之后调用
+  - `error`：处理请求时发生错误调用
+- `filterOrder`：通过返回的int值来定义过滤器的执行顺序，数字越小优先级越高。
+
+
+
+- 过滤器执行生命周期
+
+这张是Zuul官网提供的请求生命周期图，清晰的表现了一个请求在各个过滤器的执行顺序。
+
+![1529152248172](assets/1529152248172.png)
+
+正常流程：
+- 请求到达首先会经过pre类型过滤器，而后到达route类型，进行路由，请求就到达真正的服务提供者，执行请求，返回结果后，会到达post过滤器。而后返回响应。
+
+异常流程：
+- 整个过程中，pre或者route过滤器出现异常，都会直接进入error过滤器，在error处理完毕后，会将请求交给POST过滤器，最后返回给用户。
+- 如果是error过滤器自己出现异常，最终也会进入POST过滤器，将最终结果返回给请求客户端。
+- 如果是POST过滤器出现异常，会跳转到error过滤器，但是与pre和route不同的是，请求不会再到达POST过滤器了。
+
+所有内置过滤器列表：
+
+ ![](assets/1525682427811.png)
+
+
+
+- 使用场景
+
+场景非常多：
+
+- 请求鉴权：一般放在pre类型，如果发现没有访问权限，直接就拦截了
+- 异常处理：一般会在error类型和post类型过滤器中结合来处理。
+- 服务调用时长统计：pre和post结合使用。
+
+
+
+- 自定义过滤器: 接下来我们来自定义一个过滤器，模拟一个登录的校验。基本逻辑：如果请求中有access-token参数，则认为请求有效，放行。
+
+ ![1529136926454](assets/1529136926454.png)
+
+内容：
+
+```java
+@Component
+public class LoginFilter extends ZuulFilter {
+    /**
+     * 过滤器类型，前置过滤器
+     * @return
+     */
+    @Override
+    public String filterType() {
+        return "pre";
+    }
+
+    /**
+     * 过滤器的执行顺序
+     * @return
+     */
+    @Override
+    public int filterOrder() {
+        return 1;
+    }
+
+    /**
+     * 该过滤器是否生效
+     * @return
+     */
+    @Override
+    public boolean shouldFilter() {
+        return true;
+    }
+
+    /**
+     * 登陆校验逻辑
+     * @return
+     * @throws ZuulException
+     */
+    @Override
+    public Object run() throws ZuulException {
+        // 获取zuul提供的上下文对象
+        RequestContext context = RequestContext.getCurrentContext();
+        // 从上下文对象中获取请求对象
+        HttpServletRequest request = context.getRequest();
+        // 获取token信息
+        String token = request.getParameter("access-token");
+        // 判断
+        if (StringUtils.isBlank(token)) {
+            // 过滤该请求，不对其进行路由
+            context.setSendZuulResponse(false);
+            // 设置响应状态码，401
+            context.setResponseStatusCode(HttpStatus.SC_UNAUTHORIZED);
+            // 设置响应信息
+            context.setResponseBody("{\"status\":\"401\", \"text\":\"request error!\"}");
+        }
+        // 校验通过，把登陆信息放入上下文信息，继续向后执行
+        context.set("token", token);
+        return null;
+    }
+}
+```
+
+
+
+- 测试
+
+没有token参数时，访问失败：
+
+![1529161460740](assets/1529161460740.png)
+
+添加token参数后：
+
+![1529161252733](assets/1529161252733.png)
+
+
+
+- 负载均衡和熔断
+
+Zuul中默认就已经集成了Ribbon负载均衡和Hystix熔断机制。但是所有的超时策略都是走的默认值，比如熔断超时时间只有1S，很容易就触发了。因此建议我们手动进行配置：
+
+```yaml
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2000 # 设置hystrix的超时时间为6000ms
+```
+
+
+
+
 
 # FastDFS
 
