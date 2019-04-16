@@ -15,6 +15,6 @@ public class C_stream {
 //        String [] list = {"11", "22", "33", "44", "55"};// cannot resolve method 'stream()'
         ArrayList<String> list = new ArrayList<>();
         Collections.addAll(list, "11", "22", "33", "44", "66");
-        list.stream().map(Integer::parseInt).forEach(System.out::println);
+        list.stream().map(Integer::parseInt).forEach(System.out::println);// 把String转换为Integer
     }
 }
