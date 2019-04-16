@@ -93,7 +93,8 @@ public class C_stream {
         Stream<User> stream = users.stream();
         List<String> array =
                 stream.filter(User::isVip)
-                        .sorted((t1, t2) -> t2.getBalance() - t1.getBalance()).limit(3)
+                        .sorted((t1, t2) -> t2.getBalance() - t1.getBalance())// 降序
+                        .limit(3)
                         .map(User::getUserID)
                         .collect(Collectors.toList());
         array.forEach(System.out::println);
