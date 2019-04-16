@@ -209,6 +209,8 @@
     
     # 左外连接
     SELECT * FROM B_PRODUCT AS A LEFT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+
+    select b.*, s.dict_name from brand as b left outer join	system_dict as s on	b.exhibition_type = s.id
     
     # 右外连接
     SELECT * FROM B_PRODUCT AS A RIGHT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
