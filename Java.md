@@ -1919,7 +1919,7 @@ public class F_client {
 ```
 
 
-# jdk1.8
+# JDK1.8
 
 
 ### Lambda
@@ -2179,7 +2179,7 @@ public class E_Stream_get {
 
 
 
-- 常用方法
+- 常用API
     - > Stream只能消费一次
     - `long concat ()` ：返回流中元素的个数。
     - `static <T> Stream<T> concat (Stream<? extends T> a, Stream<? extends T> b)`  ：创建一个新的懒惰连接流
