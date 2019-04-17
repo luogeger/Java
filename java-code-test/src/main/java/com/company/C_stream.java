@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,6 +19,9 @@ public class C_stream {
         ArrayList<String> list = new ArrayList<>();
         Collections.addAll(list, "11", "22", "33", "44", "66");
         list.stream().map(Integer::parseInt).forEach(System.out::println);// 把String转换为Integer
+
+        long count = list.stream().map(Integer::parseInt).filter(item -> item > 30).count();
+        System.out.println(count);
     }
 
     @Test
@@ -42,6 +46,15 @@ public class C_stream {
                 .filter(s -> s.length() == 3)
                 .collect(Collectors.toList());// 转存到新集合
         System.out.println(result.toString());
+    }
+
+    @Test
+    public void test4() {
+        Integer[] nums = {1,34,56,234,78,97,9};// int[] nums = {}; 报错
+        Stream<Integer> numStream = Stream.of(nums);
+        List<String> list = numStream.map(String::valueOf).collect(Collectors.toList());// Integer转换String
+        list.stream().forEach(System.out::println);
+
     }
 
     @Test

@@ -2134,87 +2134,62 @@ public class F_Stream {
 
 
 
-- 获取流
-    - 单列集合
-        - 在单列集合的父接口 `Collection` 里有个默认方法 `default Stream<E> stream()` 
-    - 双列集合
-        - 转化成单列集合 `keySet`  `entrySet` 
-    - 数组
-        - 使用 `Stream` 接口中的方法： `static <T> Stream<T> of (T... values)` ，参数是可变参数，就是数组
-        - 数组类型是 **引用类型**
-
-```java
-public class E_Stream_get {
-    public static void main(String[] args) {
-        ArrayList<Integer> array = new ArrayList<>();
-        LinkedList<String> linked = new LinkedList<>();
-        HashSet<Integer> hash = new HashSet<>();
-
-        Stream<Integer> arrayStream = array.stream();
-        Stream<String> linkedStream = linked.stream();
-        Stream<Integer> hashStream = hash.stream();
-
-        // 双列集合
-        HashMap<Integer, String> hm = new HashMap<>();
-        hm.put(11, "chicken");
-        hm.put(22, "duck");
-        Set<Integer> keys = hm.keySet();
-        for (Integer key : keys) {
-            System.out.println(key +" -> "+ hm.get(key));
-        }
-        Set<Map.Entry<Integer, String>> kvs = hm.entrySet();
-        for (Map.Entry<Integer, String> kv : kvs) {
-            System.out.println(kv.getKey() +" -> "+ kv.getValue());
-        }
-
-        // 数组
-        Integer[] nums = {1,34,56,234,78,97,9};// int[] nums = {}; 报错
-        Stream<Integer> numStream = Stream.of(nums);
-        
-    }
-}
-```
+- **获取流**
+    - 根据`Collection`获取流
+        - `java.util.Collection`接口中加入了`default Stream<E> stream()`用来获取流，所以其所有实现类均可获取流。
+    - 根据`Map`获取流
+        - 双列集合不能直接获取流对象，但是可以间接获取流对象。`java.util.Map`接口不是`Collection`的子接口，且其`K-V`数据结构不符合流元素的单一特征，所以获取对应的流需要分`key`、`value`、`entry`
+        ```java
+            public class MapGetStream {
+                public static void main(String[] args) {
+                    //创建集合对象
+                    Map<String, String> map = new HashMap<>();
+                    // ...
+                    Stream<String> keyStream = map.keySet().stream();
+                    Stream<String> valueStream = map.values().stream();
+                    Stream<Map.Entry<String, String>> entryStream = map.entrySet().stream();
+                }
+            }
+        ```
+    - 根据数组获取流
+        - 因为数组对象不可能添加默认方法，所以使用`Stream` 接口中的方法： `static <T> Stream<T> of (T... values)` ，参数是可变参数，就是数组，数组类型是 **引用类型**
+        ```java
+            public class ArrayGetStream {
+                public static void main(String[] args) {
+                    String[] array = { "张无忌", "张翠山", "张三丰", "张一元" };
+                    //static <T> Stream<T> of(T... values) 返回其元素是指定值的顺序排序流。  
+                    Stream<String> stream = Stream.of(array);
+                }
+            }
+        ```
 
 
 
 
 
-- 常用API
+- **常用API**
     - > Stream只能消费一次
-    - `long concat ()` ：返回流中元素的个数。
-    - `static <T> Stream<T> concat (Stream<? extends T> a, Stream<? extends T> b)`  ：创建一个新的懒惰连接流
-    - `Stream<T> limit (long maxSize) ` 
-    - `Stream<T> skip (long n)` 
+    - 拼接方法：
+        - `long concat ()` ：返回流中元素的个数。
+        - `static <T> Stream<T> concat (Stream<? extends T> a, Stream<? extends T> b)`  ：创建一个新的懒惰连接流
+        - `Stream<T> limit (long maxSize) ` 
+        - `Stream<T> skip (long n)` 
+        - `Stream <T> filter (Predicate<? super T> predicate)` 
+        - `<R> Stream<R> map (Function<? super T,? extends R> mapper)` 
+    - 终结方法：
     - `void forEach (Consumer<? super T> action)`  
-    - `Stream <T> filter (Predicate<? super T> predicate)` 
-    - `<R> Stream<R> map (Function<? super T,? extends R> mapper)` 
-
+    - `long count()`
 
 
 ```java
-public class G_Stream_methods {
-    public static void main(String[] args) {
-        filter();
-    }
+public class StreamMethods {
 
-    private static void filter() {
-        Stream<String> one = Stream.of("acc", "bcc", "add");
-        one.filter(item -> item.startsWith("a")).forEach(System.out::println);
-    }
-
+    // concat 类型必须一致
     private static void concatMethod() {
         Stream<String> one = Stream.of("apple");
         Stream<String> two = Stream.of("banana");
         Stream<String> result = Stream.concat(one, two);
         result.forEach(System.out::println);
-    }
-
-    private static void map() {
-        Stream<String> flow = Stream.of("11", "22", "33", "44", "55");
-        flow.map(Integer::parseInt).forEach(System.out::println);
-        // flow.map(item -> {
-        //     return Integer.parseInt(item);
-        // }).forEach(System.out::println);
     }
 
     private static void skip() {
@@ -2233,14 +2208,6 @@ public class G_Stream_methods {
     }
 }
 ```
-
-
-
-- **拼接方法和终结方法** 
-    - 终结方法
-      - `count`	`filter`
-    - 拼接方法
-
 
 
 ### 并发流
