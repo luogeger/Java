@@ -316,7 +316,7 @@
 - **java database connection**
 - JDBC有关的类和接口：``java.sql`` , ``javax.sql`` (扩展包)  
 
-## 1. 快速入门
+> **1. 快速入门**
 
 ```java
 public class Ajdbc {
@@ -354,12 +354,7 @@ public class Ajdbc {
 
 ```
 
-## 2. API详解
-
-```
-DriverManager → Connection → Statement → ResrltSet
-                                 ↑ PreparedStatement ← CallableStatement
-```
+> **2. API详解**
 
 - `DriverManager`   驱动管理类
 - `Connection`      数据库连接接口
@@ -368,7 +363,8 @@ DriverManager → Connection → Statement → ResrltSet
 - `PrearedStatement`    发送预编译的SQL语句到数据库
 - `CallableStatement`   操作存储过程
 
-## 3. 工具类抽取
+> **3. 工具类抽取**
+
 ```java
 public class _jdbc {
     private static String  url  = null;
@@ -423,7 +419,8 @@ public class _jdbc {
 }// end
 ```
 
-## 4. _jdbc CRUD操作
+> **4. _jdbc CRUD操作**
+
 ```java
 public class CjdbcUtils {
     @Test
@@ -502,7 +499,7 @@ public class CjdbcUtils {
 }// end
 ```
 
-## 5.SQL注入
+> **5.SQL注入**
 
 - `String user = "lucy' -- ";`  `--`  注释的方式不需要密码
 - `String pwd = "xxx' or '1' = '1";`  `or`  能全部查出来
@@ -608,7 +605,7 @@ public class Dinject {
 - `show variables like '%commit%'` ：查看`autocommit`的模式，默认是 **on**, 打开状态。
 - `set autocommit = 0` ：关闭自动提交
 
-### 事务特性
+> **事务特性**
 
 - `Atomicity`   原子性：
 - `Consistensy` 一致性：
@@ -618,7 +615,7 @@ public class Dinject {
 - `Isolation`   隔离性：
     - 多个用户并发访问数据库的时候，一个用户的事务不能被其他用户的事务干扰。
     
-### 事务隔离性
+> **事务隔离性**
 > 如果不考虑事务隔离性会出现以下问题
 
 - 脏读
@@ -630,7 +627,7 @@ public class Dinject {
 - 虚读(幻读)
     - 一个事务多次读取了另一个事务已提交的数据的**数量**，强调的是`insert` , `delete`。
 
-### jdbc操作事务
+> **jdbc操作事务**
 
 - `public interface Connection extends Wrapper`
     - `void setAutoCommit(boolean autoCommit)`
