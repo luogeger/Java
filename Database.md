@@ -670,9 +670,6 @@ public class Transaction {
 - `public interface DataSource extends CommonDataSource, Wrapper` : 厂商实现这个规定的接口
     - `Connection getConnection()`
 
-### 自定义连接池
-- 适配器模式：定义父类实现接口，在用子类实现部分接口。`23种模式`
-
 ```java
 public class B_adaptor implements DataSource {
     @Override
@@ -829,7 +826,6 @@ ResultSet rs =null;
 
     _jdbc.release(rs, pst, conn);
 ```
-### DBCP
 
 ### JDBCTemplate
 - `JDBCTemplate` 是 `Spring` 对 `JDBC`的封装，目的是使`JDBC` 更加易于使用，处理了资源的建立和释放。

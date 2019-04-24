@@ -154,4 +154,17 @@ public class C_stream {
             System.out.println(i);
         }
     }
+
+    @Test
+    public void test6() {
+
+        List<Integer> ids = new ArrayList<>();
+        Collections.addAll(ids, 51, 52, 59, 60, 62, 70, 71, 75);
+
+        List<Integer> nums = new ArrayList<>();
+        Collections.addAll(nums, 0,0,51,51,52,56,57,58);// 所有父节点id
+
+        List<Integer> collect = nums.stream().distinct().filter(item -> item != 0).collect(Collectors.toList());
+        collect.stream().forEach(System.out::println);
+    }
 }
