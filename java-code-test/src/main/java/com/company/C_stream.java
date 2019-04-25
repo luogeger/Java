@@ -1,6 +1,7 @@
 package com.company;
 
 import org.junit.Test;
+import org.springframework.util.CollectionUtils;
 
 import java.sql.*;
 import java.util.*;
@@ -165,6 +166,12 @@ public class C_stream {
         Collections.addAll(nums, 0,0,51,51,52,56,57,58);// 所有父节点id
 
         List<Integer> collect = nums.stream().distinct().filter(item -> item != 0).collect(Collectors.toList());
-        collect.stream().forEach(System.out::println);
+        //collect.stream().forEach(System.out::println);
+
+
+        // 去重
+        //Collection<Integer> parent = CollectionUtils.removeAll(nums, ids);
+        //parent.stream().forEach(System.out::println);
+
     }
 }
