@@ -1,3 +1,27 @@
-/.idea
-/out
+# directory
+/.idea/
+/.vscode/
 /target/
+/.settings/
+
+
+# file
+*.project
+*.iml
+*.com
+*.class
+*.dll
+*.exe
+
+# compression file
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.via
+*.tmp
+*.err
