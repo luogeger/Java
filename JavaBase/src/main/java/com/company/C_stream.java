@@ -1,15 +1,48 @@
 package com.company;
 
 import org.junit.Test;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.sql.*;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class C_stream {
+
+    @Test
+    public void jdbc() throws Exception {
+        // 1.  注册数据库驱动
+        // 2.  获取数据库连接
+        // 3.  创建发送SQL对象
+        // 4.  执行SQL语句，获取结果
+        // 5.  遍历结果集
+        // 6.  关闭资源
+        String url = "wanzhanqu.mysql.rds.aliyuncs.com/sungoal_public";
+        String user = "sungoal_public";
+        String pwd = "sun85ydhfAiu1";
+        String sql = "select * from brand";
+
+        //DriverManager.registerDriver();
+        Connection conn = DriverManager.getConnection(url, user, pwd);
+        Statement stt = conn.createStatement();
+        ResultSet result = stt.executeQuery(sql);
+
+        while (result.next()) {
+            /*int id = result.getInt("id");
+            String _user = result.getString("username");
+            String _pwd = result.getString("password");
+            System.out.println(id + " -> " + _user + " -> " + _pwd);*/
+            System.out.println(result);
+        }
+
+        result.close();
+        stt.close();
+        conn.close();
+
+        //return result;
+    }
+
     @Test
     public void test1() {
 //        Stream<String> flow = Stream.of("11", "22", "33", "44", "55");
@@ -50,7 +83,7 @@ public class C_stream {
 
     @Test
     public void test4() {
-        Integer[] nums = {1,34,56,234,78,97,9};// int[] nums = {}; 报错
+        Integer[] nums = {1, 34, 56, 234, 78, 97, 9};// int[] nums = {}; 报错
         Stream<Integer> numStream = Stream.of(nums);
         List<String> list = numStream.map(String::valueOf).collect(Collectors.toList());// Integer转换String
         list.stream().forEach(System.out::println);
@@ -59,31 +92,26 @@ public class C_stream {
 
     @Test
     public void test3() {
-        class User
-        {
+        class User {
             private String userID;
             private boolean isVip;
             private int balance;
 
-            public User(String userID, boolean isVip, int balance)
-            {
+            public User(String userID, boolean isVip, int balance) {
                 this.userID = userID;
                 this.isVip = isVip;
                 this.balance = balance;
             }
 
-            public boolean isVip()
-            {
+            public boolean isVip() {
                 return this.isVip;
             }
 
-            public String getUserID()
-            {
+            public String getUserID() {
                 return this.userID;
             }
 
-            public int getBalance()
-            {
+            public int getBalance() {
                 return this.balance;
             }
         }
@@ -111,5 +139,39 @@ public class C_stream {
                         .map(User::getUserID)
                         .collect(Collectors.toList());
         array.forEach(System.out::println);
+    }
+
+    @Test
+    public void test5() {
+        Integer[] nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+        List<Integer> collect = Stream.of(nums)
+                .filter((n) -> {
+                    return n > 5 && n % 2 != 0;
+                })
+                .collect(Collectors.toList());
+        System.out.println(collect);
+        for (Integer i : collect) {
+            System.out.println(i);
+        }
+    }
+
+    @Test
+    public void test6() {
+
+        List<Integer> ids = new ArrayList<>();
+        Collections.addAll(ids, 51, 52, 59, 60, 62, 70, 71, 75);
+
+        List<Integer> nums = new ArrayList<>();
+        Collections.addAll(nums, 0,0,51,51,52,56,57,58);// 所有父节点id
+
+        List<Integer> collect = nums.stream().distinct().filter(item -> item != 0).collect(Collectors.toList());
+        //collect.stream().forEach(System.out::println);
+
+
+        // 去重
+        //Collection<Integer> parent = CollectionUtils.removeAll(nums, ids);
+        //parent.stream().forEach(System.out::println);
+
     }
 }
