@@ -7,5 +7,4 @@ public class A_date {
         System.out.println(new Date().getTime());
     }
 
-
 }
