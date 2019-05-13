@@ -3224,6 +3224,8 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - `grep`: == `ctrl + f`
         - `grep to /etc/sudo.conf --color`
     - 在文件中精确查找信息
+        - `grep "msg" info.log`
+        - `grep "msg" info.log error.log`
 
 - 管道命令：`|`
     - 过滤操作，将前面的命令的输出，作为后面命令的输入
