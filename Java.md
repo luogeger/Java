@@ -3183,6 +3183,9 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 - 权限操作
     - `chown roming:roming elasticsearch-6.3.0.tar.gz`
     - `chmod 777 elasticsearch-6.3.0.tar.gz`
+    
+- 查询
+    - `tail -f info.log` 查看日志    
 
 - 目录操作
     -  `pwd` (Print Working Directory) 查看当前目录
@@ -3208,21 +3211,25 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     -  `cp` (copy) 复制文件
         - `cp -r bbb/ /usr/local`: 复制当前目录`bbb`以及里面的内容听到`/usr/local`
     - `find` : `find /usr/local/ -name 'b'`        
-    -  `rmdir` (Remove Directory) 删除文件夹，只能删除空文件夹，不常用
+    - `rmdir` (Remove Directory) 删除文件夹，只能删除空文件夹，不常用
 
 - 文件操作
     - `wc` (Word Count) 字数信息统计，如 wc index.html
     - `touch` 创建文件， `touch index.html`
-    - `head` 查看文件前几行, `head -10 index.html`
-    - `tail` 查看文件后几行, `tail -10 index.html`
-    - `cat` 查看文件全部内容, `cat /etc/sudo.conf`
+    - `head` , `head -10 info.log`, 查看文件前几行 
+    - `tail` , `tail -10 info.log`, 查看文件后几行
+    - `tail` , `tail -f info.log`, 动态查看文件
+    - `cat` , `cat /etc/sudo.conf`, 查看文件全部内容
     - `more`  `less` 查看文件
     - `grep`: == `ctrl + f`
         - `grep to /etc/sudo.conf --color`
+    - 在文件中精确查找信息
 
 - 管道命令：`|`
     - 过滤操作，将前面的命令的输出，作为后面命令的输入
         - `ps -ef | grep mysql`, **注意：**至少有一个进程
+        - `ps -ef|grep java`
+        - `ps -ef|grep public`
 
 - 压缩文件的操作
     - `.tar` 打包文件
@@ -3256,7 +3263,6 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - `ifconfig eth0 up` : 权限不够
     - `chkconfig --level 2345 network on` : 网络服务在系统启动级别是2345时默认启动
    
-
 
 - 时间
     - `hwclock` 硬件时间
