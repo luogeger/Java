@@ -1300,7 +1300,8 @@ public class P01 {
     }
 }
 ```
-# Stream
+# FLOW
+
 ### I/O流
 
 - 字节流：输入、输出
@@ -1308,7 +1309,8 @@ public class P01 {
 - 注意：细节点，区别
 - io异常
 
-#### -字节输出流
+> 字节输出流
+
 - ``public abstract class OutputStream extends Object implements Closeable, Flushable``  : 抽象类， **比输入流多实现一个接口**
     -  `public class FileOutputStream extends OutputStream` ：通过子类实现
         -  `FileOutputStream (String name）`
@@ -1342,7 +1344,8 @@ public class a_OutputStream {
 }
 ```
 
-#### -字节输入流
+> 字节输入流
+
 - ``public abstract class InputStream extends Object implements Closeable``  ：抽象类
     - ``public class FileInputStream extends InputStream`` ：通过子类实现
         - `FileInputStream(File file) throws FileNotFoundException`
@@ -1390,7 +1393,7 @@ public class b_InputStream {
 byte 数组转字符串，也可以用偏移量
 ```
 
-#### -复制歌曲
+> 复制歌曲
 
 ```java
 public class d_FileReader {
@@ -1413,7 +1416,7 @@ public class d_FileReader {
 }
 ```
 
-#### -字符流输入
+> 字符流输入
 
 - `public abstract class Reader extends Object implements Readable, Closeable` ：抽象类
     - ``public class InputStreamReader extends Reader`` ：子类
@@ -1435,7 +1438,8 @@ public class d_FileReader {
 }
 ```
 
-#### -字符流输出
+> 字符流输出
+
 - `public abstract class Writer extends Object implements Appendable, Closeable, Flushable`  ：抽象类，  **和字符流输入的接口不一样** 
     - ``public class OutputStreamWriter extends Writer`` ： 子类
         - `public class FileWriter extends OutputStreamWriter`  ：通过**孙子类**实现
@@ -1453,7 +1457,7 @@ public class e_FileWriter {
 }
 ```
 
-#### I/O异常
+> I/O异常
 
 ```java
 public class io_Exception {
@@ -1530,7 +1534,8 @@ public class io_Exception {
 ```
 
 
-### -缓冲流
+### buffer 缓冲流
+
 - 字节缓冲流
     - 输入： ``public class BufferedInputStream extends FilterInputStream``
     - 输出： ``public class BufferedOutputStream extends FilterOutputStream``
@@ -1655,7 +1660,7 @@ public class C_case {
 ```
 
 
-### -转换流
+### exchange 转换流
 - 两个类名
 ```java
 public class D_exchange {
@@ -1686,7 +1691,7 @@ public class D_exchange {
 ```
 
 
-### -序列化，反序列化
+### serializable 序列化，反序列化
 - `java.io.InvalidClassException`
 
 - 概述
@@ -1752,7 +1757,7 @@ public class E_serializable {
 ```
 
 
-###	>打印流
+###	print 打印流
 
 - 可以向硬盘文件输出内容
 
@@ -1781,7 +1786,7 @@ public class A_PrintStream {
 ```
 
 
-### 属性流>
+### properties 属性流
 
 ```
 java.lang.Object
@@ -3146,6 +3151,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - 管理插件
             
 # linux
+
 ### VMware
 
 
