@@ -1,16 +1,24 @@
 # RESTful 
+
 - **REST**: `Representational State Transfer`表述性状态转移
     - web服务的一种**架构风格**
     - 使用HTTP、URI、JSON、HTML等广泛流行的**标准和协议**
     - 轻量级、跨平台、跨语言的**架构设计**
     - 是一种设计风格或思想，并不是一种标准，更不是一种软件
-- **REST**架构的主要原则
-    - 网络上的所有事物都可以被抽象为资源`resource`
-    - 每个资源都有唯一的资源标识符`resource identifier`    
-    - 每个资源有多种表现形式`xml`, `json`
-    - 对资源操作不会改变资源的标识符
-    - 所有的操作都是无状态的
-- 接口设计
+    - 无状态性
+    
+- **REST**: 架构原则
+    - 所有的事务都可以被抽象为资源`Resource`  
+    - 每个资源都有唯一的标识符`Resource Identifier`, 
+    - 同一资源具有多种表现形式`xml`, `json`
+    - 而且对资源的操作不会改变标识符
+    - 所有的操作都是无状态的`Stateless`
+        - 服务器只需要处理当前的 request，不必了解前面 request的历史，当前请求完成就可以释放资源
+        - 服务器可以充分利用 Pool技术来提高稳定性和性能
+    - 符合REST原则的架构方式就可以称为`RESTful`    
+    
+- **REST**: 架构设计
+    - 接口`URL`
     - `URL`的组成
         - 网络协议`http`, `https`
         - 服务器地址
@@ -20,10 +28,10 @@
         - 不要使用大写字母
         - `-`代替`_`
         - 参数列表应该被`encode`
-- 响应设计        
-    - `Content body`仅仅用来传输数据
-    - 数据拿来就用的原则，不需要"拆箱"，不需要冗余数据
-    - 描述数据或请求的元数据放在`Header`种，例：`X-Result-Fields`
+    - 响应
+        - `Content body`仅仅用来传输数据，不需要拆箱
+        - 描述数据或请求的 **元数据**放在`Header`中，例：`X-Result-Fields`
+    - 指定响应属性字段
         - 错误响应
         ```json
             {
@@ -45,6 +53,32 @@
                 }                
         ```
 
+- **Status Code**
+    - [常见状态码](https://www.cnblogs.com/phpfeng/p/9247142.html)
+    - 200 `OK`查询成功
+    - 201 `Created`新增成功
+    - 202 `Accepted`请求被接受
+    - 204 `No Content`修改，删除执行，但是没有返回数据
+    - 301 `Moved Permanently`资源永久移除
+    - 302 `Moved Temporarily`资源暂时移除
+    - 303 `See Other`重定向
+    - 304 `Not Modified`缓存
+    - 400 `Bad Required`请求参数错误，服务器不理解客户端的请求，未做任何处理
+    - 401 `Unauthorized`未授权，用户未提供身份验证凭据，或者没有通过身份验证
+    - 403 `Forbidden` 被禁止，用户通过身份验证，但是不具备访问资源所需的权限
+    - 404 `NOT_FOUND`
+    - 405 `Method Not Allowed`请求方式错误，不允许的http方法
+    - 409 `Conflict`资源冲突，或者资源被锁定
+    - 410 `Gone`所请求的资源已经从这个地址转移，不再可用
+    - 415 `Unsupported Media Type`不支持的数据(媒体)类型，客户端要求的返回格式不支持。比如API只能返回JSON格式，但是客户端要求返回XML格式。
+    - 422 `Unprocessable Entity` 客户端上传的附件无法处理，导致请求失败
+    - 429 `Too Many Requests`请求过多被限制，客户端的请求次数超过限额
+    - 500 `Internal Server Error`服务器错误
+    - 501 `Not Implemented`接口未实现
+    - 502 `Bad Gateway` 
+    - 503 `Service Unavailable` 服务器无法处理请求，一般用于网站维护状态
+    - 504 `Gateway Timeout`
+    - 505 `Http Version not supported`
 
 
 
