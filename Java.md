@@ -3009,7 +3009,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 # Redis 
 
-- 概述
+- 概述 
 - 特点
 - 应用
     - `redis-benchmark` : 性能测试工具
@@ -3152,12 +3152,6 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
             
 # linux
 
-### VMware
-
-
-### CentOS
-
-
 ### Shell 
 - `shell`概述
     - Shell俗称壳，用来区别于Kernel（核），是指“提供使用者使用界面”的软件（命令解析器）。
@@ -3281,7 +3275,8 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 - `lrzsz`
 
-- `jdk`
+
+### jdk
     - 先卸载Linux自带的jdk
         - `java -version` 
         - `rpm -qa | grep java`
@@ -3301,7 +3296,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         - `source /etc/profile`
         - `java -version`
 
-- `mysql`
+### mysql
     - `mkdir /usr/local/src/mysql5.6`：创建目录
     - `tar -xvf MySQL-5.6.34-1.rhel5.x86_64.rpm-bundle.tar` :[解压]  要在mysql5.6目录下执行命令
     - `rpm -qa | grep mysql` ：**注意：** 解压之后，先不要安装，把自带的Mysql删除再安装，先执行命令检测有没有安装
@@ -3327,7 +3322,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
             - `/etc/rc.d/init.d/iptables save` ：会看到 [表格： filter]
 
 
-- `redis`    
+### redis   
     - 先安装`gcc`
         - `yum install gcc-c++`
         - `gcc --version` 检查有没有安装好
@@ -3350,7 +3345,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         - 先开放`6379`这个端口，管理端口的文件是`/etc/sysconfig/iptables`
         - 再重启防火墙 `service iptables restart`, 会出现4个[确定]
 
-- `tomcat`
+### tomcat
     - 先解压 :`tar -xvf apache-tomcat-7.0.57.tar.gz`
     - 再启动 ：在`bin`目录下启动`startup.sh`
     - 启动查看日志 : `./startup.sh && tail -f ../logs/catalina.out` 
