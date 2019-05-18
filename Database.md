@@ -314,9 +314,8 @@
 # JDBC
 
 - **java database connection**
-- JDBC有关的类和接口：``java.sql`` , ``javax.sql`` (扩展包)  
 
-> **1. 快速入门**
+> **快速入门**
 
 ```java
 public class Ajdbc {
@@ -354,75 +353,22 @@ public class Ajdbc {
 
 ```
 
-> **2. API详解**
+> **API详解**
 
 - `DriverManager`   驱动管理类
 - `Connection`      数据库连接接口
 - `Statement`       发送SQL语句
-- `Result`          获取结果
-- `PrearedStatement`    发送预编译的SQL语句到数据库
+    - `PreparedStatement`  发送预编译的SQL语句到数据库
+        - `pst.setString("lucy");`
+        - `pst.setString("lili");`
+- `ResultSet`          获取结果
 - `CallableStatement`   操作存储过程
 
-> **3. 工具类抽取**
+
+> **_jdbc抽取 CRUD操作**
 
 ```java
-public class _jdbc {
-    private static String  url  = null;
-    private static String  user = null;
-    private static String  pwd  = null;
-
-    static {
-        try {
-            // classLoader 相对 src 目录
-            Properties p = new Properties();
-            InputStream is = _jdbc.class.getClassLoader().getResourceAsStream("user.properties");
-            p.load(is);
-            url = p.getProperty("url");
-            user = p.getProperty("username");
-            pwd = p.getProperty("password");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static Connection getConnection () {
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url, user, pwd);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return conn;
-    }
-
-    public static void release
-    (ResultSet rs, Statement stt, Connection conn) {
-        try {
-            if (rs != null) rs.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            if (stt != null) stt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            if (conn != null) conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-}// end
-```
-
-> **4. _jdbc CRUD操作**
-
-```java
-public class CjdbcUtils {
+public class JdbdCrud {
     @Test
     public void query () {
         Connection conn = null;
@@ -461,51 +407,16 @@ public class CjdbcUtils {
             _jdbc.release(null, stt, conn);
         }
     }
-
-    @Test
-    public void insert () {
-        String sql = "insert into user values (null, 'luo', 'gege')";
-        Connection conn = null;
-        Statement stt = null;
-        try {
-            conn = _jdbc.getConnection();
-            stt = conn.createStatement();
-            int i = stt.executeUpdate(sql);
-            System.out.println(i);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            _jdbc.release(null, stt, conn);
-        }
-    }
-
-    @Test
-    public void delete () {
-        String sql = "delete from user where username = 'wangwu'";
-        Connection conn = null;
-        Statement stt = null;
-
-        try {
-            conn = _jdbc.getConnection();
-            stt = conn.createStatement();
-            int i = stt.executeUpdate(sql);
-            System.out.println("i -> " + i );
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            _jdbc.release(null, stt, conn );
-        }
-    }
 }// end
 ```
 
-> **5.SQL注入**
+> **SQL注入**
 
 - `String user = "lucy' -- ";`  `--`  注释的方式不需要密码
 - `String pwd = "xxx' or '1' = '1";`  `or`  能全部查出来
 
 ```java
-public class Dinject {
+public class inject {
     @Test
     public void or () {
         String user = "lucy";

@@ -1,4 +1,4 @@
-package com.company;
+package com.company.e_stream;
 
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class C_stream {
+public class StreamTest {
 
     @Test
     public void jdbc() throws Exception {
