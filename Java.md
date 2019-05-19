@@ -2982,7 +2982,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 - `Adapter`适配器模式
 - `Decorator`装饰器模式
 - `Proxy`代理模式
-    - 真实对象存在就使用代理对象；不存在**先**初始化真实对象，**再**使用代理对象
+    - 真实对象存在就使用代理对象；不存在**先**初始化真实对象, **再**使用代理对象
 - `Facade`外观模式
 - `Bridge`桥接模式
 - `Composite`组合模式
@@ -3047,36 +3047,44 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 ### 数据类型
 
 - `String`
-    - `set name 'lucy'` : 重复设置就是修改
+    - `set name "lucy"` 
     - `get name` 
     - `del name`
-    - `mset`
-    - `mget`
     
-- `hash`
-    - `hget`
-    - `hset` 
-    - `del`
-    - `hmset`
-    - `hmget`
-    - `hgetall`
-    - `hkeys`
-    - `hvals`
+- `Hash`
+    - `hset` 设置字段值
+        - `hset userInfo password "1234"`
+        - `hset userInfo email "11@qq.com"`
+    - `hget` 获取字段值
+        - `hget userInfo email`
+    - `hmset` 设置多个字段值
+        - `hmset userInfo name "lucy" mobile "13756565"`
+    - `hmget` 获取多个字段值        
+        - `hmget userInfo name email`
+    - `hdel` 删除字段：一次删除一个或多个字段，返回的是删除字段的个数
+        - `hdel userInfo password age address`
+    - `hmget` 一次设置`key`的多个值
+        - `hmset info email "11@qq.com" address "jiangsu"`
+    - `hkeys` 一次获取所有的`key`
+        - `hkeys userInfo`
+    - `hvals` 一次获取所有的值
+        - `hvals userInfo`
+    - `hgetall` 一次获取`key`对应的所有值
+        - `hgetall userInfo`
 
-- `list` : 底层是 LinkedList
+- `List` : 底层是 LinkedList
     - `lpush`
     - `rpush`
     - `lpop`
     - `rpop`
-    - `lrange key start end`
-    - `lrange key 0 -1`
-    - `index key 2`
+    - `lrange key [start] [end]` 返回索引对应区间值
+    - `lindex key [index]` 返回索引对应的指定值
 
-- `set`
-    - `sadd`
-    - `smembers key`
-    - `srem`
-    - `scard`
+- `Set`是`String`类型的无序集合。集合成员是唯一的，这就意味着集合中不能出现重复的数据。
+    - `sadd` 返回字段数量
+    - `smembers key` 获取
+    - `srem` 删除
+    - `scard` 返回字段数量
 
 - `sorted set`  
 
