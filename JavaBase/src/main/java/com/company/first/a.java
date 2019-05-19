@@ -1,4 +1,4 @@
-package first;
+package com.company.first;
 
 public class a {
     public a() {

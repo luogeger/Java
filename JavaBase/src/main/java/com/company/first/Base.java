@@ -1,4 +1,4 @@
-package first;
+package com.company.first;
 
 public class Base {
     private String baseName = "base";

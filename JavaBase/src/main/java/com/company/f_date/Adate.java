@@ -14,4 +14,6 @@ public class Adate {
         System.out.println(new Date().getTime());// 1558144706160
         System.out.println(DateFormatUtils.format(new Date(), "MM-dd"));// 07-11
     }
+
+
 }

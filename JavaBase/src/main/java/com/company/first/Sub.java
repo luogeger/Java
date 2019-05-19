@@ -1,6 +1,4 @@
-package first;
-
-import java.util.List;
+package com.company.first;
 
 public class Sub {
     private String baseName = "sub";
