@@ -819,6 +819,16 @@ ResultSet rs =null;
     }
 ```
 
+# SQL优化
+    
+- `show variables like 'test_0520';`    
+- `show variables like '%log%';`
+- `set global log_queries_not_using_indexes=on';` 打开慢查询
+- `show variables like 'long_query_time';`
+- `set global slow_query_log=on;` 开启了慢查询日志
+
+
+
 # ORACLE
 - sql增强
     - 表里的值区分大小写
