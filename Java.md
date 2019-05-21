@@ -688,40 +688,6 @@ public class Case {
 - 调用 ``start()``
 
 
-```java
-public class Task extends Thread {// **这里是继承 Thread**
-    @Override
-    public void run() {
-        Thread t = Thread.currentThread();//获取当前线程的对象
-        t.setName("task");
-        String name = t.getName();
-
-        for (int i = 0; i < 10; i++) {
-            System.out.println(name +"\t"+ i);
-        }
-    }
-}
-
-// ==
-
-public class R01 {
-    public static void main(String[] args) {
-        Task t = new Task();
-        t.start();
-
-        for (int i = 0; i < 10; i++) {
-            System.out.println(Thread.currentThread().getName() +"\t"+ i);
-        }
-    }
-}
-```
-
-
-
-
-
-
-
 > **创建线程方式二**
 
 - 自定义**任务类**实现接口 ``Runnable`` 
