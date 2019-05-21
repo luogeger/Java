@@ -1,10 +1,3 @@
-- jdk1.8, method: abstract, default, static
-    - lambda, 方法引用，函数式接口，Stream流
-- design model
-- api document
-- annotation
-- method: get, post, put, delete
-
 
 # Base
 
@@ -61,13 +54,6 @@
 - `成员内部类`
     - **类里面定义类**
     - 格式
-        - ```java
-            public class Car {
-                class Engine {
-                    
-                }
-            }
-            ```
     - 访问
         - 从内到外：直接反问，包括私有成员, 遵循就近原则 
             - `Car.this.oil` 外部类

@@ -1,6 +1,10 @@
 package com.company.e_stream;
 
+import com.company.pojo.User;
 import org.junit.Test;
+
+import java.util.Optional;
+
 
 public class OptionalTest {
 
@@ -20,5 +24,30 @@ public class OptionalTest {
     @Test
     public void test1 () {
 
+        //创建一个值为张三的String类型的Optional
+        Optional<String> ofOptional = Optional.of("张三");
+        //如果我们用of方法创建Optional对象时，所传入的值为null，则抛出NullPointerException如下图所示
+        Optional<String> nullOptional = Optional.of(null);// 报错：java.lang.NullPointerException
+    }
+
+    @Test
+    public void test2 () {
+        //为指定的值创建Optional对象，不管所传入的值为null不为null，创建的时候都不会报错
+        Optional<Object> o1 = Optional.ofNullable(null);
+        Optional<String> o2 = Optional.ofNullable("lucy");
+
+        System.out.println(o1);// == Optional.empty
+
+    }
+
+    @Test// 判断两个Optional是否相等，主要是所包裹的对象是否相等
+    public void test3 () {
+        Optional op1 = Optional.of("hello");
+        Optional op2 = Optional.ofNullable("hello");
+        System.out.println(op1.equals(op2));// true
+
+        Optional<User> u1 = Optional.of(new User());
+        Optional<User> u2 = Optional.of(new User());
+        System.out.println(u1.equals(u2));// false
     }
 }
