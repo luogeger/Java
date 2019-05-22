@@ -1024,7 +1024,7 @@ public void jdk () {
 - `Advice.java`
 
 ```java
-    @Component("annoAdvice")// 相当于<bean id="myAspect" class="cn.itcast.spring.a_aspectj.MyAspect"/>
+    @Component("annoAdvice")// 相当于<bean id="myAspect" class="cn.ttt.spring.a_aspectj.MyAspect"/>
     @Aspect// 相当于<aop:aspect ref="myAspect">
     public class Advice {
 
