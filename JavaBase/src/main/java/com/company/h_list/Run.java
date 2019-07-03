@@ -1,10 +1,12 @@
 package com.company.h_list;
 
+import com.company.pojo.User;
 import org.apache.commons.beanutils.BeanUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,5 +49,19 @@ public class Run {
         b = b.stream().distinct().collect(Collectors.toList());
         System.out.println(a);
         System.out.println(b);
+    }
+
+    @Test
+    public void test3 () {
+        //User u1 = new User().setUserID("1").setBalance(1);
+        User u2 = new User().setUserID("2").setBalance(2);
+        User u3 = new User().setUserID("2").setBalance(2);
+
+        ArrayList<User> users = new ArrayList<>();
+        Collections.addAll(users,  u2, u3);
+        List<User> li = users.stream().distinct().collect(Collectors.toList());
+        for (User user : li) {
+            System.out.println(user.toString());
+        }
     }
 }
