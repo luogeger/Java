@@ -174,4 +174,19 @@ public class StreamTest {
         //parent.stream().forEach(System.out::println);
 
     }
+
+    @Test
+    public void test7 () {
+        List<String> ss = new ArrayList<>();
+        Collections.addAll(ss, "a", "c", "a", "c", "c", "f");
+
+        Map<String, Long> collect = ss.stream().collect(Collectors.groupingBy(String::toString, Collectors.counting()));
+        Set<Map.Entry<String, Long>> kvs = collect.entrySet();
+        for (Map.Entry<String, Long> kv : kvs) {
+            System.out.println(kv.getKey());
+            System.out.println(kv.getValue());
+            System.out.println(">>");
+        }
+
+    }
 }
