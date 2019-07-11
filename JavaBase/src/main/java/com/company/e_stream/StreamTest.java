@@ -1,5 +1,6 @@
 package com.company.e_stream;
 
+import com.company.pojo.User;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
@@ -188,5 +189,45 @@ public class StreamTest {
             System.out.println(">>");
         }
 
+    }
+
+    @Test
+    public void test8 () {
+        List<Map<String, Integer>> jobs = new ArrayList();
+        HashMap<String, Integer> job1 = new HashMap<>();
+        HashMap<String, Integer> job2 = new HashMap<>();
+        HashMap<String, Integer> job3 = new HashMap<>();
+        HashMap<String, Integer> job4 = new HashMap<>();
+        HashMap<String, Integer> job5 = new HashMap<>();
+        HashMap<String, Integer> job6 = new HashMap<>();
+
+        job1.put("a", 2);
+        job2.put("a", 3);
+        job3.put("c", 4);
+        job4.put("c", 5);
+        job5.put("c", 6);
+        job6.put("f", 7);
+
+        Collections.addAll(jobs, job1, job2, job3, job4, job5, job6);
+
+        jobs.forEach(item -> {
+//            System.out.println(item.toString());
+        });
+
+        //jobs.stream().collect(Collectors.groupingBy(HashMap::))
+
+        List<User> users = new ArrayList<>();
+        User u1 = new User().setName("a").setAge(2);
+        User u2 = new User().setName("a").setAge(3);
+        User u3 = new User().setName("c").setAge(4);
+        User u4 = new User().setName("c").setAge(5);
+        User u5 = new User().setName("c").setAge(6);
+        User u6 = new User().setName("f").setAge(7);
+        Collections.addAll(users, u1, u2, u3, u4, u5, u6);
+
+        Map<String, Integer> collect = users.stream().collect(Collectors.groupingBy(User::getName, Collectors.summingInt(User::getAge)));
+        collect.entrySet().stream().forEach(item -> {
+            System.out.println(item.toString());
+        });
     }
 }
