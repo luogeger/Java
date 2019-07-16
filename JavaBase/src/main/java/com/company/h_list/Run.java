@@ -44,9 +44,9 @@ public class Run {
         System.out.println(a);
         System.out.println(b);
         a.retainAll(b);
-        b.retainAll(a);
-        a = a.stream().distinct().collect(Collectors.toList());
-        b = b.stream().distinct().collect(Collectors.toList());
+//        b.retainAll(a);
+//        a = a.stream().distinct().collect(Collectors.toList());
+//        b = b.stream().distinct().collect(Collectors.toList());
         System.out.println(a);
         System.out.println(b);
     }

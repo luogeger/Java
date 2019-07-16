@@ -227,7 +227,23 @@ public class StreamTest {
 
         Map<String, Integer> collect = users.stream().collect(Collectors.groupingBy(User::getName, Collectors.summingInt(User::getAge)));
         collect.entrySet().stream().forEach(item -> {
-            System.out.println(item.toString());
+//            System.out.println(item.toString());
         });
+
+
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("a", 2);
+        map.put("c", 6);
+        map.put("f", 7);
+
+        Set<String> keySet = map.keySet();
+        List<String> keys = new ArrayList<>(keySet);
+        Collection<Integer> values = map.values();
+
+        keys.forEach(System.out::println);
+        values.forEach(System.out::println);
+
+        System.out.println(users.isEmpty());
+
     }
 }
