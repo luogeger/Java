@@ -246,4 +246,31 @@ public class StreamTest {
         System.out.println(users.isEmpty());
 
     }
+
+    @Test
+    public void test9 () {
+        List<User> users = new ArrayList<>();
+        User u1 = new User().setName("a").setAge(1);
+        User u2 = new User().setName("a").setAge(3);
+        User u3 = new User().setName("c").setAge(2);
+        User u4 = new User().setName("c").setAge(2);
+        User u5 = new User().setName("c").setAge(3);
+        User u6 = new User().setName("f").setAge(3);
+        Collections.addAll(users, u1, u2, u3, u4, u5, u6);
+
+        Map<Integer, List<User>> collect = users.stream().collect(Collectors.groupingBy(User::getAge, Collectors.toList()));
+        List<Integer> level = new ArrayList<>(collect.keySet());
+        Integer max = Collections.max(level);
+        List<User> maxUser = collect.get(max);
+        List<String> names = maxUser.stream().map(User::getName).collect(Collectors.toList());
+        names.forEach(item -> {
+            System.out.println(item);
+        });
+
+        collect.entrySet().forEach(item -> {
+//            System.out.println(item.getKey());
+//            System.out.println(item.getValue().toString());
+        });
+
+    }
 }
