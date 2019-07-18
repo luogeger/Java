@@ -1,6 +1,7 @@
 package com.company.e_stream;
 
 import com.company.pojo.User;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
@@ -272,5 +273,10 @@ public class StreamTest {
 //            System.out.println(item.getValue().toString());
         });
 
+    }
+
+    @Test
+    public void test10 () {
+        System.out.println(StringUtils.isNotBlank(""));
     }
 }
