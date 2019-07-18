@@ -3143,6 +3143,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - `chmod 777 elasticsearch-6.3.0.tar.gz`
     
 - 查询
+    - `grep -A 10  开始同步商品 huapei-backend.log` 查看关键字后10行的日志
     - `tail -f info.log` 查看日志    
 
 - 目录操作
