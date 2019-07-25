@@ -218,17 +218,17 @@ public class StreamTest {
         //jobs.stream().collect(Collectors.groupingBy(HashMap::))
 
         List<User> users = new ArrayList<>();
-        User u1 = new User().setName("a").setAge(2);
-        User u2 = new User().setName("a").setAge(3);
-        User u3 = new User().setName("c").setAge(4);
-        User u4 = new User().setName("c").setAge(5);
-        User u5 = new User().setName("c").setAge(6);
-        User u6 = new User().setName("f").setAge(7);
+        User u1 = new User().setName("a").setAge(0);
+        User u2 = new User().setName("a").setAge(1);
+        User u3 = new User().setName("c").setAge(1);
+        User u4 = new User().setName("c").setAge(1);
+        User u5 = new User().setName("c").setAge(1);
+        User u6 = new User().setName("f").setAge(1);
         Collections.addAll(users, u1, u2, u3, u4, u5, u6);
 
         Map<String, Integer> collect = users.stream().collect(Collectors.groupingBy(User::getName, Collectors.summingInt(User::getAge)));
         collect.entrySet().stream().forEach(item -> {
-//            System.out.println(item.toString());
+            System.out.println(item.toString());
         });
 
 
@@ -244,7 +244,7 @@ public class StreamTest {
         keys.forEach(System.out::println);
         values.forEach(System.out::println);
 
-        System.out.println(users.isEmpty());
+//        System.out.println(users.isEmpty());
 
     }
 
@@ -252,11 +252,11 @@ public class StreamTest {
     public void test9 () {
         List<User> users = new ArrayList<>();
         User u1 = new User().setName("a").setAge(1);
-        User u2 = new User().setName("a").setAge(3);
-        User u3 = new User().setName("c").setAge(2);
+        User u2 = new User().setName("a").setAge(4);
+        User u3 = new User().setName("c").setAge(3);
         User u4 = new User().setName("c").setAge(2);
-        User u5 = new User().setName("c").setAge(3);
-        User u6 = new User().setName("f").setAge(3);
+        User u5 = new User().setName("c").setAge(5);
+        User u6 = new User().setName("f").setAge(6);
         Collections.addAll(users, u1, u2, u3, u4, u5, u6);
 
         Map<Integer, List<User>> collect = users.stream().collect(Collectors.groupingBy(User::getAge, Collectors.toList()));
@@ -265,18 +265,37 @@ public class StreamTest {
         List<User> maxUser = collect.get(max);
         List<String> names = maxUser.stream().map(User::getName).collect(Collectors.toList());
         names.forEach(item -> {
-            System.out.println(item);
+//            System.out.println(item);
         });
 
         collect.entrySet().forEach(item -> {
-//            System.out.println(item.getKey());
-//            System.out.println(item.getValue().toString());
+            System.out.println(item.getKey());
+            System.out.println(item.getValue().toString());
         });
 
     }
 
     @Test
     public void test10 () {
-        System.out.println(StringUtils.isNotBlank(""));
+        List<Map<String, Integer>> users = new ArrayList<>();
+        Map<String, Integer> u1 = new HashMap<>();
+        u1.put("a", 2);
+        Map<String, Integer> u2 = new HashMap<>();
+        u2.put("a", 3);
+        Map<String, Integer> u3 = new HashMap<>();
+        u3.put("c", 4);
+        Map<String, Integer> u4 = new HashMap<>();
+        u4.put("c", 5);
+        Map<String, Integer> u5 = new HashMap<>();
+        u5.put("c", 6);
+        Map<String, Integer> u6 = new HashMap<>();
+        u6.put("f", 7);
+        Collections.addAll(users, u1, u2, u3, u4, u5, u6);
+
+
+//        Map<String, Integer> collect = users.stream().collect(Collectors.groupingBy(String::toString, Collectors.summingInt()));
+//        collect.entrySet().stream().forEach(item -> {
+//            System.out.println(item.toString()); //a=5 c=15  f=7
+//        });
     }
 }
