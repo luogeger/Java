@@ -1879,6 +1879,10 @@ public class F_client {
 
 ### Lambda
 
+
+
+
+
 ```java
 import java.util.Arrays;
 import java.util.Comparator;

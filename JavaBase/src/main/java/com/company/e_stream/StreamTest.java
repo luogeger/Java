@@ -1,11 +1,12 @@
 package com.company.e_stream;
 
 import com.company.pojo.User;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
-import org.springframework.util.CollectionUtils;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -297,5 +298,36 @@ public class StreamTest {
 //        collect.entrySet().stream().forEach(item -> {
 //            System.out.println(item.toString()); //a=5 c=15  f=7
 //        });
+    }
+
+    @Test
+    public void test11 () {
+        // 操作外部变量
+        ArrayList<String> list = new ArrayList<>();
+
+        ArrayList<String> vals = new ArrayList<>();
+
+        vals.add("123");
+        vals.add("456");
+        vals.add("789");
+
+        vals.forEach(val -> {
+            list.add(val);
+        });
+
+        System.out.println(list.size());
+        System.out.println(list.toString());
+
+//        list.stream().forEach(item -> {
+//            if ("123".equals(item)) {
+//                list.remove(item);
+//            }
+//        });
+//        java.util.ConcurrentModificationException
+//        at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1388)
+//        at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:580)
+//        at com.company.e_stream.StreamTest.test11(StreamTest.java:321)
+
+        System.out.println(list.toString());
     }
 }
