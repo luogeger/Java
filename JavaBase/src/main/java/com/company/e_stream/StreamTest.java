@@ -1,6 +1,6 @@
 package com.company.e_stream;
 
-import com.company.pojo.User;
+import com.company.entity.User;
 import org.junit.Test;
 
 import java.sql.Connection;

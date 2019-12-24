@@ -1,12 +1,10 @@
 package com.company.h_list;
 
-import com.company.pojo.User;
-import org.apache.commons.beanutils.BeanUtils;
+import com.company.entity.User;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 

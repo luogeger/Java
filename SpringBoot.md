@@ -86,6 +86,11 @@
 
 > SpringBoot是基于Spring来构建，可以理解是对Spring的简化，快速构建Spring应用。SpringCloud是利用SpringBoot简化构建分布式应用。
 
+- 快速构建
+- 简化编码
+- 简化配置
+- 简化部署
+
 
 ### overview
 - spring体系的一部分，创建独立的spring应用程序，

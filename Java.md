@@ -46,7 +46,7 @@
     - **方法**: 不能被重写
     - **变量**: 不能被重新赋值
         - 被`final`修饰的常量，一般都是大写
-        
+    
 - Permission modifier 权限修饰符        
 
 
@@ -60,7 +60,7 @@
             - `this.oil` 本类
             - `oil` 局部
         - 从外到内：必须先实例化再访问       
-         
+    
 - `局部内部类`
     - **方法内部定义类**
     - 格式
@@ -106,6 +106,9 @@
             String str2 = str1 + "def";
             System.out.print(str1 ==  str2);// false
             // 存储着不同的地址，为不同的对象
+            ```
+        ```
+        
         ```
     - `共享性`：因为不能更改，所以能共享
         - ```bash
@@ -113,15 +116,21 @@
             String two = "hello";
             System.out.print(one == two);// true
             // 虽然创建了两个字符串对象，但是内容是一样的，能够共享
+            ```
+    ```
+        
         ```
-    - `String` 在jdk1.8以前底层是靠字符数组`char[]`实现的，jdk9.0已经改为`byte[]`
+- `String` 在jdk1.8以前底层是靠字符数组`char[]`实现的，jdk9.0已经改为`byte[]`
         - ```bash
             String str = "abc";
-
+    
             char[] data = {'a', 'b', 'c'};
             byte[] data = {97, 98, 99};
-
+    
             String str = new String(data);
+            ```
+        ```
+        
         ```
 
 
@@ -142,14 +151,6 @@
     - `jdk1.7`以后存在于堆内存中的字符串常量池中(之前是在常量池的方法区中)
     - `==` 比较的是地址，`equals`比较的是内容
     - `String str = "lucy"` >> 存在常量池中，`String str = new String()` >> 存在普通的堆中。
-
-
-- 常用方法：
-    - 判断
-    - 获取
-    - 转换
-    - 分割
-    
 
 ### StringBuilder
 - `append`
@@ -175,8 +176,11 @@
 ### Date
 - `Date`
     ```java
-          SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-          System.out.println(df.format(new Date()));// new Date()为获取当前系统时间 == 2018-03-05 21:50:58
+    //设置日期格式      
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    
+    // new Date()为获取当前系统时间 == 2018-03-05 21:50:58
+    System.out.println(df.format(new Date()));
     ```
     
 - `DateFormat`
@@ -340,14 +344,14 @@ public class T01 {
 
 ## Collection  
 
-- Collection `/kə'lɛkʃən/` 
+- Collection 
   - List (Interface)
   - Set (Interface)
 
 
 - 集合概述
     - 集合是用来存储数据的容器，
-    -集合体系是从 ``jdk1.2`` 以后开始的
+    - 集合体系是从 ``jdk1.2`` 以后开始的
     
 - 集合和数组区别
     - 数组长度固定
@@ -378,7 +382,7 @@ public class T01 {
 
 
 ### Iterator
-- `/ɪtə'retɚ/` 迭代器
+- 迭代器
     - List 有 索引， Set没有，所以不能用遍历
     - 集合遍历的时候，有些数据类型需要向下转型
 
@@ -432,7 +436,7 @@ public class T01 {
          System.out.println(s.length());//输出每个元素长度
      }
 
-```    
+```
 
 ### Collections 工具类
 
@@ -2095,6 +2099,7 @@ public class F_Stream {
 
 - **获取流**
     - 根据`Collection`获取流
+        
         - `java.util.Collection`接口中加入了`default Stream<E> stream()`用来获取流，所以其所有实现类均可获取流。
     - 根据`Map`获取流
         - 双列集合不能直接获取流对象，但是可以间接获取流对象。`java.util.Map`接口不是`Collection`的子接口，且其`K-V`数据结构不符合流元素的单一特征，所以获取对应的流需要分`key`、`value`、`entry`
@@ -2312,8 +2317,9 @@ public class A_forName {
     - params: 是Class的类型
     - return： 返回的构造方法是Construction类型
 - 访问私有的Filed、Method、Construction => 权限检测 => 爷爷类`AccessibleObject` 的方法解除
-    - `c.setAccessible(true)`
-
+    
+- `c.setAccessible(true)`
+    
 - > 反射获取成员变量
 - `Field getDeclaredField (String name)`  
     - params:	字段名
@@ -2408,7 +2414,7 @@ public @interface G_annotation {
 
 # XML
 - 作用: XML就是一种数据格式，自定义的数据格式
-    
+  
 - 如何写XML
     - 声明
         - `<?xml verson="1.0" encoding="UTF-8"?>`
@@ -2444,7 +2450,7 @@ that may have their access modifier narrowed down
 ### Tomcat
 
 ### Web
- 
+
 ### Servlet
 > Servlet是运行在服务端的小程序，是SUN公司提供的一套规范，用来处理客户端请求、响应动态web资源给浏览器
 
@@ -2460,7 +2466,7 @@ public interface Servlet {
 
     void destroy();
 }
-``` 
+```
 
 - Servlet入门开发
     - a.创建java类实现Servlet接口
@@ -2480,8 +2486,8 @@ public interface Servlet {
     - c.在`service`方法中处理请求和响应
     
     - d.发布、启动，访问路径
- 
- 
+
+
 - Servlet优化 `GenericServlet` 
     - GenericServlet 是一个抽象类， 重写了 Servlet的所有方法
     - `public abstract class GenericServlet implements Servlet, ServletConfig, Serializable { }`
@@ -2496,7 +2502,7 @@ public interface Servlet {
     - `log (String, Throwable):void`
     - `service (ServletRequest, ServletResponse):void`
     - `getServletName ():String`
- 
+
 - Servlet优化 `HttpServlet`
     - `public abstract class HttpServlet extends GenericServlet { }`
     - `doDelete (HttpServletRequest, HttpServletResponse):void`
@@ -2534,8 +2540,8 @@ public interface Servlet {
     - 支持 web模块
     - 支持 Servlet异步处理
     - 文件上传 API简化
- 
- 
+
+
 ### Filter
 - 再`tomcat`启动时创建
 - 在servlet之前执行，拦截请求，将servlet中一些共同的业务代码抽取出来，这就是过滤器作用。比如：请求乱码处理。
@@ -2558,12 +2564,12 @@ public interface Servlet {
 ### 执行流程
 
 ### 映射路径 
- 
+
 # Request
 ### HTTP协议
 - HTTP：HyperText Transfer Protocol, 超文本传输协议
 - HTTP/1.0 获得一个web资源，连接断开，HTTP/1.1 可以获得多个web资源，连接断开
- 
+
 - 请求方式：
     - 1.`OPTIONS`: 
     - 2.`HEAD`:
@@ -2584,12 +2590,12 @@ public interface Servlet {
     - get 请求体没有内容
     - post 的请求参数以请求体的形式发送到服务器，安全
 
-            
- 
- 
+      ​      
+
+
  ### HttpServletRequest
  > **HttpServletRequest**对象代表客户端的请求，HTTP请求中的所有信息都封装在这个对象中
- 
+
 - 获取请求行信息
     - `String getMethod()`
     - `StringBuffer getRequestURL()`
@@ -2611,16 +2617,16 @@ public interface Servlet {
         - `mime`
         - `accept-encoding`
         - `accept-language`
-        
+    
 - 获取请求体信息    
     - `String getParameter(String name)`: 获取指定值，没有返回 null，有多个返回第一个
     - `String[] getParameterValues(name)`: 获取请求数据 Key相同的多个数据
     - `request.getParameterMap()`: 获取所有表单的数据
     
 - `request.setCharacterEncoding("utf-8");`     
+
  
- 
- 
+
  ### request 作用域
 - request 生命周期
     - 1.浏览器向 `Servlet`发送请求
@@ -2650,8 +2656,8 @@ public interface Servlet {
         - ```javascript 
             request.getRequestDispatcher("/about.html").forward(request, response);
             ```
- 
- 
+
+
 ### HttpServletResponse
 - 响应行
     - `setStatus (int code)` , 发送状态码, 配合设置响应头完成重定向
@@ -2659,15 +2665,18 @@ public interface Servlet {
             response.setStatus(302);
             response.setHeader("location", "login.html")
             response.sendRedirect("login.html");// 简写
+            ```
+    ```
+        
         ```
- 
+    
 - 响应头
     - `content-disposition` , 通知浏览器以附件的形式解析正文
     - `content-type` ，设置响应**数据的类型（MIME类型）** 和 **编码格式**
         - ```javascript
             //response.setHeader("content-type", "text/html;charset=utf-8");
             response.setContentType("text/html;charset=utf-8");// 简写
-            ```    
+            ```
     - `location` , 指定响应的路径，需要配合 `setStatus()`使用，完成重定向
         - ```javascript
             //response.setStatus(302);
@@ -2677,14 +2686,20 @@ public interface Servlet {
             ```
     - `refresh` , 定时刷新
         - ```javascript
-        response.setHeader("refresh", "3;url=https://www.jd.com")
+          response.setHeader("refresh", "3;url=https://www.jd.com")
+          ```
+        ```
+        
         ```
 - 乱码
     - 服务器响应 **中文** 给浏览器，而`tomcat`默认编码是`ISO-8859-1`，该码表不支持中文编码
     - ```javascript
-    response.setHeader("content-type", "text/html;charset=utf-8");// 设置响应头
-    response.setContentType("text/html;charset=utf-8");// 简写方式
+      response.setHeader("content-type", "text/html;charset=utf-8");// 设置响应头
+      response.setContentType("text/html;charset=utf-8");// 简写方式
+      ```
     ```    
+    
+    ```
     
 - 重定向 
     - 重定向和转发的区别
@@ -2706,8 +2721,8 @@ public interface Servlet {
     - `removeAttribute (String name)`
     - `String getRealPath (String path)`
     - `getServletContext().getMimeType( fileName)`
- 
- 
+
+
  ```javascript
 ServletContext context = request.getServletContext();
 String fileName = request.getParameter("filename");
@@ -2717,12 +2732,12 @@ File filePath = new File(path);
 
 response.setContentType(type);
 response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
-```
+ ```
+
  
+
  
- 
- 
- 
+
 # cookie&session
 - cookie 和 session 都是在会话期间产生，作用都是保存数据
 
@@ -2749,6 +2764,9 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
             System.out.println(cookie.getName());
             System.out.println(URLDecoder.decode(cookie.getValue()));
         }
+        ```
+    ```
+    
     ```
     
 - `cookie` 存活时间
@@ -2763,10 +2781,13 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 - `cookie` 删除
     - ```javascript
-    Cookie cookie = new Cookie("name","");//1. 创建相同名称cookie
-    //2. 保证cookie有效路径一致
-    cookie.setMaxAge(0);//3. 设置cookie存活时间 0
-     response.addCookie(cookie);//4.将cookie响应回到浏览器中，自动置换          
+      Cookie cookie = new Cookie("name","");//1. 创建相同名称cookie
+      //2. 保证cookie有效路径一致
+      cookie.setMaxAge(0);//3. 设置cookie存活时间 0
+       response.addCookie(cookie);//4.将cookie响应回到浏览器中，自动置换          
+      ```
+    ```
+    
     ```
 
 ### session
@@ -2778,6 +2799,9 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         request.getSession();
         request.getSession(true);// 等同于不传参数，如果存在 session, 获取，不存在，创建
         request.getSession(false);// 如果存在 session，获取，不存在...,不创建
+        ```
+    ```
+    
     ```
     
 - `session`使用：存取数据
@@ -2789,7 +2813,10 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         // @WebServlet("/success")
         String msg = (String) request.getSession().getAttribute("name");
         System.out.println(msg);
-    ```
+        ```
+   ```
+   
+   ```
    
 - `session`持久化
     - ```javascript
@@ -2798,13 +2825,19 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         Cookie cookie = new Cookie("JSESSIONID",id);
         cookie.setMaxAge(60*60*24*30);
         response.addCookie(cookie);
-    ```   
-
+        ```
+```   
+    
+    ```
+    
 - `session`移除 和 销毁
     - ```javascript
         request.getSession().removeSession("user");
 
         request.getSession().invalidate("user");
+        ```
+    ```
+    
     ```
 
 ### JSP 
@@ -2824,9 +2857,12 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 - jsp 常用对象
     - `HttpServletRequeset` , `HttpServletResponse`
     - ```javascript
-    <% String msg = request.getAttribute("msg"); %>
-    <span> <%= msg %> </span>
-    <span> ${msg} </span>
+      <% String msg = request.getAttribute("msg"); %>
+      <span> <%= msg %> </span>
+      <span> ${msg} </span>
+      ```
+    ```
+    
     ```
 
 ### EL
@@ -2834,28 +2870,40 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     - `pageScope`
         - 指的是当前的jsp页面，存储的数据只在当前jsp有效
         - ```bash
-        pageContext.setAttribute("page_key", "page_val");
-        ${pageScope.page_key}
+          pageContext.setAttribute("page_key", "page_val");
+          ${pageScope.page_key}
+          ```
+        ```
+        
         ```
     - `requestScope`
         - 一次请求或请求链中的 request域
         - ```bash
-        request.setAttribute("request_key", "request_val");
-        ${requestScope.request_key}
+          request.setAttribute("request_key", "request_val");
+          ${requestScope.request_key}
+          ```
+        ```
+        
         ```
     - `sessionScope`
         - 一次会话过程中，session域
         - ```bash
-        request.getSession().setAttribute("session_key", "session_val");
-        ${sessionScope.session_key}
+          request.getSession().setAttribute("session_key", "session_val");
+          ${sessionScope.session_key}
+          ```
+    ```
+        
         ```
     - `applicationScope`
         - 服务器启动后，整个项目的ServletContext域
         - ```bash
-        application.setAttribute("app_key", "app_val");
-        ${applicationScope.app_key}
+          application.setAttribute("app_key", "app_val");
+          ${applicationScope.app_key}
+          ```
         ```
-
+        
+        ```
+    
 - 运算
 
 
@@ -2885,26 +2933,35 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 - `c:if`
     - ```bash
-    <c:if test="${user != null}">
+      <c:if test="${user != null}">
         <c:out value="登陆成功"></c:out>
-    </c:if>
+      </c:if>
+      ```
+```
+    
     ```
-
+    
 - `c:forEach`    
     - ```bash
-    <c:forEach items="${list}" var="item">
+      <c:forEach items="${list}" var="item">
         <span>&{item.name}</span>
         <span>&{item.age}</span>
-    </c:forEach>
+      </c:forEach>
+      ```
+    ```
+    
     ```
     
 - `c:choose`    
     - ```bash
-    <c:choose>
+      <c:choose>
         <c:when test="${result == 1}">
             <c:out value="一号选手"></c:out>
         </c:when>
-    </c:choose>
+      </c:choose>
+      ```
+    ```
+    
     ```
 
 
@@ -3088,7 +3145,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 - **项目构建管理**： maven提供一套对项目生命周期管理的标准，开发人员、和测试人员统一使用maven进行项目构建。项目生命周期管理：编译、测试、打包、部署、运行。
 - **管理依赖**（jar包）： maven能够帮我们统一管理项目开发中需要的jar包；
 - **管理插件**： maven能够帮我们统一管理项目开发过程中需要的插件；    
-    
+  
 - 安装maven
     - `repository` : 本地仓库
         - `settings.xml` : `<localRepository>G:\apache-maven-3.2.3\repository</localRepository>`
@@ -3106,7 +3163,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
             - `Deployment`
     - 发布web项目            
         - `Tomcat`            
-        
+    
 - **pom** Project Object Model
     - 描述项目
     - 管理依赖
@@ -3223,11 +3280,10 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         - `chkconfig iptables on` 永久开启
     - 查看有哪些自启动服务        
     
-        
 - 其他
     - `ifconfig eth0 up` : 权限不够
     - `chkconfig --level 2345 network on` : 网络服务在系统启动级别是2345时默认启动
-   
+
 
 - 时间
     - `hwclock` 硬件时间
@@ -3252,9 +3308,9 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
             // 复制注意目录
             #set java environment
         	JAVA_HOME=/usr/local/src/jdk/jdk1.8.0_181
-	        CLASSPATH=.:$JAVA_HOME/lib.tools.jar
-	        PATH=$JAVA_HOME/bin:$PATH
-	        export JAVA_HOME CLASSPATH PATH
+            CLASSPATH=.:$JAVA_HOME/lib.tools.jar
+            PATH=$JAVA_HOME/bin:$PATH
+            export JAVA_HOME CLASSPATH PATH
         ```
         - `source /etc/profile`
         - `java -version`
