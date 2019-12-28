@@ -127,14 +127,12 @@
 - 查看所有注册的脚本文件: `chkconfig --list`
 
 #### 防火墙
-- 查看防火墙状态
-- 一次性关闭
-- 永久关闭  
-- 永久开启    
+- 查看防火墙状态: `firewall-cmd --state` 
+- 关闭防火墙
+    - `systemctl stop firewalld`
+    - `systemctl stop firewalld.service`
 - 重启防火墙
     - `firewall-cmd --reload` or `systemctl restart firewalld.service`
-- 停止防火墙
-    - `systemctl stop firewalld.service`
 - 禁止防火墙开机启动
     - `systemctl disable firewalld.service`
 
@@ -161,5 +159,8 @@
     
     
 #### redis
-- 启动：`./redis-server`    
-
+- 启动：
+    - `./redis-server`    
+    - 指定配置启动：`/home/redis-4.0.11/src/redis.service /home/redis-4.0.11/redis.conf`
+    - 任何目录下启动：`service redis start`
+    - 关闭服务：`service redis stop`  可能需要密码
