@@ -117,13 +117,14 @@
 
 #### 进程
 - 查看进程：`ps -ef`
+- 查看redis进程: `ps -aux|grep redis`
 
 
 #### 服务
-- 查看自启动服务
-- 设置自启动服务
-    - `chkconfig rabbitmq-server on`
-
+- 服务的形式启动和关闭redis: `chkconfig --add redis`
+- 开机自启服务：`chkconfig redis on`, `chkconfig rabbitmq-server on` 
+- 启动服务：`service redisd start`
+- 查看所有注册的脚本文件: `chkconfig --list`
 
 #### 防火墙
 - 查看防火墙状态
@@ -131,7 +132,7 @@
 - 永久关闭  
 - 永久开启    
 - 重启防火墙
-    - `firewall-cmd --reload` or `systemctl restart firewalld.service `  
+    - `firewall-cmd --reload` or `systemctl restart firewalld.service`
 - 停止防火墙
     - `systemctl stop firewalld.service`
 - 禁止防火墙开机启动
@@ -157,4 +158,8 @@
 
 - 检测软件是否安装成功
     - `rpm -qa|grep rabbitmq` 检测rabbitmq
+    
+    
+#### redis
+- 启动：`./redis-server`    
 
