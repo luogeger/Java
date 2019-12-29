@@ -39,6 +39,14 @@
     - `ps -ef | grep mysql`, **注意：**至少有一个进程
     - `ps -ef|grep java`
     - `ps -ef|grep public`
+    
+#### 文件搜索
+- `whereis`, ``
+    - 只能搜索命令的命令
+- `locate`    
+    - 只能搜索目录名
+- `find`
+- `grep` :字符串搜索
 
 #### 查询
 - `grep -A 10  开始同步商品 huapei-backend.log` 查看关键字后10行的日志
@@ -55,10 +63,13 @@
     - `grep "msg" info.log error.log`
 
 #### 目录操作
--  `pwd` (Print Working Directory) 
--  `mkdir` (Make Directory) 创建目录
-- `rmdir` (Remove Directory) 删除文件夹，只能删除空文件夹，不常用
--  `cd` (Change Directory) 切换目录 
+- 查看当前所在目录：`pwd` (Print Working Directory) 
+- 创建目录: `mkdir` (Make Directory) 
+- 删除目录：`rm -rf 目录名字`
+    - `r` 就是向下递归，不管有多少级目录，一并删除
+    - `f` 就是直接强行删除，不作任何提示的意思
+    - `rmdir` (Remove Directory) 删除文件夹，只能删除空文件夹，不常用
+- 切换目录：`cd` (Change Directory) 
     - `cd /` 根目录
     - `cd ~`  home目录
     - `cd ../` 上一级
@@ -121,9 +132,12 @@
 
 
 #### 服务
+- 检测软件是否安装：``
 - 服务的形式启动和关闭redis: `chkconfig --add redis`
 - 开机自启服务：`chkconfig redis on`, `chkconfig rabbitmq-server on` 
-- 启动服务：`service redisd start`
+- 启动服务：`service redis start`
+- 停止服务：`service reids stop`
+- 查看服务状态：`service reids status`
 - 查看所有注册的脚本文件: `chkconfig --list`
 
 #### 防火墙
@@ -153,9 +167,8 @@
 ### 安装软件
 
 #### rabbitMQ
-
-- 检测软件是否安装成功
-    - `rpm -qa|grep rabbitmq` 检测rabbitmq
+- 检测rabbitmq是否安装成功: `rpm -qa|grep rabbitmq` 
+- 启动rabbitmq: `service rabbitmq-server start`
     
     
 #### redis
