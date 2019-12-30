@@ -40,12 +40,30 @@
     - `ps -ef|grep java`
     - `ps -ef|grep public`
     
-#### 文件搜索
-- `whereis`, ``
-    - 只能搜索命令的命令
+#### 搜索
 - `locate`    
-    - 只能搜索目录名
+    - 只能搜索文件名
+- `whereis`
+    - 只能搜索命令的命令：`whereis ls`, `whereis -b ls`, `whereis -m ls`            
+- `whatis`            
+    ```bash
+    [root@localhost /]# whatis ls
+    ls (1)               - list directory contents
+    [root@localhost /]# whatis ll
+    ll: nothing appropriate.    
+    ```
+- `which`
+    - 搜索命令所在路径及别名: 
+    ```bash
+    [root@localhost /]# which ll
+    alias ll='ls -l --color=auto'
+            /usr/bin/ls
+    [root@localhost /]# which ls
+    alias ls='ls --color=auto'
+            /usr/bin/ls
+    ```
 - `find`
+    - 
 - `grep` :字符串搜索
 
 #### 查询
