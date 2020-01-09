@@ -3106,8 +3106,6 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 - exists key
 - type key
 
-### Jedis
-> 通过Jedis用Java代码连接Redis
 
 # maven
 

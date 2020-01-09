@@ -1360,28 +1360,6 @@ public void jdk () {
 
 - 集合的绑定
 
-### jstl
-- 
-```xml
-    <dependency>
-        <groupId>jstl</groupId>
-        <artifactId>jstl</artifactId>
-    </dependency>
-```
-
-### JSON
-- 
-```xml
-    <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-    </dependency>
-```
-- 导包，重启，注解驱动
-- 序列化和反序列化
-    - `@ResponseBody`
-    - `@RequestBody`
-- 约定编程
 
 ### file upload 文件上传
 - 导包

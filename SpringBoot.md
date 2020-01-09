@@ -285,7 +285,7 @@
 - `RANCHER`    
 
 ### Eureka
-- `/jʊ'rikə/`
+
 - 服务注册中心
     - `Eureka`的服务端应用，提供服务**注册和发现**功能
 - 服务提供者
@@ -555,10 +555,10 @@ spring:
 ```java
 @SpringBootApplication
 @EnableZuulProxy // 开启网关功能
-public class ItcastZuulApplication {
+public class ZuulApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ItcastZuulApplication.class, args);
+        SpringApplication.run(ZuulApplication.class, args);
     }
 }
 ```
@@ -576,7 +576,7 @@ public class ItcastZuulApplication {
 
 映射规则：
 
-```yaml
+```yml
 server:
   port: 10010 #服务端口
 spring:
