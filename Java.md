@@ -1654,7 +1654,8 @@ public class D_exchange {
 
 - 注意点
     - 该类必须实现`java.io.Serializable ` 接口，`Serializable` 是一个标记接口，不实现接口会抛出`NotSerializableException` 。
-`Serializable`：是一个标记性接口。接口中没有任何的方法，所以称为标记型接口！它仅仅是一个标识。是一个标记接口为了启动一个序列化功能。只有具备了这个接口标识的类才能通过Java中的序列化和反序列化流操作这个对象。
+`Serializable`：是一个标记性接口。接口中没有任何的方法，所以称为标记型接口！它仅仅是一个标识。是一个标记接口为了启动一个序列化功能。
+只有具备了这个接口标识的类才能通过Java中的序列化和反序列化流操作这个对象。
 注意：只要一个类实现了Serializable接口，那么都会给每个实现类分配一个序列版本号作为唯一标识。
     - 如果有一个属性不需要可序列化的，该属性必须注明是瞬态的，使用`transient` 关键字修饰。
     - 序列化版本号  `serialVersionUID`
@@ -3001,7 +3002,8 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 ### Behavior 行为型：11种
 - 策略模式
-- 模板方法模式
+- `Template Method`模板方法模式
+    - 业务流程相同，具体的步骤实现不同
 - `Observer`观察者模式
 - 迭代子模式
 - 责任链模式

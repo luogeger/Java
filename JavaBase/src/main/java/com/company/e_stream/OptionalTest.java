@@ -40,7 +40,11 @@ public class OptionalTest {
 
     }
 
-    @Test// 判断两个Optional是否相等，主要是所包裹的对象是否相等
+
+    /**
+     *  判断两个Optional是否相等，主要是所包裹的对象是否相等
+     */
+    @Test
     public void test3 () {
         Optional op1 = Optional.of("hello");
         Optional op2 = Optional.ofNullable("hello");
