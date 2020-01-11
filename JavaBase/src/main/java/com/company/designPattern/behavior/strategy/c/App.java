@@ -17,9 +17,7 @@ public class App {
         System.out.println(b1);
 
 
-        Context lowerCareValidator = new Context(s -> {
-            return s.matches("\\d+");
-        });
+        Context lowerCareValidator = new Context(s -> s.matches("\\d+"));
         boolean b2 = lowerCareValidator.execute("aaa");
         System.out.println(b2);
 

@@ -2,7 +2,9 @@
 
 ### Editing
 - **Ctrl + Space** `Basic code completion (the name of any class, method or variable)`
+    - 基本代码完成（任何类，方法或变量的名称）
 - **Ctrl + Shift + Space** `Smart code completion (filters the list of methods and variables by expected type)`
+    - 智能代码完成, 按预期类型过滤方法和变量的列表
 - **Ctrl + Shift + Enter** `Complete statement`
 - **Ctrl + P** `Parameter info (within method call arguments)`
 - **Ctrl + Q** `Quick documentation lookup`
