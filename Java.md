@@ -135,16 +135,16 @@
 
 
 - 构建方式
-    - 1.无参构造
-        - `String str1 = new String()`
-    - 2.通过字符数组构造
-        - `char[] c = {'a', 'b', 'c'}; String str2 = new String(c)`
-    - 3.通过字节数组构造
-        - `byte[] b = {97, 98, 99}; String str3 = new String(b)`
-    - 4.直接使用已有字符串构造
-        - `String str4 = new String("cat");`
-    - 5.直接赋值
+    - 1.直接赋值
         - `String str5 = "dog";`
+    - 2.无参构造
+        - `String str1 = new String()`
+    - 3.直接使用已有字符串构造
+        - `String str4 = new String("cat");`
+    - 4.通过字节数组构造
+        - `byte[] b = {97, 98, 99}; String str3 = new String(b)`
+    - 5.通过字符数组构造
+        - `char[] c = {'a', 'b', 'c'}; String str2 = new String(c)`
 
 
 - 字符串的常量池内存分析
@@ -167,11 +167,6 @@
 
 > **最后，如果程序不是多线程的，那么使用StringBuilder效率高于StringBuffer。**
 
-### Objects
-- `equals`
-- `toString`
-- `hashCode`
-- `Objects`
 
 ### Date
 - `Date`
@@ -216,14 +211,8 @@ public class Generic<E> {
     public void showName () {
         System.out.println(this.name);
     }
-
-    public E getName() {
-        return name;
-    }
-
-    public void setName(E name) {
-        this.name = name;
-    }
+    
+    // getter, setter...
 }
 
 // ==
@@ -270,19 +259,12 @@ public class Generic {
         return s;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    // getter, setter...
 }
 
 // ==
 
-public class R01 {
-    public static void main(String[] args) {
+public static void main(String[] args) {
         // 自定义泛型方法
         Generic gen = new Generic();
 
@@ -299,7 +281,6 @@ public class R01 {
         // 多个泛型参数
         String str2 = gen.mutiReturn(888, "dog");
         System.out.println(str2);
-    }
 }
 
 ```
@@ -565,10 +546,10 @@ public class T01 {
 ## Map
 
 - Map 是双列集合，Collection是单列集合，它们都是超级父接口
-    - `hashMap`
+    - `HashMap`
     - `LinkedHashMap`
     
-- 特点：由哈希控制键，能保证唯一性
+- 特点：由哈希控制键，能保证唯一性, 底层是数组，单链表，红黑树
 - 区别：单列集合一次只能存一个对象，对象之间没有任何关系。双列集合一次可以存两个对象，两个对象只有有映射关系。
 - 常用方法：
    - `put`
@@ -577,50 +558,25 @@ public class T01 {
    - `clear`
    - `containsKey` `containsValue`
    - `keySet`   `entrySet`
+- **HashMap**: 相对于**HashTable**线程不安全，速度快，效率高
+
+> **遍历的方式**
 
 ```java
 // keySet
-public class R01 {
-    public static void main(String[] args) {
-        HashMap<Integer, Student> hs = new HashMap<>();
-        hs.put(1, new Student("lili", 18));
-        hs.put(2, new Student("lucy", 19));
-        hs.put(3, new Student("lili", 18));
-        hs.put(3, new Student("jim", 18));
-        System.out.println(hs);
-        Set<Integer> keys = hs.keySet();
-        System.out.println(keys);
+for(Iterator<Integer> it = keys.iterator(); it.hasNext();) {
+    Integer key = it.next();
+    System.out.println(key +"  --  "+ hs.get(key));
+}
 
-        for(Iterator<Integer> it = keys.iterator(); it.hasNext();) {
-            Integer key = it.next();
-            System.out.println(key +"  --  "+ hs.get(key));
-        }
-
-        for (Integer key : keys) {
-            System.out.println(key +"  ==  "+ hs.get(key));
-        }
-    }
+for (Integer key : keys) {
+    System.out.println(key +"  ==  "+ hs.get(key));
 }
 
 // entrySet
-
-public class Case {
-    public static void main(String[] args) {
-        String  str = "alsdkfjalskgsdfklj";
-        HashMap<Character, Integer> strMap = new HashMap<>();
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if (strMap.containsKey(c)) {
-                strMap.put(c, strMap.get(c) +1);
-            } else {
-                strMap.put(c, 1);
-            }
-        }
-        Set<Map.Entry<Character, Integer>> kvs = strMap.entrySet();
-        for (Map.Entry<Character, Integer> kv : kvs) {
-            System.out.println(kv.getKey() +"\t"+ kv.getValue());
-        }
-    }
+Set<Map.Entry<Character, Integer>> kvs = strMap.entrySet();
+for (Map.Entry<Character, Integer> kv : kvs) {
+    System.out.println(kv.getKey() +"\t"+ kv.getValue());
 }
 ```
 
