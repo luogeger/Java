@@ -1042,20 +1042,34 @@ import java.util.concurrent.Executors;
 public class R01 {
     public static void main(String[] args) {
         Tickets t = new Tickets();
-//        Thread t1 = new Thread(t, "t1");
-//        Thread t2 = new Thread(t, "t2");
-//        Thread t3 = new Thread(t, "t3");
-//        Thread t4 = new Thread(t, "t4");
-//        t1.start();
-//        t2.start();
-//        t3.start();
-//        t4.start();
-
         ExecutorService es = Executors.newFixedThreadPool(4);
         es.execute(t);
         es.execute(t);
         es.execute(t);
         es.execute(t);
+        
+        //  创建线程池的正确方式
+        ThreadPoolExecutor executorTask = new ThreadPoolExecutor(10, 20,
+                            60L, TimeUnit.SECONDS,
+                            new ArrayBlockingQueue(200));
+        ExecutorCompletionService<List<Product>> completionService = new ExecutorCompletionService<>(executorTask);
+        for (Integer pageIndex = 2; pageIndex <= totalPage; pageIndex++) {
+            //  发送http请求 
+            completionService.submit(new GetProductTask(categoryCode, pageIndex, ProductRemote));
+        }
+        // 收集结果
+        for (int j = 0; j < totalPage - 1; j++) {
+            try {
+                List<Product> Products = completionService.take().get();
+                list.addAll(Products);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        // 关闭线程池
+        executorTask.shutdown();
     }
 }
 ```
@@ -1818,11 +1832,11 @@ public class F_client {
 # JDK1.8
 
 
+### 函数式接口
+
+### 方法引用
+
 ### Lambda
-
-
-
-
 
 ```java
 import java.util.Arrays;
@@ -1893,14 +1907,7 @@ public class R01 {
 - lambda作为返回值
 
 
-
-### 方法引用
-
-
-### 函数式接口
-
 - Supplier	生产对象
-
 
 
 - Consumer	消费对象
@@ -2010,106 +2017,78 @@ public class D_Function {
 
 - `Interface Stream<T>` 
     - Stream本身并不存储任何元素，也不存储地址，是一个集合元素的函数模型。
+    
+- 聚合操作：数据的批量操作
+    
+- 处理流程
+    - 1.获取数据源
+    - 2.数据转换：可以进行一次或多次
+    - 3.获取结果
 
-- **函数式编程**
 
-```java
-public class F_Stream {
-    public static void main(String[] args) {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("张三丰");
-        list.add("张无忌");
-        list.add("赵敏");
-        list.add("周芷若");
-        list.add("灭绝师太");
-        list.add("张翠山");
-        list.add("张三");
-        list.stream()
-          .filter(item -> item.length() == 3)
-          .filter(item -> item.startsWith("张"))
-          .forEach(System.out::println);// 张三丰， 张无忌， 张翠山
-    }
-}
+
+> **1. 获取流**
+
+```bash
+1. 从集合或数组中获取
+    Collectin.stream(), ex: accounts.stream()
+    Collections.parallelStream()
+    Arrays.stream(T t)
+2. BufferReader
+    BufferReader.lines() -> stream()
+3. 静态工厂
+    java.util.stream.IntStream.range()...
+    java.nio.file.Files.walk()...
+4. 自定义构建
+    java.util.Spliterator
+5. 更多的方式...
+    Rondom.ints()
+    Pottern.splitAsStream()...        
 ```
 
+- `Collection`获取流
+    - `java.util.Collection`接口中加入了`default Stream<E> stream()`用来获取流，所以其所有实现类均可获取流。
 
 
-- **获取流**
-    - 根据`Collection`获取流
+- `Array`获取流
+    - 因为数组对象不可能添加默认方法，所以使用`Stream` 接口中的方法： `static <T> Stream<T> of (T... values)` ，参数是可变参数，就是数组，数组类型是 **引用类型**
+    ```java
+        Stream<String> stream = Stream.of(array);
+    ```
+    
+- `List`获取流
+    ```java
+    list.stream()
+    ```
+    
         
-        - `java.util.Collection`接口中加入了`default Stream<E> stream()`用来获取流，所以其所有实现类均可获取流。
-    - 根据`Map`获取流
-        - 双列集合不能直接获取流对象，但是可以间接获取流对象。`java.util.Map`接口不是`Collection`的子接口，且其`K-V`数据结构不符合流元素的单一特征，所以获取对应的流需要分`key`、`value`、`entry`
-        ```java
-            public class MapGetStream {
-                public static void main(String[] args) {
-                    //创建集合对象
-                    Map<String, String> map = new HashMap<>();
-                    // ...
-                    Stream<String> keyStream = map.keySet().stream();
-                    Stream<String> valueStream = map.values().stream();
-                    Stream<Map.Entry<String, String>> entryStream = map.entrySet().stream();
-                }
-            }
-        ```
-    - 根据数组获取流
-        - 因为数组对象不可能添加默认方法，所以使用`Stream` 接口中的方法： `static <T> Stream<T> of (T... values)` ，参数是可变参数，就是数组，数组类型是 **引用类型**
-        ```java
-            public class ArrayGetStream {
-                public static void main(String[] args) {
-                    String[] array = { "张无忌", "张翠山", "张三丰", "张一元" };
-                    //static <T> Stream<T> of(T... values) 返回其元素是指定值的顺序排序流。  
-                    Stream<String> stream = Stream.of(array);
-                }
-            }
-        ```
+- `Map`获取流
+    - 双列集合不能直接获取流对象，但是可以间接获取流对象。`java.util.Map`接口不是`Collection`的子接口，且其`K-V`数据结构不符合流元素的单一特征，所以获取对应的流需要分`key`、`value`、`entry`
+    ```java
+        Stream<String> keyStream = map.keySet().stream();
+        Stream<String> valueStream = map.values().stream();
+        Stream<Map.Entry<String, String>> entryStream = map.entrySet().stream();
+    
+> **2. 数据转换：常用API**
 
+```bash
 
-
-
-
-- **常用API**
-    - > Stream只能消费一次
-    - 拼接方法：
-        - `long concat ()` ：返回流中元素的个数。
-        - `static <T> Stream<T> concat (Stream<? extends T> a, Stream<? extends T> b)`  ：创建一个新的懒惰连接流
-        - `Stream<T> limit (long maxSize) ` 
-        - `Stream<T> skip (long n)` 
-        - `Stream <T> filter (Predicate<? super T> predicate)` 
-        - `<R> Stream<R> map (Function<? super T,? extends R> mapper)` 
-    - 终结方法：
-    - `void forEach (Consumer<? super T> action)`  
-    - `long count()`
-
-
-```java
-public class StreamMethods {
-
-    // concat 类型必须一致
-    private static void concatMethod() {
-        Stream<String> one = Stream.of("apple");
-        Stream<String> two = Stream.of("banana");
-        Stream<String> result = Stream.concat(one, two);
-        result.forEach(System.out::println);
-    }
-
-    private static void skip() {
-        Stream<String> flow = Stream.of("q", "w", "e", "r", "t", "y");
-        flow.skip(4).forEach(item -> System.out.println(item));
-    }
-
-    private static void limit() {
-        Stream<String> flow = Stream.of("q", "w", "e", "r", "t", "y");
-        flow.limit(4).forEach(item -> System.out.println(item));
-    }
-
-    private static void count() {
-        Stream<String> one = Stream.of("acc", "bcc", "add");
-        System.out.println(one.count());
-    }
-}
+1. 中间操作：操作的 结果是一个stream。中间操作可以有一个或多个，需要注意的是，
+中间操作只记录操作方式，不做具体执行，直到借宿操作发生时，才做数据的最终执行
+    1) 无状态：数据处理不受前置操作的影响
+        map/filter/peek/parallel/sequential/unordered
+    2) 有状态：
+        distinct/sorted/limit/skip
+2. 终结操作：只能有一个操作
+    1) 非短路操作：当前Stream对象必须处理完集合中所有数据，才能得到结果
+        forEach/forEachOrdered/toArray/reduce/collect/min/max/count/iterator
+    2) 短路操作：当前的Stream对象在处理过程中，一旦满足某个条件，就可以到到结果
+        anyMatch/allMatch/noneMatch/findFirst/findAny
+        短路操作也被称为Short-circuiting, 适用于无限大的Stream -> 有限的Stream 
 ```
 
+
+> **3. 收集结果**
 
 ### 并发流
 
