@@ -1834,77 +1834,29 @@ public class F_client {
 
 ### 函数式接口
 
-### 方法引用
+- 注解
+- 只能有一个抽象方法
+- 可以有默认方法和静态方法
 
 ### Lambda
 
-```java
-import java.util.Arrays;
-import java.util.Comparator;
+- 函数式接口，只包含一个操作方法
+- Lambda表达式，只能操作一个方法
+- Java中的Lambda表达式，核心就是一个函数式接口的实现
 
-public class R01 {
-    public static void main(String[] args) {
-        Student[] stu = {
-                new Student("lili", 18),
-                new Student("lucy", 20),
-                new Student("jim", 17),
-                new Student("green", 19),
-        };
-
-//        Arrays.sort(stu, new Comparator<Student>() {
-//            @Override
-//            public int compare(Student o1, Student o2) {
-//                return o2.getAge() - o1.getAge();
-//            }
-//        });
-
-//        Arrays.sort(stu, (Student o1, Student o2) -> {// lambda格式
-//            return o1.getAge() - o2.getAge();
-//        });
-		// lambda简化格式
-        Arrays.sort(stu, (Student o1, Student o2) -> o2.getAge() - o1.getAge());
-
-        System.out.println(Arrays.toString(stu));
-    }
-}
-```
-
-
+#### Lambda应用
 - lambda实现
-
-```java
-public interface Inter {
-    int sum(int a, int b);
-}
-
-// ==
-public class R01 {
-    public static void main(String[] args) {
-//        int sum = implementMethod(3, 5, new Inter() {
-//            @Override
-//            public int sum(int a, int b) {
-//                return a * b;
-//            }
-//        });
-
-        int sum = implementMethod(5, 6, (a, b) -> {
-            return a * b;
-        });
-
-        System.out.println("sum = " + sum);
-    }
-
-    private static int implementMethod(int a, int b,Inter lam) {
-        return lam.sum(a, b);
-    }
-}
-```
-
-
 - lambda作为参数
-
-
 - lambda作为返回值
+
+
+### 方法引用
+
+- **就是简化方法的调用过程**
+    - 静态方法
+    - 实例方法
+    - 构造方法
+
 
 
 - Supplier	生产对象
@@ -2090,6 +2042,16 @@ public class D_Function {
 
 > **3. 收集结果**
 
+- `collect`： 是一个方法，收集结果的方法
+- `Collector`： 是一个接口，`collect`方法的参数是实现`Collector`的收集器
+- `Collectors`：是一个工具类(预定义收集器)，封装了很多实现了`Collector`的静态方法，大致分为以下几种
+    - 将流元素归约和汇总为一个值
+        - `Collectors.toList()`
+    - 将流元素分组
+        - `Map<Integer, List<User>> group = users.stream().collect(Collectors.groupingBy(User::getAge));`, 以用户的年龄分类 
+    - 将流元素分区
+        - - `Map<Boolean, List<User>> partiton = users.stream().collect(Collectors.partitioningBy(user -> user.getAge > 18));`, 将用户划分为两部分，以年龄是否大于18为划分条件
+    
 ### 并发流
 
 - > 当需要对集合或数组中的元素进行并发操作时，需要仔细考虑多线程环境下的竞争和锁的问题。

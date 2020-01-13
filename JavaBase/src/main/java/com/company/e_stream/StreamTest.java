@@ -3,6 +3,9 @@ package com.company.e_stream;
 import com.company.entity.User;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -300,6 +303,10 @@ public class StreamTest {
 //        });
     }
 
+    /**
+     * 操作外部变量
+     *
+     */
     @Test
     public void test11 () {
         // 操作外部变量
@@ -314,7 +321,6 @@ public class StreamTest {
         vals.forEach(val -> {
             list.add(val);
         });
-
         System.out.println(list.size());
         System.out.println(list.toString());
 
@@ -328,6 +334,88 @@ public class StreamTest {
 //        at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:580)
 //        at com.company.e_stream.StreamTest.test11(StreamTest.java:321)
 
-        System.out.println(list.toString());
+//        System.out.println(list.toString());
     }
-}
+
+
+    /**
+     * 字符串转换：joining, toList, toMap
+     */
+    @Test
+    public void test12() {
+
+        Stream<String> fruit = Stream.of("apple", "banana", "orange");
+
+        //  拼接字符串
+//        String collect = fruit.collect(Collectors.joining());
+//        System.out.println(collect);
+
+
+        // List
+//        List<String> collect1 = fruit.collect(Collectors.toList());
+//        System.out.println(collect1);
+
+        //  Map
+        Map<Object, Object> collect2 = fruit.collect(Collectors.toMap(x ->
+                        "key-" + x
+                , y ->
+                        "value-" + y
+        ));
+        System.out.println(collect2);
+
+    }
+
+    /**
+     * peek, map
+     */
+    @Test
+    public void test13 () {
+        List<String> ss = new ArrayList();
+        ss.add("a");
+        ss.add("a");
+        ss.add("c");
+        ss.add("c");
+        ss.add("c");
+        ss.add("f");
+
+        List<String> collect = ss.stream().map(x -> "--" + x).collect(Collectors.toList());
+        for (String s : collect) {
+            System.out.println(s);
+        }
+
+//        List<String> collect = ss.stream().peek(x -> "--" + x).collect(Collectors.toList());
+        //  Bad return type in lambda expression: String cannot be converted to voidBad return type in lambda expression: String cannot be converted to void
+    }
+
+
+    /**
+     * 获取文件流
+     */
+    @Test
+    public void streamFromFile () throws IOException {
+        Stream<String> lines = Files.lines(Paths.get("C:\\PC\\workspace\\Java\\JavaBase\\src\\main\\java\\com\\company\\e_stream\\OptionalTest.java"));
+
+        lines.forEach(System.out::println);
+    }
+
+
+    /**
+     * 通过函数生成流
+     */
+    @Test
+    public void streamFromFunction () {
+        //  无限流
+        Stream<Integer> iterate = Stream.iterate(0, n -> n + 2);
+        iterate.limit(10).forEach(System.out::println);
+
+
+        Stream<Double> generate = Stream.generate(Math::random);
+        generate.limit(10).forEach(System.out::println);
+
+    }
+
+
+
+
+
+}// end
