@@ -398,26 +398,6 @@ public class T01 {
         at com.itheima.sh.demo_03.Demo02.main(Demo02.java:22)
 ```
 
-### for
-
-> jdk1.5之后对遍历数组和集合进行优化
-
-```java
-    Collection<String> coll = new ArrayList<String>();
-
-    coll.add("aaaa");
-    coll.add("bbb");
-    coll.add("cc");
-    coll.add(123);
-    coll.add(true);
-
-	for (Object o : coll) {
-         //Object o = "aaaa" 多态  
-         String s=(String)o;//强转 
-         System.out.println(s.length());//输出每个元素长度
-     }
-
-```
 
 ### Collections 工具类
 
