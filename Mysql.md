@@ -681,7 +681,7 @@ public class D_comboPooled_test {
 ```
 - 配置文件的使用
 
-```javascript
+```java
 ComboPooledDataSource cpbs = new ComboPooledDataSource("third");// 数据库名字
 Connection conn =null;
 PreparedStatement pst =null;
@@ -738,7 +738,7 @@ ResultSet rs =null;
     _jdbc.release(rs, pst, conn);
 ```
 
-### JDBCTemplate
+# JDBCTemplate
 - `JDBCTemplate` 是 `Spring` 对 `JDBC`的封装，目的是使`JDBC` 更加易于使用，处理了资源的建立和释放。
     - `commons-logging-1.2.jar` ：日志记录
     - `spring-beans-5.0.0.RELEASE.jar` ：JavaBean管理包
@@ -864,3 +864,92 @@ ResultSet rs =null;
 
 - 主键自增
 - 没有驼峰
+
+# Redis 
+
+- 概述 
+- 特点
+- 应用
+    - `redis-benchmark` : 性能测试工具
+    - `redis-check-aof` : AOF文件修复工具
+    - `redis-check-dump` : RDB文件检查工具（快照持久化文件）
+    - `redis-cli` : 命令行客户端
+    - `redis-server` : redis服务器启动命令
+    - `redis.windows.conf` : redis核心配置文件
+        - `maxmemory`
+    - `redis-install.bat` : 启动脚本
+        - `redis-server --service-install redis.windows.conf --loglevel verbose` 
+        - `redis-install.bat`
+    - `uninstall-redis.bat` : 关闭脚本
+        - `redis-server --service-stop`
+        - `redis-server --service-uninstall`
+
+- 使用
+    - 1.`redis-server.exe`
+    - 2.`redis-cli.exe`
+    - 3.`ping`
+
+- 测试性能命令：`redis-benchmark.exe -c 50 -n 10000 -t get`
+    - `-c` 表示连接数
+    - `-n` 表示请求数
+    - 50个并发连接，10000个请求
+    
+    
+### 常用命令
+- `select 0` : 选择数据库，`0`表示索引，默认有16个
+- `flushdb` : 删除当前数据所有数据，不影响其他数据库
+- `flushall` : 删除所有数据库数据
+
+
+
+### 数据类型
+
+- `String`
+    - `set name "lucy"` 
+    - `get name` 
+    - `del name`
+    
+- `Hash`
+    - `hset` 设置字段值
+        - `hset userInfo password "1234"`
+        - `hset userInfo email "11@qq.com"`
+    - `hget` 获取字段值
+        - `hget userInfo email`
+    - `hmset` 设置多个字段值
+        - `hmset userInfo name "lucy" mobile "13756565"`
+    - `hmget` 获取多个字段值        
+        - `hmget userInfo name email`
+    - `hdel` 删除字段：一次删除一个或多个字段，返回的是删除字段的个数
+        - `hdel userInfo password age address`
+    - `hmget` 一次设置`key`的多个值
+        - `hmset info email "11@qq.com" address "jiangsu"`
+    - `hkeys` 一次获取所有的`key`
+        - `hkeys userInfo`
+    - `hvals` 一次获取所有的值
+        - `hvals userInfo`
+    - `hgetall` 一次获取`key`对应的所有值
+        - `hgetall userInfo`
+
+- `List` : 底层是 LinkedList
+    - `lpush`
+    - `rpush`
+    - `lpop`
+    - `rpop`
+    - `lrange key [start] [end]` 返回索引对应区间值
+    - `lindex key [index]` 返回索引对应的指定值
+
+- `Set`是`String`类型的无序集合。集合成员是唯一的，这就意味着集合中不能出现重复的数据。
+    - `sadd` 返回字段数量
+    - `smembers key` 获取
+    - `srem` 删除
+    - `scard` 返回字段数量
+
+- `sorted set`  
+
+### 通用命令
+
+- keys pattern
+- del key1 key2...
+- exists key
+- type key
+
