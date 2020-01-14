@@ -1,6 +1,8 @@
 package com.company.thread;
 
 public class MyThread extends Thread {
+
+    @Override
     public void run() {
         //这里就是线程要执行的代码
         Thread t = Thread.currentThread();

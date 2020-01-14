@@ -2,7 +2,9 @@ package com.company.thread;
 
 public class SellTicketTask implements Runnable {
     private int tickets = 100;
-    private Object lock = new Object();// 同步代码块的锁是任意对象
+
+    // 同步代码块的锁是任意对象
+    private Object lock = new Object();
 
     private static int num = 100;
     @Override

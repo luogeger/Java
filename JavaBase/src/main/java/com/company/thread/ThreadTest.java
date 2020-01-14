@@ -18,7 +18,7 @@ public class ThreadTest {
      * 多线程执行卖票任务
      */
     private static void sellTicketTask1() {
-        SellTicketTask t = new SellTicketTask();//
+        SellTicketTask t = new SellTicketTask();
         new Thread(t, "t1").start();
         new Thread(t, "t2").start();
         new Thread(t, "t3").start();

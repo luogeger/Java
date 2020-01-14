@@ -603,7 +603,7 @@ for (Map.Entry<Character, Integer> kv : kvs) {
 
 # Threads 线程
 
-> **创建线程：操作线程需要用到 ``java.lang.Thread``** 
+### 创建线程
 
 - **构造方法**
     - `public Thread()`:分配一个新的线程对象。
@@ -636,7 +636,10 @@ for (Map.Entry<Character, Integer> kv : kvs) {
 - 再调用 ``start（）`` 
 
 ```java
-public class Task implements Runnable {// **这里是实现 Runnable**
+/**
+* 自定义Task任务类，实现Runnable接口
+*/
+public class Task implements Runnable {
     @Override
     public void run() {
         String name = Thread.currentThread().getName();
@@ -647,9 +650,8 @@ public class Task implements Runnable {// **这里是实现 Runnable**
     }
 }
 
-// ==
 
-public class R01 {
+public class Test {
     public static void main(String[] args) {
         new Thread(new Task()).start();
 
@@ -659,8 +661,10 @@ public class R01 {
     }
 }
 
-// == 也可以直接用匿名类的形式，不用定义Task任务类
-public class R01 {
+/**
+* 也可以直接用匿名类的形式，不用定义Task任务类
+*/
+public class Test {
     public static void main(String[] args) {
         //new Thread(new Task()).start();// 可以用匿名类的形式
 
@@ -680,13 +684,6 @@ public class R01 {
     }
 }
 ```
-
-> **注意事项:**
-
-- 实际开发用的是第二种方式，有以下好处
-    - 避免了单继承的局限性
-    - 松散耦合
-
 
 
 > **并行、并发**
@@ -718,11 +715,11 @@ public class Task implements Runnable{
     }
 }
 
-// ===
 
-public class R01 {
+public class Test {
     public static void main(String[] args) {
-        new Thread(new Task(), "task").start();// 这里可以直接设置线程名字
+        //  "task" -> 设置线程名
+        new Thread(new Task(), "task").start();
 
         for (int i = 0; i < 10; i++) {
             try {
@@ -756,8 +753,6 @@ public class Task implements Runnable{
     }
 }
 
-
-// ==
 
 public class R01 {
     public static void main(String[] args) {
@@ -917,10 +912,10 @@ public class Task implements Runnable {
 - 线程状态
     - `new` 新创建	
     - `runnable` 可运行
-    - `teminated` 被终止：死亡状态或者终止状态。出现异常或者任务结束
     - `blocked` 锁阻塞：就是一个线程获取锁对象，其他线程都是处于等待锁的状态。既不是等待，也没有执行，
     - `waiting` 无线等待
     - `tiemd waiting` 计时等待：使用`sleep(long time)` 处于计时等待状态
+    - `teminated` 被终止：死亡状态或者终止状态。出现异常或者任务结束
 
 - 线程通信
     - ``wait()`` 
@@ -940,114 +935,17 @@ public class Task implements Runnable {
     - 以上的方法都定义在`Object` 中，锁对象是任意的对象，所以必须位于所有的类的共同父类Object中。
 
 
-
-- **案列**
-
-```java
-public class Factory {
-    private String  brand;
-    private int     price;
-    private boolean hasPhone = false;
-    private int i = 0;
-
-    public synchronized void produce () {
-        try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
-        if (hasPhone) {
-            try {this.wait();} catch (InterruptedException e) {e.printStackTrace();}
-        }
-        if (i % 2 == 0) {
-            this.brand = "xiaomi";
-            this.price = 1111;
-        } else {
-            this.brand = "iPhone";
-            this.price = 8888;
-        }
-        i++;
-        hasPhone = true;
-        this.notify();
-        System.out.println(this.brand +"\t 正在生产...");
-    }
-
-    public synchronized void sell () {
-        if (!hasPhone) {// 如果没有手机，就停止售卖
-            try {this.wait();} catch (InterruptedException e) {e.printStackTrace();}
-        }
-        try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
-        System.out.println(this.brand +"\t"+ this.price);
-        hasPhone = false;
-        this.notify();
-    }   
-}
-
-// == produce
-public class Produce implements Runnable {
-    private Factory factory;
-    public Produce(Factory factory) {
-        this.factory = factory;
-    }
-    @Override
-    public void run() {
-        while (true) {
-            factory.produce();
-        }
-    }
-}
-
-// == sell
-public class Sell implements Runnable {
-    private Factory factory;
-    public Sell(Factory factory) {
-        this.factory = factory;
-    }
-    @Override
-    public void run() {
-        while (true) {
-            factory.sell();
-        }
-    }
-}
-
-// == test
-public class R01 {
-    public static void main(String[] args) {
-        Factory factory = new Factory();
-
-        Thread produce = new Thread(new Produce(factory), "生产");
-        Thread sell = new Thread(new Sell(factory), "销售");
-
-        sell.start();
-        produce.start();
-    }
-}
-```
-
-
-
-
-
-
-
-
-
 ### thread pool 线程池
 
-> 在JDK5之前，我们必须手动实现自己的线程池，从JDK5开始，Java内置支持线程池。Java里面线程池的顶级接口是`java.util.concurrent.Executor`，但是严格意义上讲`Executor`并不是一个线程池，而只是一个执行线程的工具。真正的线程池接口是`java.util.concurrent.ExecutorService`。
+> 在JDK5之前，我们必须手动实现自己的线程池，从JDK5开始，Java内置支持线程池。Java里面线程池的顶级接口是`java.util.concurrent.Executor`，
+但是严格意义上讲`Executor`并不是一个线程池，而只是一个执行线程的工具。真正的线程池接口是`java.util.concurrent.ExecutorService`。
 
-- **案例**
+- **实际开发中创建线程的方式**
 
 ```java
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class R01 {
+public class Test {
     public static void main(String[] args) {
-        Tickets t = new Tickets();
-        ExecutorService es = Executors.newFixedThreadPool(4);
-        es.execute(t);
-        es.execute(t);
-        es.execute(t);
-        es.execute(t);
-        
         //  创建线程池的正确方式
         ThreadPoolExecutor executorTask = new ThreadPoolExecutor(10, 20,
                             60L, TimeUnit.SECONDS,
@@ -1074,6 +972,62 @@ public class R01 {
 }
 ```
 
+> **线程池参数详解**
+
+```java
+/**
+     * Creates a new {@code ThreadPoolExecutor} with the given initial
+     * parameters.
+     *
+     * @param corePoolSize the number of threads to keep in the pool, even
+     *        if they are idle, unless {@code allowCoreThreadTimeOut} is set
+               核心线程数量
+     * @param maximumPoolSize the maximum number of threads to allow in the
+     *        pool
+                最大线程数量
+     * @param keepAliveTime when the number of threads is greater than
+     *        the core, this is the maximum time that excess idle threads
+     *        will wait for new tasks before terminating.
+                线程空闲后的存活时间
+     * @param unit the time unit for the {@code keepAliveTime} argument
+                时间单位
+     * @param workQueue the queue to use for holding tasks before they are
+     *        executed.  This queue will hold only the {@code Runnable}
+     *        tasks submitted by the {@code execute} method.
+                用于存放任务的阻塞队列
+     * @param threadFactory the factory to use when the executor
+     *        creates a new thread
+                线程工厂类
+     * @param handler the handler to use when execution is blocked
+     *        because the thread bounds and queue capacities are reached
+                饱和策略
+     */
+    public ThreadPoolExecutor(int corePoolSize,
+                              int maximumPoolSize,
+                              long keepAliveTime,
+                              TimeUnit unit,
+                              BlockingQueue<Runnable> workQueue,
+                              ThreadFactory threadFactory,
+                              RejectedExecutionHandler handler){
+        
+                              }
+```
+
+- 阻塞队列：支持两个插入和移除的队列
+    - 无界队列
+    - 有界队列
+    - 同步移交队列
+    
+- 饱和策略
+    - AbortPolicy 终止策略（默认）
+    - DiscardPolicy 抛弃策略
+    - DiscardOlderPolicy 抛弃旧任务策略
+    - CallerRunsPolicy 调用者运行策略    
+
+
+> **常用线程池** : Executors
+
+> **向线程池提交任务的两种方式**
 
 
 # File
