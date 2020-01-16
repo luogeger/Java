@@ -415,6 +415,32 @@ public class StreamTest {
     }
 
 
+    /**
+     * lambda 改变外部变量值
+     */
+    @Test
+    public void test14 () {
+        boolean flag = false;
+
+        ArrayList<Integer> list = new ArrayList<>();
+
+        ArrayList<Integer> nums = new ArrayList<>();
+        Collections.addAll(nums, 1, 2, 3, 4, 5);
+        nums.stream().forEach(item -> {
+            if (item == 1) {
+                System.out.println(item);
+                list.add(item);
+
+                // Variable used in lambda expression should be final or effectively final
+                // lambda表达式中使用的变量应为final或有效为final
+                // flag = true;
+            }
+        });
+
+        System.out.println(list.toArray());  // [Ljava.lang.Object;@7a7b0070
+        System.out.println(list.toString());// [1]
+
+    }
 
 
 
