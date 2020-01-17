@@ -135,6 +135,8 @@
 #### 端口
 - 查看已开放的端口(默认不开放任何端口)
     - `firewall-cmd --list-ports`
+- 查看80端口是否开启
+    - `firewall-cmd --query-port=80/tcp`
 - 开启80端口
     - `firewall-cmd --zone=public --add-port=80/tcp --permanent`
         - `=public`(作用域) `=80/tcp`(端口和通讯协议) `--permanent`(永久生效)
@@ -164,7 +166,7 @@
     - `systemctl stop firewalld`
     - `systemctl stop firewalld.service`
 - 重启防火墙
-    - `firewall-cmd --reload` or `systemctl restart firewalld.service`
+    - `firewall-cmd --reload`
 - 禁止防火墙开机启动
     - `systemctl disable firewalld.service`
 

@@ -6,6 +6,7 @@
 - **Ctrl + Shift + Space** `Smart code completion (filters the list of methods and variables by expected type)`
     - 智能代码完成, 按预期类型过滤方法和变量的列表
 - **Ctrl + Shift + Enter** `Complete statement`
+    - 完整的陈述 `所在行代码补充完整，例如：行尾需要分号，但是光标在中间，不用把光标移到行尾添加分号。`
 - **Ctrl + P** `Parameter info (within method call arguments)`
 - **Ctrl + Q** `Quick documentation lookup`
 - **Shift + F1** `External Doc`
