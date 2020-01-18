@@ -1,8 +1,8 @@
-# directory
-/.idea/
-/.vscode/
-/target/
-/.settings/
+# directory 忽略目录下的所有文件
+.idea/
+.vscode/
+target/
+.settings/
 
 
 # file
