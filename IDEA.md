@@ -10,8 +10,11 @@
 - **Ctrl + P** `Parameter info (within method call arguments)`
     - 参数信息（在方法调用参数内）
 - **Ctrl + Q** `Quick documentation lookup`
+    - 光标停留在类上，快速查看类的文档信息
 - **Shift + F1** `External Doc`
+    - 外部文件
 - **Ctrl + mouse over code** `Brief Info`
+    - Ctrl + 光标悬停： 摘要信息
 - **Ctrl + F1** `Show descriptions of error or warning at caret`
 - **Alt + Insert** `Generate code... (Getters, Setters, Constructors, hashCode/equals, toString)`
 - **Ctrl + O** `Override methods`
