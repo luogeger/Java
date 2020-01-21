@@ -2,9 +2,11 @@ package com.company.list;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * @author luoxiaoqing
@@ -14,12 +16,17 @@ import java.util.Arrays;
 @Data
 @Accessors(chain = true)
 public class Reflect {
-    public static void main(String[] args) {
+
+    /**
+     *  Integer类型的列表，中文
+     */
+    @Test
+    public void test1 () {
         ArrayList<Integer> list = new 	ArrayList<>();
         list.add(2);
         list.add(3);
         try {
-            //todo ,get hot socore
+            //todo ,get hot score
             list.add(60);
             list.getClass().getMethod("add", Object.class).invoke(list, "活跃度中等【0~100】");
             //todo get fans
@@ -34,5 +41,22 @@ public class Reflect {
             e.printStackTrace();
         }
         System.out.println(Arrays.toString(list.toArray()));
+    }
+
+
+    /**
+     * linkedList 可以装重复元素
+     */
+    @Test
+    public void test2 () {
+        LinkedList<String> link = new LinkedList<String>();
+        //添加元素
+        link.addFirst("abc1");
+        link.addFirst("abc2");
+        link.addFirst("abc3");
+        link.addFirst("abc3");
+        link.addFirst("abc3");
+
+        System.out.println(link);
     }
 }
