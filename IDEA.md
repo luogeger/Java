@@ -18,7 +18,9 @@
 - **Ctrl + F1** `Show descriptions of error or warning at caret`
 - **Alt + Insert** `Generate code... (Getters, Setters, Constructors, hashCode/equals, toString)`
 - **Ctrl + O** `Override methods`
+    - 重写方法
 - **Ctrl + I** `Implement methods`
+    - 实现方法
 - **Ctrl + Alt + T** `Surround with… (if..else, try..catch, for, synchronized, etc.)`
 - **Ctrl + /** `Comment/uncomment with line comment`
 - **Ctrl + Shift + /** `Comment/uncomment with block comment`
