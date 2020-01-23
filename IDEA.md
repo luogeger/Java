@@ -22,6 +22,7 @@
 - **Ctrl + I** `Implement methods`
     - 实现方法
 - **Ctrl + Alt + T** `Surround with… (if..else, try..catch, for, synchronized, etc.)`
+    - 用括号内的语句代码进行环绕
 - **Ctrl + /** `Comment/uncomment with line comment`
 - **Ctrl + Shift + /** `Comment/uncomment with block comment`
 - **Ctrl + W** `Select successively increasing code blocks`
