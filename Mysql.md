@@ -369,17 +369,17 @@ public class JdbcTest {
 - `CallableStatement`   操作存储过程
 
 
-> **_jdbc抽取 CRUD操作**
+> **jdbcUtils抽取 CRUD操作**
 
 ```java
-public class JdbdCrud {
+public class JdbcCrud {
     @Test
     public void query () {
         Connection conn = null;
         Statement stt = null;
         ResultSet rs = null;
         try {
-            conn = _jdbc.getConnection();
+            conn = jdbcUtils.getConnection();
             stt = conn.createStatement();
             rs = stt.executeQuery("select * from user where id = 5");
             if (rs.next()) {
@@ -390,7 +390,7 @@ public class JdbdCrud {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            _jdbc.release(rs, stt, conn);
+            jdbcUtils.release(rs, stt, conn);
         }
 
     }
@@ -401,14 +401,14 @@ public class JdbdCrud {
         Connection conn = null;
         Statement stt = null;
         try {
-            conn = _jdbc.getConnection();
+            conn = jdbcUtils.getConnection();
             stt = conn.createStatement();
             int i = stt.executeUpdate(sql);
             System.out.println("i => " + i);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            _jdbc.release(null, stt, conn);
+            jdbcUtils.release(null, stt, conn);
         }
     }
 }// end
@@ -435,7 +435,7 @@ public class inject {
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-            conn = _jdbc.getConnection();
+            conn = jdbcUtils.getConnection();
             //stt = conn.createStatement();// replace
             //rs = stt.executeQuery(sql);// replace
 
@@ -452,7 +452,7 @@ public class inject {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            _jdbc.release(rs, pst, conn);
+            jdbcUtils.release(rs, pst, conn);
         }
         
     }
@@ -466,7 +466,7 @@ public class inject {
         ResultSet rs = null;
 
         try {
-            conn = _jdbc.getConnection();
+            conn = jdbcUtils.getConnection();
 
             // update
             pst = conn.prepareStatement(update);
@@ -482,7 +482,7 @@ public class inject {
             e.printStackTrace();
 
         } finally {
-            _jdbc.release(rs, pst, conn);
+            jdbcUtils.release(rs, pst, conn);
         }
     }
     
@@ -493,14 +493,14 @@ public class inject {
         PreparedStatement pst   = null;
         ResultSet rs            = null;
         try {
-            conn = _jdbc.getConnection();
+            conn = jdbcUtils.getConnection();
             pst = conn.prepareStatement(delete);
             pst.setString(1, "omg");
             pst.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            _jdbc.release(rs, pst, conn);
+            jdbcUtils.release(rs, pst, conn);
         }
     }
 }
@@ -558,7 +558,7 @@ public class Transaction {
         ResultSet rs            = null;
 
         try {
-            conn = _jdbc.getConnection();
+            conn = jdbcUtils.getConnection();
             conn.setAutoCommit(false);// 开启事务
             pst = conn.prepareStatement(update);
             pst.setString(1, "789789");
@@ -574,7 +574,7 @@ public class Transaction {
             }
         } finally {
             // 不出异常就提交
-            _jdbc.release(rs, pst, conn);
+            jdbcUtils.release(rs, pst, conn);
         }
     }
 }
@@ -601,7 +601,7 @@ public class C_myComboPooled extends B_adaptor {
     
     public C_myComboPooled () {// 构造函数
         for (int i = 0; i < 5; i++) {
-            list.addLast(_jdbc.getConnection());
+            list.addLast(jdbcUtils.getConnection());
         }
     }
     
@@ -641,7 +641,7 @@ public class D_comboPooled_test {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            _jdbc.release(rs, pst, conn);// 释放资源
+            jdbcUtils.release(rs, pst, conn);// 释放资源
             pool.backConnection(conn);// 还给连接池，连接池是通过动态代理完成的，
         }
     }
@@ -739,7 +739,7 @@ ResultSet rs =null;
         );
     }
 
-    _jdbc.release(rs, pst, conn);
+    jdbcUtils.release(rs, pst, conn);
 ```
 
 # JDBCTemplate
@@ -750,7 +750,7 @@ ResultSet rs =null;
     - `spring-jdbc-5.0.0.RELEASE.jar` ：jdbc支持包
     - `spring-tx-5.0.0.RELEASE.jar` ：事务支持包
 - 使用方法
-    - `JdbcTemplate jt = new JdbcTemplate(_jdbc.getDruidComboPool)`
+    - `JdbcTemplate jt = new JdbcTemplate(javax.sql.DataSource dataSource)`
 - 常用方法
     - `execute(String sql)` : 建表
         - `jt.execute("create table user(id int primay key auto_increment, name varchar(20) not null)")`
@@ -766,7 +766,7 @@ ResultSet rs =null;
         
 ```java 
     public class H_query {
-        private JdbcTemplate jt = new JdbcTemplate(_jdbc.getComboPooled("DRUID"));
+        private JdbcTemplate jt = new JdbcTemplate(jdbcUtils.getComboPooled("DRUID"));
     
         @Test// 一个字段
         public void test1 () {

@@ -1,8 +1,12 @@
 package com.first.jdbc;
 
-import org.junit.Test;
 import com.mysql.jdbc.Driver;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Properties;
 
 /**
  * Jdbc连接数据库
@@ -12,6 +16,79 @@ import java.sql.*;
  */
 public class JdbcTest {
 
+
+    private static String url = null;
+    private static String username = null;
+    private static String password = null;
+    private static Connection conn = null;
+
+    /**
+     * 读取配置文件
+     */
+    public void getConfigInfo() {
+        try {
+            //  创建属性集和对象
+            Properties p = new Properties();
+            //  使用类加载器中的方法获取，io流的方式相对的就是src路径
+            InputStream is = JdbcTemplateTest.class.getClassLoader().getResourceAsStream("jdbc.properties");
+            p.load(is);
+            //双引号中的url表示配置文件jdbc.properties中的key,即url
+            url = p.getProperty("url");
+            username = p.getProperty("username");
+            password = p.getProperty("password");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 获取连接
+     */
+    public Connection getConnection() {
+        try {
+            conn = DriverManager.getConnection(url, username, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return conn;
+    }
+
+
+    /**
+     * 释放资源
+     */
+    public void release(Connection conn, Statement st, ResultSet rs) {
+        try {
+            //判断。防止空指针异常，有异常在关闭
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            //判断。防止空指针异常，有异常在关闭
+            if (st != null) {
+                st.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            //判断。防止空指针异常，有异常在关闭
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 最原始的创建
+     * @throws Exception
+     */
     @Test
     public void main1 () throws Exception {
         // 1.  注册数据库驱动
