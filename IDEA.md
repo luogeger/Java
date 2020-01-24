@@ -24,7 +24,9 @@
 - **Ctrl + Alt + T** `Surround with… (if..else, try..catch, for, synchronized, etc.)`
     - 用括号内的语句代码进行环绕
 - **Ctrl + /** `Comment/uncomment with line comment`
+    - 行注释
 - **Ctrl + Shift + /** `Comment/uncomment with block comment`
+    - 块注释
 - **Ctrl + W** `Select successively increasing code blocks`
 - **Ctrl + Shift + W** `Decrease current selection to previous state`
 - **Alt + Q** `Context info`

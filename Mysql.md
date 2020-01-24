@@ -318,9 +318,13 @@
 > **快速入门**
 
 ```java
-public class Ajdbc {
+import org.junit.Test;
+import com.mysql.jdbc.Driver;
+import java.sql.*;
+
+public class JdbcTest {
     @Test
-    public void main (){
+    public void main1 (){
         // 1.  注册数据库驱动
         // 2.  获取数据库连接
         // 3.  创建发送SQL对象
@@ -348,7 +352,7 @@ public class Ajdbc {
         result.close();
         stt.close();
         conn.close();
-    }// main
+    }
 }
 
 ```
