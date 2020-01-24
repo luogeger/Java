@@ -29,7 +29,7 @@
 
 # SQL语句	
 
-### database desgin
+### database design
 
 - 范式
     - 原子性，不可拆分
@@ -53,26 +53,59 @@
 - 查看当前使用DB   `select database()`
 - 切换DB         `use <first>`
 - 导入sql文件     `source <fileAbsolutePath>`
-
-### TABLE
-
 - 查看所有表     `show tables`
 - 查看表结构     `desc <tableName>`
 - 创建表        `create table <tableName> (id int(10) not null primary key auto_increment, name varchar(50), pwd varchar(50));`
+
+```sql
+create table if not exists user
+(
+  id          int(20) auto_increment comment '自增ID'
+    primary key,
+  name        varchar(32) default ''                not null comment '姓名',
+  age         int(8)      default 0                 not null comment '年龄',
+  create_time timestamp   default CURRENT_TIMESTAMP not null comment '创建时间',
+  update_time timestamp   default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间'
+)
+  comment '用户表';
+  
+  
+# 增加字段
+alter table tt_user add password varchar(20) not null default '' comment '用户密码';
+alter table tt_user add teacher varchar(20) not null default '' comment '老师';
+alter table tt_user add course varchar(20) not null default '' comment '课程';
+
+# 修改表字段
+alter table tt_user modify age int(4) not null default -1 comment '用户年龄';
+
+# 删除字段
+alter table tt_user drop password;
+
+# 添加索引
+alter table tt_user add index index_name(name);
+
+# 添加唯一索引
+alter table tt_user add unique unique_name(name);
+
+# 添加联合索引
+alter table tt_user add index joint_index(teacher, course);
+```
+
 - 修改表名      `rename table <oldName> to <newName>`
 - 删除表        `drop table <tableName>` **表不存在了**
-- 删除表再新建    `truncate <tableName>` **清空**
+- 删除表再新建   `truncate <tableName>` **清空**
 - 查看表编码     `show create table <tableName>`
 - 修改表编码     `alter table <tableName> character set <utf8>`
 - 增加字段       `alter table <tableName> add <fileName> <type>(length)`
 - 删除字段       `alter table <tableName> drop <filedName>`
 - 字段约束
-    - 主键  `PRIMARY KEY`   
-    - 自增长 `AUTO_INCREMENT`
-    - 唯一  `UNIQUE`
-    - 非空  `NOT NULL`
+    - 主键    `primary key`   
+    - 自增长   `auto_increment`
+    - 唯一    `unique`
+    - 非空    `not null`
 - 字段(名字、类型、长度、约束)的添加和修改，都相当于是重写 
     - `alter table <tableName> modify id int(11) auto_increment;`
+- 添加索引    
 
 ### DML
 

@@ -56,6 +56,7 @@ public class JdbcTemplateTest {
         String name = jt.queryForObject("select name from user where id = ?", String.class, 2);
         System.out.println("name = " + name);
 
+
     }
 
 
