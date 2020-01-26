@@ -49,14 +49,16 @@ public class JdbcTemplateTest {
     }
 
 
-
+    /**
+     * 查询
+     * @throws SQLException
+     * @throws IOException
+     */
     @Test
     public void query() throws SQLException, IOException {
         //  连接池, 数据源
         String name = jt.queryForObject("select name from user where id = ?", String.class, 2);
         System.out.println("name = " + name);
-
-
     }
 
 
