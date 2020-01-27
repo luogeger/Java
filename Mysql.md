@@ -3,9 +3,6 @@
 - **DDL** : 数据库定义语言 `Data Definition Language` ，用来定义数据库对象 
     - create , drop , alter, truncate
    
-- **DML** : 数据操纵语言 `Data Manipulation Language` ，数据表中更新、增加、删除记录
-    - update , insert , delete
-   
 - **DCL** :数据控制语言 `Data Contrlol Language` ，设置用户权限和控制事务
     - `grant`, `revoke`, `start transaction`, `commit`, `rollback`
     - 1.创建用户
@@ -23,6 +20,10 @@
     - 6.修改密码
         - `mysqladmin -u root -p password <pwd>` ：超级管理员修改密码
         - `set password for '<user>'@'<tableName>' = password('<pwd>')` ：普通用户使用超级管理员修改
+        
+   
+- **DML** : 数据操纵语言 `Data Manipulation Language` ，数据表中更新、增加、删除记录
+    - update , insert , delete
    
 - **DQL** : 数据查询语言 `Data Query Language` ，记录的查询
     - select ...
@@ -212,7 +213,7 @@ alter table tt_user add index joint_index(teacher, course);
 | `order by` | 把内容进行排序输出          
 
 
-### multi-table queries
+### join query
 - 外键约束
     - `foreign key(<currentFiled>) reference(<foreignFiled>)` , 约束从表，保证数据有效性， 
     - 已经存在的表添加外键约束
@@ -232,45 +233,47 @@ alter table tt_user add index joint_index(teacher, course);
 - 笛卡尔积：
 ```sql
     # 笛卡尔积
-    SELECT * FROM B_PRODUCT, B_PRICE
+    select * from b_product, b_price
     
     # 隐式内连接
-    SELECT * FROM B_PRODUCT AS A, B_PRICE AS B WHERE A.ID = B.B_PRODUCT_ID 
+    select * from b_product as a, b_price as b where a.id = b.b_product_id 
     
     # 显示内连接
-    SELECT * FROM B_PRODUCT AS A INNER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+    select * from b_product as a inner join b_price as b on a.id = b.b_product_id 
     
     # 左外连接
-    SELECT * FROM B_PRODUCT AS A LEFT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+    select * from b_product as a left outer join b_price as b on a.id = b.b_product_id 
 
     select b.*, s.dict_name from brand as b left outer join	system_dict as s on	b.exhibition_type = s.id
     
     # 右外连接
-    SELECT * FROM B_PRODUCT AS A RIGHT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+    select * from b_product as a right outer join b_price as b on a.id = b.b_product_id 
     
     # 全连接 会自动去重
-    SELECT * FROM B_PRODUCT AS A LEFT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
-    UNION 
-    SELECT * FROM B_PRODUCT AS A RIGHT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+    select * from b_product as a left outer join b_price as b on a.id = b.b_product_id 
+    union 
+    select * from b_product as a right outer join b_price as b on a.id = b.b_product_id 
     
     # 全连接 不会去重
-    SELECT * FROM B_PRODUCT AS A LEFT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
-    UNION ALL
-    SELECT * FROM B_PRODUCT AS A RIGHT OUTER JOIN B_PRICE AS B ON A.ID = B.B_PRODUCT_ID 
+    select * from b_product as a left outer join b_price as b on a.id = b.b_product_id 
+    union all
+    select * from b_product as a right outer join b_price as b on a.id = b.b_product_id 
 ```
 
-### subquery
+### sub query
+
+> 概述：当一个查询是另一个查询的条件时，称之为子查询
 
 - `in`
 ```sql
     # 不及格的学生的信息 -- student
-    SELECT * FROM STUDENT WHERE ID IN (
-        SELECT STUDENT_ID FROM STUDENTCOURSE WHERE SCORE <= 60)
+    select * from student where id in (
+        select student_id from studentcourse where score <= 60)
         
     # jack参与了哪些项目 -- project        
-    SELECT PROJECT FROM PROJECT WHERE ID IN (
-        SELECT PROJECT_ID FROM CODER_PROJECT WHERE CODER_ID IN (
-            SELECT ID FROM CODER WHERE CODER = 'jack'))
+    select project from project where id in (
+        select project_id from coder_project where coder_id in (
+            select id from coder where coder = 'jack'))
 ```    
 
 - **exists**
@@ -289,12 +292,12 @@ alter table tt_user add index joint_index(teacher, course);
 - **all**
     - 查询年龄最大的学生的信息
     ```sql
-      SELECT MAX(AGE) FROM STUDENT 
+      select max(age) from student 
       
-      SELECT * FROM STUDENT WHERE AGE =(SELECT MAX(AGE) FROM STUDENT)
+      select * from student where age =(select max(age) from student)
       
       # 必须用 >=
-      SELECT * FROM STUDENT WHERE AGE >= ALL(SELECT AGE FROM STUDENT)
+      select * from student where age >= all(select age from student)
     ```
     
 
@@ -316,8 +319,6 @@ alter table tt_user add index joint_index(teacher, course);
             temp.student_id = student.id and temp.course_id = course.id
         order by temp.score;
     ```
-    
-### index
     
 
 ### native function
@@ -444,7 +445,7 @@ public class JdbcCrud {
             jdbcUtils.release(null, stt, conn);
         }
     }
-}// end
+}
 ```
 
 > **SQL注入**
@@ -491,7 +492,7 @@ public class inject {
     }
     
     @Test
-    public void update_insert () {
+    public void updateOrInsert () {
         String update = "update user set password = ? where username = 'lucy'";
         String insert = "insert into user values (null, ?, ?, null, null);";
         Connection conn = null;
@@ -564,7 +565,7 @@ public class inject {
     - 多个用户并发访问数据库的时候，一个用户的事务不能被其他用户的事务干扰。
     
 > **事务隔离性**
-> 如果不考虑事务隔离性会出现以下问题
+>> 如果不考虑事务隔离性会出现以下问题
 
 - 脏读
     - 一个事务读取了另一个事务**未提交**的数据。
@@ -619,7 +620,11 @@ public class Transaction {
     - `Connection getConnection()`
 
 ```java
-public class B_adaptor implements DataSource {
+
+/**
+*  实现接口
+*/
+public class Adaptor implements DataSource {
     @Override
     public Connection getConnection() throws SQLException {
         return null;
@@ -628,11 +633,13 @@ public class B_adaptor implements DataSource {
     // ... 其他的重写方法
 }   
 
-// ==
-public class C_myComboPooled extends B_adaptor {
+/**
+* 实现父类
+*/
+public class MyComboPooled extends Adaptor {
     private LinkedList<Connection> list = new LinkedList<>();
     
-    public C_myComboPooled () {// 构造函数
+    public MyComboPooled () {// 构造函数
         for (int i = 0; i < 5; i++) {
             list.addLast(jdbcUtils.getConnection());
         }
@@ -648,11 +655,13 @@ public class C_myComboPooled extends B_adaptor {
     }
 }
 
-// ==
-public class D_comboPooled_test {
+/**
+* 测试
+*/
+public class ComboPooledTest {
     @Test
     public void main() {
-        C_myComboPooled pool = new C_myComboPooled();
+        MyComboPooled pool = new MyComboPooled();
         String sql = "select * from students";
         Connection conn = null;
         PreparedStatement pst = null;
@@ -684,19 +693,16 @@ public class D_comboPooled_test {
 ### C3P0
 - 基本用法：
 
-```java
+```bash
+    # 读取配置文件
     ComboPooledDataSource cpds = new ComboPooledDataSource();
     cpds.setDriverClass("com.mysql.jdbc.Driver");
     cpds.setJdbcUrl("jdbc:mysql://localhost:3306/fourth");
     cpds.setUser("root");
     cpds.setPassword("123456");
-    
-    Connection conn =null;
-    PreparedStatement pst =null;
-    ResultSet rs =null;
 ```
 
-- 默认文件名：`c3p0-config.xml`， 在`src`目录下
+- `c3p0-config.xml`：默认文件名， 在`src`目录下
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -718,11 +724,12 @@ public class D_comboPooled_test {
 ```
 - 配置文件的使用
 
-```java
-ComboPooledDataSource cpbs = new ComboPooledDataSource("third");// 数据库名字
-Connection conn =null;
-PreparedStatement pst =null;
-ResultSet rs =null;
+```bash
+    # `third`为数据库名
+    ComboPooledDataSource cpbs = new ComboPooledDataSource("third");
+    Connection conn =null;
+    PreparedStatement pst =null;
+    ResultSet rs =null;
 ```
 
 
@@ -748,9 +755,9 @@ ResultSet rs =null;
     - `Connection conn = ds.getConnection();`
     
 - **案例**
-```java
+```bash
     Properties p = new Properties();
-    InputStream file = E_druid.class.getClassLoader().getResourceAsStream("druid.properties");
+    InputStream file = DruidTest.class.getClassLoader().getResourceAsStream("druid.properties");
     p.load(file);
     DataSource ds = DruidDataSourceFactory.createDataSource(p);
     // String url = p.getProperty("url");
@@ -986,6 +993,7 @@ ResultSet rs =null;
 ### 通用命令
 
 - keys pattern
+    - `keys a*`, `keys *`
 - del key1 key2...
 - exists key
 - type key
