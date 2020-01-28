@@ -16,6 +16,7 @@
 - **Ctrl + mouse over code** `Brief Info`
     - Ctrl + 光标悬停： 摘要信息
 - **Ctrl + F1** `Show descriptions of error or warning at caret`
+    - 在插入符号处显示错误或警告的描述
 - **Alt + Insert** `Generate code... (Getters, Setters, Constructors, hashCode/equals, toString)`
 - **Ctrl + O** `Override methods`
     - 重写方法
