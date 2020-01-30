@@ -8,7 +8,7 @@ import java.util.concurrent.SynchronousQueue;
 
 /**
  * @author luoxiaoqing
- * @date 2020-01-14__11:25
+ * @date 2018-01-14__11:25
  */
 public class BlockQueue {
     @Test

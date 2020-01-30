@@ -2,7 +2,7 @@ package com.first.designPattern.create.singleton;
 
 /**
  * @author luoxiaoqing
- * @date 2020-01-10__17:24
+ * @date 2018-01-10__17:24
  * @desc
  */
 public class MutliThreadCreateLazySingleton implements Runnable {

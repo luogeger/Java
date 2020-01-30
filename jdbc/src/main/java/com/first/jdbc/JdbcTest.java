@@ -12,7 +12,7 @@ import java.util.Properties;
  * Jdbc连接数据库
  *
  * @author luoxiaoqing
- * @date 2020-01-24__14:40
+ * @date 2018-01-24__14:40
  */
 public class JdbcTest {
 

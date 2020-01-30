@@ -2,7 +2,7 @@ package com.first.stream;
 
 /**
  * @author luoxiaoqing
- * @date 2020-01-13__16:53
+ * @date 2018-01-13__16:53
  */
 @FunctionalInterface
 public interface FunctionalInterfaceDemo {

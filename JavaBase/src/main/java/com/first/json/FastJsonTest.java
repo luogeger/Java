@@ -15,7 +15,7 @@ import java.util.Map;
  * fastjson 工具类的使用  JSON.toJSONString(list, true)
  *
  * @author luoxiaoqing
- * @date 2020-01-29__16:41
+ * @date 2018-01-29__16:41
  */
 public class FastJsonTest {
 

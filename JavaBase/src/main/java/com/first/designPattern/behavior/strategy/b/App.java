@@ -2,7 +2,7 @@ package com.first.designPattern.behavior.strategy.b;
 
 /**
  * @author luoxiaoqing
- * @date 2020-01-11__14:01
+ * @date 2018-01-11__14:01
  */
 public class App {
 

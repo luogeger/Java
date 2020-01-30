@@ -324,8 +324,8 @@ alter table tt_user add index joint_index(teacher, course);
 ### native function
 - 日期
 ```sql
-    select now(); -- 2017-06-26 11:07:24
-    select current_date(); -- 2017-06-26
+    select now(); -- 2018-06-26 11:07:24
+    select current_date(); -- 2018-06-26
     select current_time(); -- 11:08:23
     select year(now()); -- 2017
 ``` 

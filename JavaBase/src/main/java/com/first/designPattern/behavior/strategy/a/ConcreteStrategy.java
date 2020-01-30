@@ -2,7 +2,7 @@ package com.first.designPattern.behavior.strategy.a;
 
 /**
  * @author luoxiaoqing
- * @date 2020-01-11__13:51
+ * @date 2018-01-11__13:51
  */
 public class ConcreteStrategy implements Strategy {
 

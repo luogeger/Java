@@ -2,7 +2,7 @@ package com.first.designPattern.behavior.strategy.b;
 
 /**
  * @author luoxiaoqing
- * @date 2020-01-11__14:00
+ * @date 2018-01-11__14:00
  */
 public class GzipStrategy implements CompressStrategy {
 
