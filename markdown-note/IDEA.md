@@ -33,9 +33,13 @@
 - **Ctrl + W** `Select successively increasing code blocks`
     - 选择连续增加的代码块
 - **Ctrl + Shift + W** `Decrease current selection to previous state`
+    - 将当前选择减小到以前的状态，和Ctrl + W 相反
 - **Alt + Q** `Context info`
+    - 上下文信息
 - **Alt + Enter** `Show intention actions and quick-fixes`
+    - 万能快捷键：显示意图动作和快速修正
 - **Ctrl + Alt + L** `Reformat code`
+    - 格式化代码
 - **Ctrl + Alt + O** `Optimize imports`
 - **Ctrl + Alt + I** `Auto-indent line(s)`
 - **Tab / Shift + Tab** `Indent/unindent selected lines`

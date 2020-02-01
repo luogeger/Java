@@ -4,23 +4,26 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
+import org.junit.Test;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * fastjson 工具类的使用  JSON.toJSONString(list, true)
+ * fastjson 工具类的使用  JSON.toJSONString(list, true) 格式化输出
  *
  * @author luoxiaoqing
  * @date 2018-01-29__16:41
  */
 public class FastJsonTest {
 
-    @Resource
-    private String  str;
+    @Test
+    public void main () {
+        String str = "name=lucy, age=12";
+        System.out.println(JSON.toJSONString(str, true));
+    }
 
     public static void main(String[] args) {
         json2JsonObject();//将Json字符串转换为JSONObject对象
