@@ -41,11 +41,17 @@
 - **Ctrl + Alt + L** `Reformat code`
     - 格式化代码
 - **Ctrl + Alt + O** `Optimize imports`
+    - 优化导入
 - **Ctrl + Alt + I** `Auto-indent line(s)`
+    - 自动缩进行
 - **Tab / Shift + Tab** `Indent/unindent selected lines`
+    - 缩进当前行
 - **Ctrl + X , Shift + Delete** `Cut current line or selected block to clipboard`
+    - 剪切
 - **Ctrl + C , Ctrl + Insert** `Copy current line or selected block to clipboard`
+    - 复制
 - **Ctrl + V , Shift + Insert** `Paste from clipboard`
+    - 粘贴
 - **Ctrl + Shift + V** `Paste from recent buffers...`
 - **Ctrl + D** `Duplicate current line or selected block`
 - **Ctrl + Y** `Delete line at caret`
