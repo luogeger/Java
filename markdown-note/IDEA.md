@@ -1,6 +1,6 @@
 ![image-20170129142216159](imgs/image-20170129142216159.png)
 
-## IntelliJ IDEA windows keymap
+# IntelliJ IDEA windows keymap
 
 ### Editing
 - **Ctrl + Space** `Basic code completion (the name of any class, method or variable)`

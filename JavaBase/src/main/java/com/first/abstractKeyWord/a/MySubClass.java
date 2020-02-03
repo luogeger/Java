@@ -11,5 +11,9 @@ public class MySubClass extends MyAbstractClass {
 
     }
 
-    //  子类继承抽象类
+    @Override
+    public void dance() {
+
+    }
+
 }
