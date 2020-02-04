@@ -1,6 +1,8 @@
 package com.first.designPattern.behavior.templateMethod;
 
 /**
+ * 模板方法
+ *
  * @author luoxiaoqing
  * @date 2018-01-10__15:47
  * @desc

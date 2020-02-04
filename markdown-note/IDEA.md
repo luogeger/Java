@@ -53,12 +53,17 @@
 - **Ctrl + V , Shift + Insert** `Paste from clipboard`
     - 粘贴
 - **Ctrl + Shift + V** `Paste from recent buffers...`
+    - 查看最近5次复制的具体内容
 - **Ctrl + D** `Duplicate current line or selected block`
+    - 复制当前行，或是选中的内容
 - **Ctrl + Y** `Delete line at caret`
+    - 删除光标所在行
 - **Ctrl + Shift + J** `Smart line join`
 - **Ctrl + Enter** `Smart line split`
 - **Shift + Enter** `Start new line`
+    - 开始新的一行
 - **Ctrl + Shift + U** `Toggle case for word at caret or selected block`
+    - 切换光标或所选块中单词的大小写
 - **Ctrl + Shift + ]/[** `Select till code block end/start`
 - **Ctrl + Delete/Backspace** `Delete to word end/start`
 - **Ctrl + NumPad+/-** `Expand/collapse code block`

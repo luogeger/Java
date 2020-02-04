@@ -1,6 +1,8 @@
 package com.first.designPattern.structure.facade;
 
 /**
+ * 门面（外观）模式
+ *
  * @author luoxiaoqing
  * @date 2018-01-10__16:13
  * @desc
