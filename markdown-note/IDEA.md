@@ -95,6 +95,7 @@ Keep:  files will be reverted to the state of the selected commit,
 - **Ctrl + N** `Go to class`
 - **Ctrl + Shift + N** `Go to file`
 - **Ctrl + Alt + Shift + N** `Go to symbol`
+    - 模糊搜索方法
 - **Alt + Right/Left** `Go to next / previous editor tab`
 - **F12** `Go back to previous tool window`
 - **Esc** `Go to editor (from tool window)`
@@ -105,6 +106,7 @@ Keep:  files will be reverted to the state of the selected commit,
 - **Ctrl + Alt + Left/Right** `Navigate back / forward`
 - **Ctrl + Shift + Backspace** `Navigate to last edit location`
 - **Alt + F1** `Select current file or symbol in any view`
+    - 在任何视图中选择当前文件或符号
 - **Ctrl + B , Ctrl + Click** `Go to declaration`
 - **Ctrl + Alt + B** `Go to implementation(s)`
 - **Ctrl + Shift + I** `Open quick definition lookup`
