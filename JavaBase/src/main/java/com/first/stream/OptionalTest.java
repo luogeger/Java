@@ -51,8 +51,8 @@ public class OptionalTest {
      */
     @Test
     public void test3() {
-        Optional op1 = Optional.of("hello");
-        Optional op2 = Optional.ofNullable("hello");
+        Optional op1 = Optional.of("VARIABLE");
+        Optional op2 = Optional.ofNullable("VARIABLE");
         System.out.println(op1.equals(op2));
         // true
 

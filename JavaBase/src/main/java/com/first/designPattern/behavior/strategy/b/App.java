@@ -7,6 +7,9 @@ package com.first.designPattern.behavior.strategy.b;
 public class App {
 
     public static void main(String[] args) {
+        System.out.println(CompressStrategy.VARIABLE);
+
+
         CompressContext context;
         System.out.println("========执行算法========");
         context = new CompressContext(new ZipStrategy());
@@ -16,6 +19,7 @@ public class App {
         context = new CompressContext(new GzipStrategy());
         context.compress("c:\\file", "d:\\file.gzip");
         context.uncompress("c:\\file.gzip", "d:\\file");
+
 
     }
 }
