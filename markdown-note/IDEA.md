@@ -1,8 +1,23 @@
 ![image-20170129142216159](imgs/image-20170129142216159.png)
 
+this will reset the current branch head to the selected commit,
+and update the working tree and the index according to the selected mode:
+
+Soft:  files won't change, differences will be staged for commit.
+
+Mixed: files won't change, differences won't be staged.
+
+Hard:  files will be reverted to the state of the selected commit,
+       warning: any local changes will be lost.
+       
+Keep:  files will be reverted to the state of the selected commit,
+       but local changes will be kept intact.
+
 # IntelliJ IDEA windows keymap
 
 ### Editing
+- **Alt + J** 
+    -  选中同样的单词
 - **Ctrl + Space** `Basic code completion (the name of any class, method or variable)`
     - 基本代码完成（任何类，方法或变量的名称）
 - **Ctrl + Shift + Space** `Smart code completion (filters the list of methods and variables by expected type)`
@@ -204,7 +219,7 @@
 | **Ctrl + Alt + J**              | *Smart line join*|
 | **Ctrl + Alt + L**              | *reformat code* <br>格式化代码|
 | **Ctrl + Alt + O**              | *optimize imports*|
-| **Ctrl + Alt + T**              | *surround with...*`if..else, try..catch, for, synchronized, etc..`|
+| **Ctrl + Alt + T**              | *surround with...* `if..else, try..catch, for, synchronized, etc..`|
 | **Ctrl + Shift + U**            | *Toggle case for word at caret or selected block* <br> 英文字母大小写来回切换|
 | **Ctrl + Shift + V**            | *Paste from recent buffers...* <br> 从最近的缓冲区粘贴|
 | **Ctrl + Shift + W**            | *decrease current selection to previous state*|
