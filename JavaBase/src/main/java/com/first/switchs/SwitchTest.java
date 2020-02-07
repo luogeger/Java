@@ -10,7 +10,8 @@ public class SwitchTest {
 
     @Test
     public void main1() {
-        String param = null;
+           String param = "a";
+        //   String param = null;
         //  空指针异常
         switch (param) {
             case "null":

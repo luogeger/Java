@@ -80,11 +80,17 @@ Keep:  files will be reverted to the state of the selected commit,
 - **Ctrl + Shift + U** `Toggle case for word at caret or selected block`
     - 切换光标或所选块中单词的大小写
 - **Ctrl + Shift + ]/[** `Select till code block end/start`
+    - 选择到代码块结束/开始的地方
 - **Ctrl + Delete/Backspace** `Delete to word end/start`
+    - 删除到单词结尾/开始的地方
 - **Ctrl + NumPad+/-** `Expand/collapse code block`
+    - 展开/折叠代码块
 - **Ctrl + Shift + NumPad+** `Expand all`
+    - 展开所有的代码块
 - **Ctrl + Shift + NumPad-** `Collapse all`
+    - 折叠所有的代码块
 - **Ctrl + F4** `Close active editor tab`
+    - 关闭当前编辑的tab（窗口）
 
 ### Usage Search
 - **Alt + F7/Ctrl + F7** `Find usages/Find usages in file`
@@ -106,7 +112,7 @@ Keep:  files will be reverted to the state of the selected commit,
 - **Ctrl + Alt + Left/Right** `Navigate back / forward`
 - **Ctrl + Shift + Backspace** `Navigate to last edit location`
 - **Alt + F1** `Select current file or symbol in any view`
-    - 在任何视图中选择当前文件或符号
+    - 在任何视图中选中当前文件
 - **Ctrl + B , Ctrl + Click** `Go to declaration`
 - **Ctrl + Alt + B** `Go to implementation(s)`
 - **Ctrl + Shift + I** `Open quick definition lookup`

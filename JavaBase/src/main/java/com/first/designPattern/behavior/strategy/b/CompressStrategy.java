@@ -22,7 +22,7 @@ public interface CompressStrategy {
      * 通俗的讲，你认为是要变化的东西，就放在你自己的实现中，不能放在接口中去，接口只是对一类事物的属性和行为更高层次的抽象。
      * 对修改关闭，对扩展（不同的实现implements）开放，接口是对开闭原则的一种体现。
       */
-    String VARIABLE = "VARIABLE";
+    String VARIABLE = "hello word";
 
     boolean compress(String source, String to);
 
