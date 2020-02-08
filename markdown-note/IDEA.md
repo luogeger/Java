@@ -1,4 +1,5 @@
-![image-20170129142216159](imgs/image-20170129142216159.png)
+
+![image-20200129142216159.png](imgs/image-20200129142216159.png)
 
 this will reset the current branch head to the selected commit,
 and update the working tree and the index according to the selected mode:

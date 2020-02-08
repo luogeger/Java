@@ -26,14 +26,14 @@ public class Reflect {
         list.add(2);
         list.add(3);
         try {
-            //todo ,get hot score
+            //TODO ,get hot score
             list.add(60);
             list.getClass().getMethod("add", Object.class).invoke(list, "活跃度中等【0~100】");
-            //todo get fans
+            //TODO get fans
             list.add(1500);
             list.getClass().getMethod("add", Object.class).invoke(list, "粉丝数,排名 3689 位");
 
-            //todo get evaluation
+            //TODO get evaluation
             list.add(90);
             list.getClass().getMethod("add", Object.class).invoke(list, "用户评价,超越 92%的用户");
 
