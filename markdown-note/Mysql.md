@@ -943,6 +943,16 @@ public class ComboPooledTest {
 - `select 0` : 选择数据库，`0`表示索引，默认有16个
 - `flushdb` : 删除当前数据所有数据，不影响其他数据库
 - `flushall` : 删除所有数据库数据
+- `type <keyName>` 
+- `del key1 key2`
+- `move keyName 1`
+- `rename key1 key2`
+- `expire key1 100`
+- `persist keyName`
+- `keys *`
+- `keys user_*`
+- `exists key`
+ 
 
 
 
@@ -988,13 +998,6 @@ public class ComboPooledTest {
     - `srem` 删除
     - `scard` 返回字段数量
 
-- `sorted set`  
+- `sorted set`: 中的每一个成员都会有一个分数(score)与之关联，Redis正是通过分数来为集合中的成员进行从小到大的排序。成员是唯一的，但是分数(score)却是可以重复的。
 
-### 通用命令
-
-- keys pattern
-    - `keys a*`, `keys *`
-- del key1 key2...
-- exists key
-- type key
 
