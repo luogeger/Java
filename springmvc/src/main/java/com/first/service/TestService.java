@@ -6,11 +6,11 @@ package com.first.service;
  */
 public interface TestService {
 
-    String get();
+    String get(String num);
 
-    String add();
+    String add(String num);
 
-    String update();
+    String update(String num);
 
-    String delete();
+    String delete(String num);
 }
