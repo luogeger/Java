@@ -11,6 +11,11 @@ public abstract class MyAbstract implements MyInterface {
 
     private String music = "Role";
 
+
+    public MyAbstract(String music) {
+        this.music = music;
+    }
+
     public abstract void play();
 
     protected abstract void happy();
