@@ -9,11 +9,11 @@ import lombok.Data;
 @Data
 public abstract class MyAbstract implements MyInterface {
 
-    private String music = "Role";
+    private String tempFiled = "Role";
 
 
-    public MyAbstract(String music) {
-        this.music = music;
+    public MyAbstract(String tempFiled) {
+        this.tempFiled = tempFiled;
     }
 
     public abstract void play();

@@ -119,14 +119,14 @@
             ```
     ```
         
-        ```
+    ```
 - `String` 在jdk1.8以前底层是靠字符数组`char[]`实现的，jdk9.0已经改为`byte[]`
         - ```bash
             String str = "abc";
     
             char[] data = {'a', 'b', 'c'};
             byte[] data = {97, 98, 99};
-    
+        
             String str = new String(data);
             ```
         ```
@@ -1925,7 +1925,7 @@ public class D_Function {
     - Stream本身并不存储任何元素，也不存储地址，是一个集合元素的函数模型。
     
 - 聚合操作：数据的批量操作
-    
+  
 - 处理流程
     - 1.获取数据源
     - 2.数据转换：可以进行一次或多次
@@ -1967,7 +1967,6 @@ public class D_Function {
     list.stream()
     ```
     
-        
 - `Map`获取流
     - 双列集合不能直接获取流对象，但是可以间接获取流对象。`java.util.Map`接口不是`Collection`的子接口，且其`K-V`数据结构不符合流元素的单一特征，所以获取对应的流需要分`key`、`value`、`entry`
     ```java
@@ -1975,6 +1974,7 @@ public class D_Function {
         Stream<String> valueStream = map.values().stream();
         Stream<Map.Entry<String, String>> entryStream = map.entrySet().stream();
     
+    ```
 > **2. 数据转换：常用API**
 
 ```bash
@@ -2149,9 +2149,9 @@ public class A_forName {
     - params: 是Class的类型
     - return： 返回的构造方法是Construction类型
 - 访问私有的Filed、Method、Construction => 权限检测 => 爷爷类`AccessibleObject` 的方法解除
-    
+  
 - `c.setAccessible(true)`
-    
+  
 - > 反射获取成员变量
 - `Field getDeclaredField (String name)`  
     - params:	字段名
@@ -2500,7 +2500,7 @@ public interface Servlet {
             ```
     ```
         
-        ```
+    ```
     
 - 响应头
     - `content-disposition` , 通知浏览器以附件的形式解析正文
@@ -2660,8 +2660,8 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
         ```
 ```   
     
-    ```
-    
+```
+
 - `session`移除 和 销毁
     - ```javascript
         request.getSession().removeSession("user");
@@ -2725,7 +2725,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
           ```
     ```
         
-        ```
+    ```
     - `applicationScope`
         - 服务器启动后，整个项目的ServletContext域
         - ```bash
@@ -2771,8 +2771,8 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
       ```
 ```
     
-    ```
-    
+```
+
 - `c:forEach`    
     - ```bash
       <c:forEach items="${list}" var="item">
@@ -2814,36 +2814,38 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 
 ### Create 创建型： 5种
-- `Factory Method`工厂方法模式
-    - 实例化时不会对暴露创建逻辑，通过使用共同的接口来指向实例。
-- `Abstract Factory`抽象工厂模式
-- `Singleton`单例模式
-- `Builder`建造者模式
-- `Prototype`原型模式
+#### `Factory Method`工厂方法模式
+- 实例化时不会对暴露创建逻辑，通过使用共同的接口来指向实例。
+#### `Abstract Factory`抽象工厂模式
+#### `Singleton`单例模式
+#### `Builder`建造者模式
+#### `Prototype`原型模式
 
 ### Structure 结构型：7种
-- `Adapter`适配器模式
-- `Decorator`装饰器模式
-- `Proxy`代理模式
-    - 真实对象存在就使用代理对象；不存在**先**初始化真实对象, **再**使用代理对象
-- `Facade`外观模式
-- `Bridge`桥接模式
-- `Composite`组合模式
-- `Flyweight`享元模式
+#### `Adapter`适配器模式
+#### `Decorator`装饰器模式
+- <img src="C:\PC\workspace\Java\markdown-note\imgs\image-20200212170256916.png" alt="image-20200212170256916" style="zoom: 80%;" />
+- ![image-20200212170325059](C:\PC\workspace\Java\markdown-note\imgs\image-20200212170325059.png)
+#### `Proxy`代理模式
+- 真实对象存在就使用代理对象；不存在**先**初始化真实对象, **再**使用代理对象
+#### `Facade`外观模式
+#### `Bridge`桥接模式
+#### `Composite`组合模式
+#### `Flyweight`享元模式
 
 ### Behavior 行为型：11种
-- 策略模式
-- `Template Method`模板方法模式
+#### 策略模式
+#### `Template Method`模板方法模式
     - 业务流程相同，具体的步骤实现不同
-- `Observer`观察者模式
-- 迭代子模式
-- 责任链模式
-- 命令模式
-- 备忘录模式
-- 状态模式
-- 访问者模式
-- 中介者模式
-- 解释器模式。
+#### `Observer`观察者模式
+#### 迭代子模式
+#### 责任链模式
+#### 命令模式
+#### 备忘录模式
+#### 状态模式
+#### 访问者模式
+#### 中介者模式
+#### 解释器模式。
 
 
 

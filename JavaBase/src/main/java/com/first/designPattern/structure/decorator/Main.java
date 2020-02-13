@@ -6,7 +6,7 @@ import org.junit.Test;
  * @author luoxiaoqing
  * @date 2020-02-11__22:08
  */
-public class DecoratorTest {
+public class Main {
     /**
      * 装饰者模式（包装模式）
      * 1，动态的给对象添加职责，（对一个方法或对象增加功能，相对于继承来说，继承是属于静态增加功能）

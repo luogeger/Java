@@ -6,6 +6,10 @@ package com.first.abstractKeyWord.b;
  */
 public class SubClass extends MyAbstract {
 
+    public SubClass(String music) {
+        super(music);
+    }
+
     @Override
     public void play() {
 
