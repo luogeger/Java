@@ -100,6 +100,7 @@ Keep:  files will be reverted to the state of the selected commit,
 
 ### Navigation
 - **Ctrl + N** `Go to class`
+  - 查找类，默认是查找项目里的类，也可以查找jar包里的类
 - **Ctrl + Shift + N** `Go to file`
 - **Ctrl + Alt + Shift + N** `Go to symbol`
     - 模糊搜索方法
