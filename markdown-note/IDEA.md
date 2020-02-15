@@ -18,7 +18,7 @@ Keep:  files will be reverted to the state of the selected commit,
 
 ### Editing
 - **Alt + J** 
-    -  选中同样的单词
+    -  tip选中同样的单词
 - **Ctrl + Space** `Basic code completion (the name of any class, method or variable)`
     - 基本代码完成（任何类，方法或变量的名称）
 - **Ctrl + Shift + Space** `Smart code completion (filters the list of methods and variables by expected type)`
@@ -102,12 +102,17 @@ Keep:  files will be reverted to the state of the selected commit,
 - **Ctrl + N** `Go to class`
   - 查找类，默认是查找项目里的类，也可以查找jar包里的类
 - **Ctrl + Shift + N** `Go to file`
+  - 查看找文件
 - **Ctrl + Alt + Shift + N** `Go to symbol`
     - 模糊搜索方法
 - **Alt + Right/Left** `Go to next / previous editor tab`
+  - 在编辑栏左右切换
 - **F12** `Go back to previous tool window`
+  - 光标回到工具栏
 - **Esc** `Go to editor (from tool window)`
+  - 光标回到编辑栏
 - **Shift + Esc** `Hide active or last active window`
+  - 隐藏最后使用的工具栏，如果只有一个的话，就隐藏它
 - **Ctrl + Shift + F4** `Close active run / messages / find / ... tab`
 - **Ctrl + G** `Go to line`
 - **Ctrl + E** `Recent files popup`
