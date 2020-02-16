@@ -205,7 +205,8 @@ Keep:  files will be reverted to the state of the selected commit,
 - **Ctrl + Alt + S** `Open Settings dialog`
 - **Ctrl + Alt + Shift + S** `Open Project Structure dialog`
 - **Ctrl + Shift + A** `Find Action`
-- **Ctrl + Tab** `Switch between tabs and tool window`    
+- **Ctrl + Tab** `Switch between tabs and tool window`   
+    - 在标签和工具窗口之间切换 
   
     
   
