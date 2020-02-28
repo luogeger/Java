@@ -8,11 +8,10 @@ Soft:  files won't change, differences will be staged for commit.
 
 Mixed: files won't change, differences won't be staged.
 
-Hard:  files will be reverted to the state of the selected commit,
-       warning: any local changes will be lost.
+Hard:  files will be reverted to the state of the selected commit,warning: any local changes will be lost.
        
-Keep:  files will be reverted to the state of the selected commit,
-       but local changes will be kept intact.
+Keep:  files will be reverted to the state of the selected commit,but local changes will be kept intact.
+
 
 # IntelliJ IDEA windows keymap
 

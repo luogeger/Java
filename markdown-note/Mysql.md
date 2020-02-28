@@ -202,7 +202,8 @@ alter table tt_user add index joint_index(teacher, course);
     - `having` 是在分组之后进行过滤，`where`是在分组之前进行过滤，
 
 - **查询的执行顺序:**
-    
+  
+
 | - | - |    
 | :--- | :--- |
 | `from`     | 表名     
@@ -217,6 +218,7 @@ alter table tt_user add index joint_index(teacher, course);
 - 外键约束
     - `foreign key(<currentFiled>) reference(<foreignFiled>)` , 约束从表，保证数据有效性， 
     - 已经存在的表添加外键约束
+        
         - `alter table coder_project add foreign key(coder_id) references coder(id);`
     - 新建表的时候添加外键约束
         ``` sql
@@ -228,8 +230,8 @@ alter table tt_user add index joint_index(teacher, course);
         );
         ```
     - 删除：先删从表，再删主表
-    - 添加：
-
+- 添加：
+    
 - 笛卡尔积：
 ```sql
     # 笛卡尔积
@@ -274,7 +276,7 @@ alter table tt_user add index joint_index(teacher, course);
     select project from project where id in (
         select project_id from coder_project where coder_id in (
             select id from coder where coder = 'jack'))
-```    
+```
 
 - **exists**
     - 不及格的学生的所有信息, `student`和`temp`的所有字段
@@ -282,7 +284,7 @@ alter table tt_user add index joint_index(teacher, course);
         select * from 
             student, (select * from student_course where score < 70) as temp 
         where student.id = temp.student_id order by temp.score;
-    ```    
+    ```
     - 只有 student 的字段，  ↓ :意注       
     ```sql
         select * from student where exists (
@@ -300,14 +302,14 @@ alter table tt_user add index joint_index(teacher, course);
       select * from student where age >= all(select age from student)
     ```
     
-
 - **any**, **some**
 
 - **as**
 
 - **limit**
-    - `select * from stu_info order by stu_id limit 0, 300` 前300条数据排序
-
+    
+- `select * from stu_info order by stu_id limit 0, 300` 前300条数据排序
+    
 - **查询所有分数在60 - 70的学生对应的学科**
     - 
     ```sql
@@ -328,7 +330,7 @@ alter table tt_user add index joint_index(teacher, course);
     select current_date(); -- 2018-06-26
     select current_time(); -- 11:08:23
     select year(now()); -- 2017
-``` 
+```
 
 - 字符串
 ```sql
@@ -565,7 +567,8 @@ public class inject {
     - 多个用户并发访问数据库的时候，一个用户的事务不能被其他用户的事务干扰。
     
 > **事务隔离性**
->> 如果不考虑事务隔离性会出现以下问题
+>
+> > 如果不考虑事务隔离性会出现以下问题
 
 - 脏读
     - 一个事务读取了另一个事务**未提交**的数据。
@@ -864,7 +867,7 @@ public class ComboPooledTest {
 ```
 
 # SQL优化
-    
+
 - `show variables like 'test_0520';`    
 - `show variables like '%log%';`
 - `set global log_queries_not_using_indexes=on';` 打开慢查询
@@ -943,16 +946,19 @@ public class ComboPooledTest {
 - `select 0` : 选择数据库，`0`表示索引，默认有16个
 - `flushdb` : 删除当前数据所有数据，不影响其他数据库
 - `flushall` : 删除所有数据库数据
-- `type <keyName>` 
-- `del key1 key2`
-- `move keyName 1`
-- `rename key1 key2`
+- `type <keyName>` ：查看key的类型
+- `del key1 key2`： 删除可以
+- `move keyName 1` ： 移动key到其他库
+- 查看当前的所在库
+- `dbsize`：查看当前库key的数量
+- `rename key1 key2` ：重命名
 - `expire key1 100`
 - `persist keyName`
-- `keys *`
-- `keys user_*`
-- `exists key`
- 
+- `keys *` ：获取所有的key
+- `keys user_*` :  获所有取带user_前缀的key
+- `exists keyName` ： 查看key是否存在
+- `ttl keyName`：  查看key的过期时间
+
 
 
 
