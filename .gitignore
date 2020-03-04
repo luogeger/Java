@@ -1,8 +1,9 @@
 # directory 忽略目录下的所有文件
+.mvn/
 .idea/
 .vscode/
-target/
 .settings/
+target/
 
 
 # file
@@ -12,6 +13,9 @@ target/
 *.class
 *.dll
 *.exe
+*.cmd
+mvnw
+HELP.md
 
 # compression file
 *.7z
