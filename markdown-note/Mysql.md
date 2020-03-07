@@ -167,7 +167,6 @@ alter table tt_user add index joint_index(teacher, course);
     - `null` 不参与统计
     - `SELECT COUNT(SCORE) FROM A_STUDENT`, 
     - `SELECT COUNT(*) FROM PERSON WHERE AGE > 18`
-
 - **sum**
     - 多列求和, `null` 不参与计算 
         - `select sum(score) from students`
@@ -180,45 +179,41 @@ alter table tt_user add index joint_index(teacher, course);
         - `select sum(ifnull(age, 0) + ifnull(score, 0)) from a_student` : 如果值为 null, 提供默认值0
     - `truncate (数值，保留小数位)`
         - `select truncate(sum(ifnull(age, 0) + ifnull(score, 0)), 2) from a_student`
-
 - **avg**
     - 平均数 `select avg(score) / count(*) from students`
-
 - **max**, **min**
     - `null` 不参与计算
     - `select max(score) 最高分, min(score) 最低分 from students;`
-
 - **group by**
     - 按照某列或某几列，把相同的数据进行合并输出
     - `SELECT * FROM A_COURSE GROUP BY COURSE DESC`， 默认是降序, 有过滤重复字段的效果
     - `SELECT ID, COURSE, SUM(SCORE) FROM A_COURSE GROUP BY COURSE`
     - `SELECT ID, COURSE, SUM(SCORE) FROM A_COURSE GROUP BY COURSE, SCORE`, 如果语文成绩的分数不一样，达不到分类的效果
         - 先按照科目名分组，在按分数进行分组，再合并输出
-    
 - **having**
     - `having`必须和`group by`一起使用，用法和`where`一样，但是`where`后面不可以跟聚合函数
     - `SELECT COURSE, SUM(SCORE) FROM A_COURSE WHERE SCORE > 5 GROUP BY COURSE HAVING SUM(SCORE) > 20`
         - `select`后面是输出形式，`group by`后面只根据科目名分类，不需要再根据分数分类，不然分数不相同科目相同也会被分类出来
     - `having` 是在分组之后进行过滤，`where`是在分组之前进行过滤，
-
 - **查询的执行顺序:**
-  
 
-| - | - |    
-| :--- | :--- |
-| `from`     | 表名     
-| `where`    | 条件过滤  
-| `group by` | 分组              
-| `having`   | 分组之后进行过滤          
-| `select`   | 执行完毕之后显示内容          
-| `order by` | 把内容进行排序输出          
+|      |      |
+| ---- | :---- |
+|  `from`     |    表名  |
+|   `where`    |   条件过滤   |
+|   `group by`   |分组|
+|   `having`   |   分组之后进行过滤   |
+|   `select`   |   执行完毕之后显示内容   |
+| `order by` |       把内容进行排序输出        |
+
+
 
 
 ### join query
 - 外键约束
     - `foreign key(<currentFiled>) reference(<foreignFiled>)` , 约束从表，保证数据有效性， 
     - 已经存在的表添加外键约束
-        
+      
         - `alter table coder_project add foreign key(coder_id) references coder(id);`
     - 新建表的时候添加外键约束
         ``` sql
@@ -231,7 +226,7 @@ alter table tt_user add index joint_index(teacher, course);
         ```
     - 删除：先删从表，再删主表
 - 添加：
-    
+  
 - 笛卡尔积：
 ```sql
     # 笛卡尔积
@@ -307,9 +302,9 @@ alter table tt_user add index joint_index(teacher, course);
 - **as**
 
 - **limit**
-    
+  
 - `select * from stu_info order by stu_id limit 0, 300` 前300条数据排序
-    
+  
 - **查询所有分数在60 - 70的学生对应的学科**
     - 
     ```sql
@@ -617,7 +612,7 @@ public class Transaction {
 }
 ```
 
-# connection pool
+# ConnectionPool
 - 优化获取连接，主要是从性能上优化
 - `public interface DataSource extends CommonDataSource, Wrapper` : 厂商实现这个规定的接口
     - `Connection getConnection()`
@@ -693,97 +688,7 @@ public class ComboPooledTest {
 }
 ```
 
-### C3P0
-- 基本用法：
 
-```bash
-    # 读取配置文件
-    ComboPooledDataSource cpds = new ComboPooledDataSource();
-    cpds.setDriverClass("com.mysql.jdbc.Driver");
-    cpds.setJdbcUrl("jdbc:mysql://localhost:3306/fourth");
-    cpds.setUser("root");
-    cpds.setPassword("123456");
-```
-
-- `c3p0-config.xml`：默认文件名， 在`src`目录下
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<c3p0-config>
-    <default-config>
-        <property name="driverClass">com.mysql.jdbc.Driver</property>
-        <property name="jdbcUrl">jdbc:mysql://localhost:3306/fourth</property>
-        <property name="user">root</property>
-        <property name="password">123456</property>
-    </default-config>
-
-    <named-config name="third">
-        <property name="driverClass">com.mysql.jdbc.Driver</property>
-        <property name="jdbcUrl">jdbc:mysql://localhost:3306/third</property>
-        <property name="user">root</property>
-        <property name="password">123456</property>
-    </named-config>
-</c3p0-config>
-```
-- 配置文件的使用
-
-```bash
-    # `third`为数据库名
-    ComboPooledDataSource cpbs = new ComboPooledDataSource("third");
-    Connection conn =null;
-    PreparedStatement pst =null;
-    ResultSet rs =null;
-```
-
-
-### DRUID
-- 配置文件的参数，通常放在`src`目录下
-    - `url` : `"jdbc:mysql://localhost:3306/third"`
-    - `username` : `"root"`
-    - `password` : `"123456"`
-    - `driverClassName` : `"com.mysql.jdbc.Driver"`, 驱动类名。根据 `url`自动识别，可以不配置，
-    - `initialSize` : 建立的物理连接个数
-    - `maxActive` : 连接池中最大连接数
-    - `maxWait` : 获取连接时最长等待时间
-    
-- 1.导包
-
-- 2.加载`properties` 配置文件到 `Properties` 对象中，通过类加载器加载文件，因为文件在`src` 目录下
-    - `所在类.class.getClassLoader().getResourceAsStream("druid.properties");`
-    
-- 3.创建`druid` 连接池，使用配置文件的参数    
-    - `DataSource ds = DruidDataSourceFactory.createDataSource(p);`
-    
-- 4.从连接池取出连接，相当于创建连接
-    - `Connection conn = ds.getConnection();`
-    
-- **案例**
-```bash
-    Properties p = new Properties();
-    InputStream file = DruidTest.class.getClassLoader().getResourceAsStream("druid.properties");
-    p.load(file);
-    DataSource ds = DruidDataSourceFactory.createDataSource(p);
-    // String url = p.getProperty("url");
-    // String user = p.getProperty("username");
-    // String pwd = p.getProperty("password");
-    // Connection conn = DriverManager.getConnection(url, user, pwd);
-    Connection conn = null;
-    PreparedStatement pst = null;
-    ResultSet rs = null;
-
-    conn = ds.getConnection();
-    pst = conn.prepareStatement("select * from students");
-    rs = pst.executeQuery();
-
-    while (rs.next()) {
-        System.out.println(
-            rs.getInt("id") +" - "+
-            rs.getString("name")
-        );
-    }
-
-    jdbcUtils.release(rs, pst, conn);
-```
 
 # JDBCTemplate
 - `JDBCTemplate` 是 `Spring` 对 `JDBC`的封装，目的是使`JDBC` 更加易于使用，处理了资源的建立和释放。
@@ -874,16 +779,94 @@ public class ComboPooledTest {
 - `show variables like 'long_query_time';`
 - `set global slow_query_log=on;` 开启了慢查询日志
 
+![image-20200306153510410](C:\PC\workspace\Java\markdown-note\imgs\image-20200306153510410.png)
+
+device_id加了索引以后
+
+![image-20200306161617841](C:\PC\workspace\Java\markdown-note\imgs\image-20200306161617841.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # ORACLE
+
+### 系统用户及登录
+
+>  **系统用户**
+
+- **sys**, **system**
+- **sysman**
+- **scott**
+
+> **系统用户登录sql Plus**
+
+- **system/password**
+- **connect sys/password as sysdba**;  sys登录需要用dba的权限
+- **show user**  查看当前用户
+- **desc <table_name>** 查看表结构及字段信息
+
+> **启用Scott用户**
+
+- **alter user scott account unlock;**
+- 使用Scott用户登录SQL Plus：Scott用户的密码默认是tiger
+    - **connect  scott/tiger**
+    - **show user**  紧接着查看当前用户是不是Scott
+
+### 表空间
+
+> **表空间的概述** 
+
+数据库，表空间，数据文件之间的关系。 
+
+- 表空间的分类
+    - 永久表空间
+        - 表，视图，存储过程
+    - 临时表空间
+        - 存放数据库当中操作的过程，执行完毕就自动释放
+    - UNDO表空间
+        - 存放对数据修改之前的数据。
+
+> **查看用户的表空间**
+
+数据字典：**dba_tablespaces, user_tablespaces, dba_users, user_users**
+
+- **desc dba_tablespaces** 可以看到第一个字段就是 **TABLESPACE_NAME**
+
+![image-20200307162753562](C:\PC\workspace\Java\markdown-note\imgs\image-20200307162753562.png)
+
+- 设置用户的默认或临时表空间
+    - **alter user username <defalut|temporary> tablespace tablespace_name**
+
+> **创建，修改，删除表空间**
+
+- 创建永久表空间
+- 创建临时表空间
+- 查看数据文件的路径
+- 查看
+
+
+
+
+
+
+
 - sql增强
     - 表里的值区分大小写
     - 隐形转换，字符串转成数字
     - ”||“
     - 伪表
     - 空值运算
-    
 - 单行函数
     - 函数的分类
     - 字符函数
@@ -892,23 +875,17 @@ public class ComboPooledTest {
     - 转化函数
     - 滤空函数
     - 条件表达式
-    
 - 多表查询
     - 内连接
     - 外连接
     - 自连接
-    
 - sql99语法
 - oracle自带语法
-
 - 伪列
     - ROWNUM
     - ROWID        
-
 - 索引
-
 - SELECT * FROM emp t1, emp t2 WHERE t1.sal > t2.sal AND ename = 'SCOTT';
-
 - 主键自增
 - 没有驼峰
 
