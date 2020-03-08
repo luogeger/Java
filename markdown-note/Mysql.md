@@ -11,7 +11,7 @@
     - 2.用户授权
         - `grant <grant1>, <grant2> on <dbName>.<tableName> to '<user>'@'<ip>'`
             - 权限：`create`,`alter`, `select`, `insert`, `delete`, `update` ... `all`
-    - 3.撤销权限        
+    - 3.撤销权限
         - `revoke <grant1>, <grant2> on <dbName>.<tableName> from '<user>'@'<ip>'`
     - 4.查看权限
         - `show grants for '<user>'@'<ip>'`
@@ -805,23 +805,25 @@ device_id加了索引以后
 
 >  **系统用户**
 
-- **sys**, **system**
-- **sysman**
-- **scott**
+- `sys`, `system`
+- `sysman`
+- `scott`
 
-> **系统用户登录sql Plus**
+> **系统用户登录SQLPlus**
 
-- **system/password**
-- **connect sys/password as sysdba**;  sys登录需要用dba的权限
-- **show user**  查看当前用户
-- **desc <table_name>** 查看表结构及字段信息
+- `system/password`
+- `connect sys/password as sysdba`;  sys登录需要用dba的权限
+- `show user`  查看当前用户
+- `dba_users` 根据数据字典查看用户信息
+    - 查看数据字典包含哪些字段
+- `desc <table_name>` 查看表结构及字段信息
 
 > **启用Scott用户**
 
-- **alter user scott account unlock;**
-- 使用Scott用户登录SQL Plus：Scott用户的密码默认是tiger
-    - **connect  scott/tiger**
-    - **show user**  紧接着查看当前用户是不是Scott
+- `alter user scott account unlock;`
+- 使用Scott用户登录SQL Plus：scott用户的密码默认是tiger
+    - `connect  scott/tiger`
+    - `show user`  紧接着查看当前用户是不是scott
 
 ### 表空间
 
@@ -839,9 +841,9 @@ device_id加了索引以后
 
 > **查看用户的表空间**
 
-数据字典：**dba_tablespaces, user_tablespaces, dba_users, user_users**
+数据字典：`dba_tablespaces`,  `user_tablespaces`,  `dba_users`,  `user_users`
 
-- **desc dba_tablespaces** 可以看到第一个字段就是 **TABLESPACE_NAME**
+- `desc dba_tablespaces` 可以看到第一个字段就是 `TABLESPACE_NAME`
 
 ![image-20200307162753562](C:\PC\workspace\Java\markdown-note\imgs\image-20200307162753562.png)
 
@@ -857,24 +859,82 @@ device_id加了索引以后
 
 
 
+### SQL查询
+
+- 表里的**值**区分大小写
+
+- 隐形转换，字符串转成数字
+
+- `||` 字符串连接符
+
+- 伪表
+
+- 空值运算
+
+- `where` 过滤子句
+
+- 字符和日期
+
+- `Espace` 转义字符
+
+- 条件运算符
+
+    - `between...and...` 包含边界值
+    - `in(set)`
+    - `like`
+    - `is null` 
+    - `and`
+    - `or`
+    - `not`
+
+- `in`，`not in` 过滤时的空值
+
+- 排序：根据别名、列号
+
+- 条件运算的优先级
+
+### 单行函数
+
+操作数据对象，接收参数返回一个结果，**只对一行进行变换，每行返回一个结果**，可以转换数据类型，可以嵌套
+
+> 函数的分类
+
+- 字符函数
+    - 大小写控制函数
+    
+    - 字符控制函数
+    
+    - | 函数                          | 结果               |
+        | ----------------------------- | ------------------ |
+        | concat('Hello', 'World')      | HelloWorld         |
+        | substr('HelloWorld', 1, 5)    | Hello              |
+        | length('HelloWorld')          | 10                 |
+        | instr('HellorWorld', 'W')     | 6                  |
+        | lpad(salary, 10, '*')         | *************24000 |
+        | rpad(salary, 10, '*')         | 24000*********     |
+        | trim('H'  from  'HelloWorld') | elloWorld          |
+        | replace('abcd',  'b',  'm')   | emcd               |
+    
+- 数字函数 ：`round`， `trunc` 函数除了对数字起作用以外，对日期也起作用
+
+    -  `round(45.926, 2)`  == 45.93  四舍五入
+    - `trunc(45.926, 2)`  == 45.92  截断
+    - `mod(1600, 300)` == 100  求余
+
+- 日期函数
+
+- 转化函数
+
+- 滤空函数
+
+- 条件表达式
+
+### 多行函数
 
 
 
+### 多表查询
 
-- sql增强
-    - 表里的值区分大小写
-    - 隐形转换，字符串转成数字
-    - ”||“
-    - 伪表
-    - 空值运算
-- 单行函数
-    - 函数的分类
-    - 字符函数
-    - 数字函数
-    - 日期函数
-    - 转化函数
-    - 滤空函数
-    - 条件表达式
 - 多表查询
     - 内连接
     - 外连接
