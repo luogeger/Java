@@ -1,9 +1,15 @@
-# SQL分类
+# Mysql
 
-- **DDL** : 数据库定义语言 `Data Definition Language` ，用来定义数据库对象 
-    - create , drop , alter, truncate
-   
-- **DCL** :数据控制语言 `Data Contrlol Language` ，设置用户权限和控制事务
+- 范式
+    - 原子性，不可拆分
+    - 完全依赖主键    
+    - 不产生传递依赖
+
+### DCL
+	数据控制语言Data Contrlol Language ，设置用户权限和控制事务
+
+- 连接数据库     `mysql -h root -p`
+- 连接其他数据库 `mysql -h userIP -P userPORT -u root -p`
     - `grant`, `revoke`, `start transaction`, `commit`, `rollback`
     - 1.创建用户
         - `create user '<username>'@'<ip>' identified by <pwd>`
@@ -20,30 +26,10 @@
     - 6.修改密码
         - `mysqladmin -u root -p password <pwd>` ：超级管理员修改密码
         - `set password for '<user>'@'<tableName>' = password('<pwd>')` ：普通用户使用超级管理员修改
-        
-   
-- **DML** : 数据操纵语言 `Data Manipulation Language` ，数据表中更新、增加、删除记录
-    - update , insert , delete
-   
-- **DQL** : 数据查询语言 `Data Query Language` ，记录的查询
-    - select ...
-
-# SQL语句	
-
-### database design
-
-- 范式
-    - 原子性，不可拆分
-    - 完全依赖主键    
-    - 不产生传递依赖
-    
-### DCL
-
-- 连接数据库     `mysql -h root -p`
-- 连接其他数据库 `mysql -h userIP -P userPORT -u root -p`
-
 
 ### DDL
+
+	数据库定义语言Data Definition Language，用来定义数据库对象create , drop , alter, truncate
 
 - 退出            `exit;`
 - 查询所有DB       `show databases;`
@@ -109,6 +95,7 @@ alter table tt_user add index joint_index(teacher, course);
 - 添加索引    
 
 ### DML
+	数据操纵语言Data Manipulation Language，  insert， create， update操作
 
 - 查看表数据             `select* from <tableName>`
 - 插入数据(指定字段)      `insert into <tableName> (id, name) values (null, 'jim')`
@@ -118,7 +105,8 @@ alter table tt_user add index joint_index(teacher, course);
 - 删除记录(where)        `delete from <tbaleName> where id=2;`
 - 删除表中所有记录        `delete from <tableName>` **表清空了**
 
-### DQL    
+### DQL
+	数据查询语言Data Query Language， select操作
 - `null` 不参与运算
 - `is null`：`where birthday is null`
 - `is not null`：`where name is not null`
@@ -161,7 +149,7 @@ alter table tt_user add index joint_index(teacher, course);
         - 等同于`select name 姓名 from a_student`
     
 
-### aggregate function
+### 聚合函数
 
 - **count**
     - `null` 不参与统计
@@ -209,7 +197,7 @@ alter table tt_user add index joint_index(teacher, course);
 
 
 
-### join query
+### 连接查询
 - 外键约束
     - `foreign key(<currentFiled>) reference(<foreignFiled>)` , 约束从表，保证数据有效性， 
     - 已经存在的表添加外键约束
@@ -257,16 +245,18 @@ alter table tt_user add index joint_index(teacher, course);
     select * from b_product as a right outer join b_price as b on a.id = b.b_product_id 
 ```
 
-### sub query
+
+
+### 子查询
 
 > 概述：当一个查询是另一个查询的条件时，称之为子查询
 
 - `in`
 ```sql
     # 不及格的学生的信息 -- student
-    select * from student where id in (
-        select student_id from studentcourse where score <= 60)
-        
+    select * from student 
+    where id in ( select student_id from studentcourse where score <= 60)
+
     # jack参与了哪些项目 -- project        
     select project from project where id in (
         select project_id from coder_project where coder_id in (
@@ -306,6 +296,7 @@ alter table tt_user add index joint_index(teacher, course);
 - `select * from stu_info order by stu_id limit 0, 300` 前300条数据排序
   
 - **查询所有分数在60 - 70的学生对应的学科**
+  
     - 
     ```sql
         select student.name '姓名', course.name '课程', temp.score '分数' from 
@@ -318,7 +309,7 @@ alter table tt_user add index joint_index(teacher, course);
     ```
     
 
-### native function
+### 原生函数
 - 日期
 ```sql
     select now(); -- 2018-06-26 11:07:24
@@ -341,8 +332,7 @@ alter table tt_user add index joint_index(teacher, course);
     select format(3.1415926, 4); -- 截取位数: 3.1416, 有四舍五入的功能
 ```
 
-
-# JDBC
+###  JDBC
 
 - **java database connection**
 
@@ -537,7 +527,7 @@ public class inject {
 }
 ```
 
-# transaction
+### Transaction
 
 - MYSQL5.5以后支持事务，存储引擎`InnoDB`支持事务，特点是自动提交
 - 概念：事务指的是逻辑上的一组操作，组成这组操作的各个单元，要么全部成功，要么全部失败(业务上市最小的工作单元，不可拆分)。
@@ -612,7 +602,8 @@ public class Transaction {
 }
 ```
 
-# ConnectionPool
+### Connection Pool
+
 - 优化获取连接，主要是从性能上优化
 - `public interface DataSource extends CommonDataSource, Wrapper` : 厂商实现这个规定的接口
     - `Connection getConnection()`
@@ -690,7 +681,8 @@ public class ComboPooledTest {
 
 
 
-# JDBCTemplate
+### JDBCTemplate
+
 - `JDBCTemplate` 是 `Spring` 对 `JDBC`的封装，目的是使`JDBC` 更加易于使用，处理了资源的建立和释放。
     - `commons-logging-1.2.jar` ：日志记录
     - `spring-beans-5.0.0.RELEASE.jar` ：JavaBean管理包
@@ -771,7 +763,9 @@ public class ComboPooledTest {
     }
 ```
 
-# SQL优化
+
+
+###  SQL优化
 
 - `show variables like 'test_0520';`    
 - `show variables like '%log%';`
@@ -799,7 +793,7 @@ device_id加了索引以后
 
 
 
-# ORACLE
+# Oracle
 
 ### 系统用户及登录
 
@@ -831,13 +825,14 @@ device_id加了索引以后
 
 数据库，表空间，数据文件之间的关系。 
 
-- 表空间的分类
-    - 永久表空间
-        - 表，视图，存储过程
-    - 临时表空间
-        - 存放数据库当中操作的过程，执行完毕就自动释放
-    - UNDO表空间
-        - 存放对数据修改之前的数据。
+> 表空间的分类
+
+- 永久表空间
+    - 表，视图，存储过程
+- 临时表空间
+    - 存放数据库当中操作的过程，执行完毕就自动释放
+- UNDO表空间
+    - 存放对数据修改之前的数据。
 
 > **查看用户的表空间**
 
@@ -925,29 +920,231 @@ device_id加了索引以后
 
 - 转化函数
 
-- 滤空函数
+- 滤空函数：也称为通用函数，其特点是：适用于任何数据类型，同时也适用于空值。
+
+    - `nvl(a,c)`，当a为null的时候，返回c，否则，返回a本身。
+    - `nvl2(a,b,c)`,当a为null的时候，返回c，否则返回b—三元运算
+    - `nullif(a,b)`,当a=b的时候，返回null，否则返回a
+    - `coalesce(a,b,c,d)`，从左往右查找，当找到第一个不为null的值的时候，就显示这第一个有值的值。
 
 - 条件表达式
 
+    - CASE 表达式：SQL99的语法，类似Basic，比较繁琐
+
+    - DECODE 函数：Oracle自己的语法，类似Java，比较简单
+
+        
+
+        
+
 ### 多行函数
 
+​		多行函数也称之为分组函数、聚集函数。简答的说就是把多行的值汇聚计算成一个值。常见的函数有
 
+- `count`	统计时的对象不同，效率也不同
+
+- `max`  
+
+- `min`
+
+- `sum`
+
+- `avg` 
+
+- `distinct`  关键字效率会比较低，如果仅仅是为了显示不重复的记录，建议使用`group by`
+
+    - ```sql
+        select distinct(deptno) from emp;
+        select deptno from emp group by deptno;
+        ```
+
+    - ```sql
+        select deptno, max(sal) from emp;
+        -- 报错：不是单组分组函数
+        聚合函数处理的是数据组，在本例中，MAX函数将整个EMP表看成一组，而deptno的数据没有进行任何分组，因此SELECT语句没有逻辑意义。
+        要想解决这个问题，需要对deptno进行分组。
+        select deptno,max(sal) from emp group by deptno;
+        -- max函数是针对每一组的数据求最大值
+        ```
+    
+- `group by` , `having`
+
+    ```sql
+    select deptno from emp group by emp.deptno having emp.deptno >= 20;
+    -- having子句过滤，是先分组，再过滤，注意：分组的时候是全表扫描的，效率较低。
+    
+    select deptno from emp where deptno >= 20 group by deptno;
+    -- 优化：where子句过滤，是先过滤再分组，注意：分组的时候仅需要扫描部分数据，效率较高。
+    ```
+
+    
 
 ### 多表查询
 
-- 多表查询
-    - 内连接
-    - 外连接
-    - 自连接
-- sql99语法
-- oracle自带语法
-- 伪列
-    - ROWNUM
-    - ROWID        
-- 索引
-- SELECT * FROM emp t1, emp t2 WHERE t1.sal > t2.sal AND ename = 'SCOTT';
-- 主键自增
-- 没有驼峰
+```
+优化：连接查询的时候用别名
+```
+
+> 内连接
+
+> 外连接
+>
+
+​		左外连接
+
+```sql
+--查询"所有"员工信息，要求显示员工号，姓名 ,和部门名称--要求使用左外连接
+--sql99标准语法
+select * from emp t1 left outer join dept t2 on t1.deptno = t2.deptno;
+
+-- oracle私有语法（mysql不支持），+放到右边是左外，你可以认为(+)是附加补充的意思。
+--要求查询所有的信息的表，我们可以称之为主表，而补充信息的表，称之为从表
+select * from emp t1,dept t2 where t1.deptno = t2.deptno(+);
+```
+
+​		右外连接：oracle特有的，mysql没有
+
+```sql
+-- sql99,右边表（dept）数据全部显示。
+select * from emp t1 right outer join dept t2 on t1.deptno = t2.deptno;
+
+-- oracle语法
+select  * from emp t1,dept t2 where t1.deptno(+) = t2.deptno;
+```
+
+> 自连接：就是将一张表当成两张表来使用
+>
+
+```sql
+--查询员工信息，要求同时显示员工和员工的领导的姓名，没有领导员工不会出现
+select t1.empno no, t1.ename name, t2.empno leader_no, t2.ename leader_name 
+from emp t1,emp t2 where t1.mgr=t2.empno;
+
+--查询“所有”员工信息，没有领导员工也要查出来
+select t1.empno no, t1.ename name, t2.empno leader_no, t2.ename leader_name  
+from emp t1,emp t2 where t1.mgr=t2.empno(+);
+```
+
+
+
+### 子查询
+
+> 单行子查询 -- 比较操作符
+
+```sql
+--查询部门名称是SALES的员工信息
+select * from emp where deptno=(select deptno from dept where dname ='sales');
+```
+
+注意：**使用子查询的时候，一定要保证子查询不能为空，否则数据就会出现异常。**
+
+
+
+> 多行子查询  `in`, `any`, `all`
+
+```sql
+-- ## 多行子查询
+-- 查找工作和'SMITH' 'ALLEN' 这两个人的工作一样的员工信息
+select job from emp where ename in('smith','allen');
+select * from emp where job in(select job from emp where ename in('smith','allen'));
+
+-- 查找工作和'smith' 'allen' 这两个人的工作不一样的员工信息
+select * from emp where job not in(select job from emp where ename in('smith','allen'));
+
+-- 查询工资比30号部门任意一个员工的工资高的员工信息。--面试题
+select * from emp where deptno =30;
+
+-- 任意一个：比最低的那个高就ok。
+select * from emp where sal >(select min(sal) from emp where deptno=30);
+
+-- any(多行函数)
+select * from emp where sal >any(select sal from emp where deptno=30);
+
+-- 查询工资比30号部门所有员工的工资高的员工信息。
+select * from emp where sal>(select max (sal) from emp where deptno=30);
+
+--all(多个返回记录)--max(sal)
+select * from emp where sal>all(select sal from emp where deptno=30);
+```
+
+**多行子查询和单行子查询之间的联系：**
+
+- `> any(a, b, c)` === `> a or > b or > c `
+- `> all(a, b, c)`  === `> a and > b and > c`
+
+**子查询注意事项：**
+
+- 子查询的位置：可以放在主查询的where、select、having、from的后面。不可以放在主查询的group by后面。
+
+- 子查询和主查询可以是同一张表，也可以不是是不同一张表，只要子查询返回的结果在主查询中能使用即可。
+
+- 关于使用操作符：单行操作符对应单行子查询，多行操作符对应多行子查询。
+-  执行顺序：一般子查询先执行，再执行主查询；
+
+- 关于排序：一般不在子查询中使用order by；但在top-N分析问题中，必须在子查询中使用order by。
+
+- 多行子查询一般用于from后面，作为一张新的虚拟临时表来使用。
+
+**子查询和多表关联查询的选择**
+
+```
+理论上，在都可以实现需求的情况下尽量选择多表查询。
+原因：子查询会操作两次，多表查询只操作一次。多表的效率高。
+但要注意的是，多表查询如果产生了笛卡尔集（语句上要注意条件的使用），则会出现严重的效率问题。
+一般不在子查询中使用排序（order by），但在top-N分析问题中必须在子查询中使用排序。
+```
+
+
+
+
+
+### 伪列
+
+​		伪列是oracle中虚拟的列，列的数据是由oracle进行维护和管理的。用户只能查看这个列，不能修改。所有的伪列要得到值必须要**显示**的指定。最常用的两个伪列：`rownum`,  `rowid` 
+
+> **rownum**
+
+- 执行查询操作时产生，由数据库产生，每次查询都会重新生成。
+
+- 只能使用 `<`, `<=` 的符号，不能使用 `>`, `>=`。因为oracle是基于行的数据库，行号永远是从1开始的。
+
+- 不受 `order by` 影响，因为 `rownum` 是在查询出来结果的时候就产生了，而 `order by` 是对查询结果的排序
+
+    **如果要先排序再查询的话，可以使用子查询**
+
+    ```sql
+    --  order by是查询语句出来的结果之后再排序的，rownum是在查询出来结果（此时行号已经有了，已经和每一行数据绑定了）的时候产生。所以不会影响到行号
+    select rownum,t.* from emp t order by deptno;
+    
+    --  先排序，再查询
+    select rownum,t.* from (select * from emp order by deptno) t;
+    ```
+
+    **使用行号进行数据分页**
+
+    ```sql
+    
+    ```
+
+> **rowid**
+
+- 用来标识表中唯一的一条记录，并间接的给出了表行的物理位置，定位表行最快的方式。
+- 主要是给数据库用的，类似UUID
+    - **主键：** 标识唯一的一条业务数据。不是给数据库用的，是给业务用的。
+
+**rowid的查看：** 
+
+**rowid的产生**：使用insert语句插入数据时，oracle会自动生成rowid并将其值与表数据一起存放到表行中。
+
+![image-20200308222548450](C:\PC\workspace\Java\markdown-note\imgs\image-20200308222548450.png)
+
+**rowID的作用**：l去除重复数据。--面试题—了解。在plsql Developer中，加上rowid可以更改数据。
+
+**rownum,  rowid 两者之间的区别**
+
+- rownum不是表中原本的数据，只是在查询的时候才生成的。rowID是插入数据的时候产生。
+
+
 
 # Redis 
 
