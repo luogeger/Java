@@ -68,7 +68,8 @@
             PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
             "http://mybatis.org/dtd/mybatis-3-config.dtd">
     <configuration>
-        <environments default="development"><!-- 环境：说明可以配置多个，default:指定生效的环境 -->
+        <!-- 环境：说明可以配置多个，default:指定生效的环境 -->
+        <environments default="development">
             <environment id="development"><!-- id:环境的唯一标识 -->
                 <transactionManager type="JDBC"/><!-- 事务管理器，type：类型 -->
                 <dataSource type="POOLED"><!-- 数据源：type-池类型的数据源 -->
@@ -94,8 +95,11 @@
         try {
 
             String resource = "mybatis-config.xml";// 指定mybatis的核心配置文件
-            InputStream inputStream = Resources.getResourceAsStream(resource);// 读取mybatis-config.xml配置文件
-            SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);// 构建sqlSessionFactory
+            // 读取mybatis-config.xml配置文件
+            InputStream inputStream = Resources.getResourceAsStream(resource);
+            // 构建sqlSessionFactory
+            SqlSessionFactory sqlSessionFactory 
+                = new SqlSessionFactoryBuilder().build(inputStream);
             sqlSession = sqlSessionFactory.openSession();// 获取sqlSession对象
 
             User user = sqlSession.selectOne("UserMapper.queryUserById", 5);
@@ -130,10 +134,10 @@
 
     ```
 
-    - `UserDao_c.java`
+    - `UserDaoImpl.java`
 
     ```java
-        public class UserDao_c implements UserDao {
+        public class UserDaoImpl implements UserDao {
             private SqlSession sqlSession;
 
             public UserDao_c(SqlSession sqlSession){
@@ -179,7 +183,7 @@
 
                 SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(is);
                 SqlSession session = factory.openSession();
-                this.dao = new UserDao_c(session);
+                this.dao = new `UserDaoImpl(session);
             }
 
             @Test
@@ -191,11 +195,13 @@
 
 ### Mapper实现类的动态代理
 - **命名空间**必须改成 **接口文件**的全路径
+    
     - `<mapper namespace="cn.item.Dao.UserDaoMapper">`
 - **statement**必须和接口 **方法名**一致, 以及 **结果集的封装类型**和方法的 **返回类型**一致
     - `public User queryUserById(Long id) {`
     - `<select id="queryUserById"  resultType="cn.item.pojo.User">`
 - **parameType**
+    
     - `select *, user_name AS userName from tb_user where id = #{id}`
 - `Test.java`
     - ```java
@@ -227,7 +233,7 @@
 
 
 
-        
+​        
 
 # Spring
 ### overview
@@ -261,11 +267,12 @@
         // 1.读取配置文件创建工厂对象(IOC容器)
         // 2.获取Bean对象，得到的是Object，向下转型，参数是Bean的id
         // 3.调用方法
-        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        ApplicationContext ac = 
+            new ClassPathXmlApplicationContext("applicationContext.xml");
         Dao dao = (Dao) ac.getBean("Dao_c");// bean的id
         dao.findUser();
-    ```
-
+```
+    
     - `Test.java`
     ```java
         Service service = new Service_c();
@@ -1192,10 +1199,14 @@ public void jdk () {
 
     - ```xml
         <tx:method name="transfer" read-only="false" isolation="DEFAULT" propagation="REQUIRED" timeout="-1" no-rollback-for="" rollback-for="">
+        ```
+```
+    
     ```
-
+    
 - **anno配置事务**
     - 开启注解扫描
+        
         - `<context:component-scan base-package="com.ssm.service" />`
     - dataSource 是支持类需要的`JdbcDaoSupport`需要的，并不是`mapper`层需要
         - 调用父类的方法给父类赋值
@@ -1205,6 +1216,7 @@ public void jdk () {
             }
         ```
     - 开启事务注解驱动   
+        
         - `<tx:annotation-driven transaction-manage="transactionManager" />`
 
 
@@ -1225,8 +1237,9 @@ public void jdk () {
     - 父类中看源码`DispatcherServlet.java`
     - SpringMVC都是面向接口，需要配置对应的实现, 而且实现的方式有很多种
 - **映射器**
-    - `HandlerMapping` -- `BeanNameUrlHandlerMapping`将URL映射成对应对象的名称    
-
+    
+- `HandlerMapping` -- `BeanNameUrlHandlerMapping`将URL映射成对应对象的名称    
+    
 - **适配器**
     - `HandlerAdapter` -- `SimpleControllerHandlerAdapter`: 处理器必须是Controller接口的实现类
     ```java
@@ -1302,7 +1315,7 @@ public void jdk () {
 
 - 组合注解
 
-### processing data 接收数据和绑定数据
+### 接收数据和绑定数据
 - `Servlet`内置对象：request，response，session
     - ```java
         @RequestMapping("show13")
@@ -1315,14 +1328,19 @@ public void jdk () {
             mv.addObject("msg", "springmvc接受的servlet内置对象:" + stringBuffer);
             return mv;
         }
+        ```
+```
+    
     ```
-
+    
 - `Model model`
-    - `model.addAttribute("msg", "model")` 会覆盖 `request.setAttribute("msg", "request")`
-
+    
+- `model.addAttribute("msg", "model")` 会覆盖 `request.setAttribute("msg", "request")`
+    
 - `cookie`
-    - `public String test(@CookieValue(value = "JSESSIONID") String cok, Model model) {`
-
+    
+- `public String test(@CookieValue(value = "JSESSIONID") String cok, Model model) {`
+    
 - `url`中的请求参数
     - `public String test(@RequestParam(value = "username", required = false) String name, Model model) {`
     - `public String test(@RequestParam(value = "username", defaultValue = "goodman") String name, Model model) {`
@@ -1346,8 +1364,11 @@ public void jdk () {
             sb.append("interests:" + Arrays.toString(interests) + "\r\n");
             System.out.println("sb = " + sb);
         }
+        ```
+```
+    
     ```
-
+    
 - POJO对象的绑定：获取前端的数组最终也是赋值给实体类
     - 前端传过来的对象的key值和set方法名的后缀要保持一致
     ```java
@@ -1387,8 +1408,11 @@ public void jdk () {
                 <bean class="com.ssm.interceptor.MyInterceptor2"/>
             </mvc:interceptor>
         </mvc:interceptors>
-    ```    
-
+        ```
+```    
+    
+    ```
+    
 - **拦截器和过滤器区别**
     - `Fileter`: 针对`Servlet`, 所有的请求
     - `Interceptor`: 针对处理器方法

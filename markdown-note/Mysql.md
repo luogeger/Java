@@ -1,4 +1,4 @@
-# Mysql
+Mysql
 
 - 范式
     - 原子性，不可拆分
@@ -47,27 +47,61 @@
 ```sql
 create table if not exists user
 (
-  id          int(20) auto_increment comment '自增ID'
-    primary key,
+  id          int(20) auto_increment                         comment '自增ID' primary key,
   name        varchar(32) default ''                not null comment '姓名',
   age         int(8)      default 0                 not null comment '年龄',
   create_time timestamp   default CURRENT_TIMESTAMP not null comment '创建时间',
   update_time timestamp   default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间'
 )
   comment '用户表';
-  
-  
-# 增加字段
-alter table tt_user add password varchar(20) not null default '' comment '用户密码';
-alter table tt_user add teacher varchar(20) not null default '' comment '老师';
-alter table tt_user add course varchar(20) not null default '' comment '课程';
+```
 
-# 修改表字段
-alter table tt_user modify age int(4) not null default -1 comment '用户年龄';
+- 修改表名      `rename table <oldName> to <newName>`
 
-# 删除字段
-alter table tt_user drop password;
+- 删除表        `drop table <tableName>` **表不存在了**
 
+- 删除表再新建   `truncate <tableName>` **清空**
+
+- 查看表编码     `show create table <tableName>`
+
+- 修改表编码     `alter table <tableName> character set <utf8>`
+
+- 增加字段       `alter table <tableName> add <fileName> <type>(length)`
+
+    ```sql
+    # 增加字段
+    alter table tt_user add password varchar(20) not null default '' comment '用户密码';
+    alter table tt_user add teacher varchar(20) not null default '' comment '老师';
+    alter table tt_user add course varchar(20) not null default '' comment '课程';
+    ```
+
+- 删除字段       `alter table <tableName> drop <filedName>`
+
+    ```sql
+    # 删除字段
+    alter table tt_user drop password;
+    ```
+
+- 修改字段   `alter table <tableName> modify id int(11) auto_increment;`
+
+    ```sql
+    # 修改表字段
+    alter table tt_user modify age int(4) not null default -1 comment '用户年龄';
+    ```
+
+**约束**
+
+- 主键    `primary key`   
+- 自增长   `auto_increment`
+- 唯一    `unique`
+- 非空    `not null`
+
+**索引**    
+
+- 唯一索引
+- 联引索引
+
+```sql
 # 添加索引
 alter table tt_user add index index_name(name);
 
@@ -78,21 +112,17 @@ alter table tt_user add unique unique_name(name);
 alter table tt_user add index joint_index(teacher, course);
 ```
 
-- 修改表名      `rename table <oldName> to <newName>`
-- 删除表        `drop table <tableName>` **表不存在了**
-- 删除表再新建   `truncate <tableName>` **清空**
-- 查看表编码     `show create table <tableName>`
-- 修改表编码     `alter table <tableName> character set <utf8>`
-- 增加字段       `alter table <tableName> add <fileName> <type>(length)`
-- 删除字段       `alter table <tableName> drop <filedName>`
-- 字段约束
-    - 主键    `primary key`   
-    - 自增长   `auto_increment`
-    - 唯一    `unique`
-    - 非空    `not null`
-- 字段(名字、类型、长度、约束)的添加和修改，都相当于是重写 
-    - `alter table <tableName> modify id int(11) auto_increment;`
-- 添加索引    
+
+
+
+
+
+
+
+
+
+
+
 
 ### DML
 	数据操纵语言Data Manipulation Language，  insert， create， update操作
@@ -781,6 +811,8 @@ device_id加了索引以后
 
 
 
+> **索引没有命中**
+
 
 
 
@@ -1143,6 +1175,61 @@ select * from emp where sal>all(select sal from emp where deptno=30);
 **rownum,  rowid 两者之间的区别**
 
 - rownum不是表中原本的数据，只是在查询的时候才生成的。rowID是插入数据的时候产生。
+
+### 数据操作
+
+- `insert`
+- `update`
+- `delete`
+
+
+
+
+
+### 事务
+
+**事务的开始和结束**
+
+- **开始：** 以第一个DML语句(`insert`， `update`， `delete`)的执行作为开始，即是自动开启的事务。
+- **结束：** 
+    - 显式结束：`commit`， `rollback`（还是隐式`commit`）
+    - 隐式结束（自动提交）：DDL（`create table…`）和DCL（所以不能回滚 ），`exit`(事务正常退出)
+    -  隐式回滚（系统异常终止）：关闭窗口，死机，掉电。
+
+**事务控制**
+
+- `savepoint`
+- `rollback`
+
+
+
+### 数据库对象
+
+
+
+### 约束
+
+
+
+### 序列 Sequence
+
+
+
+### 视图 View
+
+
+
+### 同义词 Synonym
+
+
+
+### 索引 Index
+
+
+
+
+
+
 
 
 

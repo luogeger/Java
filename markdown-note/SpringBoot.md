@@ -1,6 +1,21 @@
 # RESTful 
 
+
+
+
+
+
+
+<img src="C:\PC\workspace\Java\markdown-note\imgs\image-20200309201925267.png" alt="image-20200309201925267" style="zoom:150%;" />
+
+<img src="C:\PC\workspace\Java\markdown-note\imgs\image-20200309201943627.png" alt="image-20200309201943627" style="zoom:150%;" />
+
+
+
+
+
 - **REST**: `Representational State Transfer`表述性状态转移
+    
     - web服务的一种**架构风格**
     - 使用HTTP、URI、JSON、HTML等广泛流行的**标准和协议**
     - 轻量级、跨平台、跨语言的**架构设计**
@@ -18,6 +33,7 @@
     - 符合REST原则的架构方式就可以称为`RESTful`    
     
 - **REST**: 架构设计
+    
     - 接口`URL`
     - `URL`的组成
         - 网络协议`http`, `https`
@@ -31,28 +47,9 @@
     - 响应
         - `Content body`仅仅用来传输数据，不需要拆箱
         - 描述数据或请求的 **元数据**放在`Header`中，例：`X-Result-Fields`
-    - 指定响应属性字段
-        - 错误响应
-        ```json
-            {
-                "status": 200,
-                "data": {
-                    "trade_id": 1234,
-                    "trade_name": "lucy"
-                }
-            }
-        ```
-        - 正确响应
-        ```json
-            Response Headers:
-                Status: 200
-            Response Body:
-                {
-                    "trade_id": 1234,
-                    "trade_name": "lucy"
-                }                
-        ```
-
+        
+        ​       
+    
 - **Status Code**
     - [常见状态码](https://www.cnblogs.com/phpfeng/p/9247142.html)
     - 200 `OK`查询成功
@@ -105,7 +102,7 @@
 - 总结，SpringBoot只是承载者，辅助简化搭建项目的过程。如果承载的是WEB项目，使用的是SpringMVC的框架，工作流程是SpringMVC在做，并不是SpringBoot，但是配置文件少，也不需要单独配置tomcat。maven打出来的jar包跑起来就就是网站。但是业务逻辑实现和业务流程实现并没有发生任何变化。
 
 
-    
+​    
 
 
 ### starter启动器
@@ -127,8 +124,11 @@
                 return "1 - two";
             }
         }
+        ```
     ```
-   
+    
+    ```
+
 
 
 ### java配置   
@@ -184,14 +184,17 @@
 > java配置方式。属性注入使用的是`@Value`注解。这种方式虽然可行，但是不够强大，因为它只能注入**基本类型值**。在SpringBoot中，提供了新的属性注入方式，支持各种java**基本数据**及**复杂数据**的注入。
 
 - **属性类**读取资源配置文件
-    - `SpringBoot`在启动时会默认读取`application.properties`或`application.yml`文件，属性类添加`@ConfiguratiionProperties(prefix = "jdbc")`读取资源文件的前缀数据
-
+    
+- `SpringBoot`在启动时会默认读取`application.properties`或`application.yml`文件，属性类添加`@ConfiguratiionProperties(prefix = "jdbc")`读取资源文件的前缀数据
+    
 - **构造方法**
+    
     - 不用`@Autowired`注入，通过构造方法注入
     
 - `@Bean`方法形参的方式注入
-    - 连`全局属性`都不需要了
-
+    
+- 连`全局属性`都不需要了
+    
 - `@Bean`配合`@ConfigurationProperties(prefix = "jdbc")`
     - **属性类**都不需要了
     - `@EnableConfigurationProperties(JdbcProperties.class)`不需要了
@@ -237,7 +240,7 @@
     - 覆盖默认配置
 
 - **transaction**
- 
+
 
 ### mapper
 - jdbc
@@ -324,6 +327,9 @@
     - 版本号
         - ```xml
             <spring-cloud.version>Finchley.SR2</spring-cloud.version>
+            ```
+        ```
+        
         ```
     - 依赖管理
         - ```xml
@@ -338,6 +344,9 @@
                     </dependency>
                 </dependencies>
             </dependencyManagement>
+            ```
+        ```
+        
         ```
     - 组件
         - ```xml
@@ -345,17 +354,22 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
             </dependency>
+            ```
+        ```
+        
         ```
 - `application.yml` 注册到服务中心
     - `spring.application.name` : `provider_service`
     - `erueka.client.service-url.defaultZone` : `http://localhost:10086/eureka`
 - `ProviderApplication.java` 启动客户端功能
+    
     - `@EnableDiscoveryClient` : `SpringCloud`
 
 > **service-consumer**    
 
 - 和 **provider_service**配置一样，但是消费服务要动态的从服务列表中获取服务实例
     - 在`UserController.java`使用`DiscoveryClient`类
+        
         - `import org.springframework.cloud.client.discovery.DiscoveryClient;`
     - 获取对应的服务实例，需要知道服务名字`provider_service`
     - ```java
@@ -363,11 +377,11 @@
         @RequestMapping("customer/user")
         public class UserController {
             @Autowired
-            private RestTemplate restTemplate;
-
+        private RestTemplate restTemplate;
+    
             @Autowired
-            private DiscoveryClient discoveryClient; // eureka客户端，可以获取到eureka中服务的信息
-
+        private DiscoveryClient discoveryClient; // eureka客户端，可以获取到eureka中服务的信息
+    
             @GetMapping
             @ResponseBody
             public User queryUserById(@RequestParam("id") Long id){
@@ -382,6 +396,9 @@
                 return user;
             }
         }
+        ```
+    ```
+    
     ```
 
 #### 高可用的Eureka Server
@@ -407,11 +424,14 @@
             instance:
                 lease-expiration-duration-in-seconds: 90
                 lease-renewal-interval-in-seconds: 30
+        ```
     ```
     - `lease-renewal-interval-in-seconds` ：服务续约(renew)的间隔，默认为30秒
-    - `lease-expiration-duration-in-seconds` ：服务失效时间，默认值90秒
-
+- `lease-expiration-duration-in-seconds` ：服务失效时间，默认值90秒
     
+    
+    ```
+
 默认情况下，间隔30秒服务会向注册中心发送一次心跳，证明自己还活着。如果超过90秒没有发送心跳，EurekaServer会认为这个服务宕机，会从服务列表中移除，这个两个值在生产环境不需要修改，默认就行。但是在开发环境中，时间太长，我们会关掉一个服务，会返现EurekaServer依然认为服务还活着。
     
 
@@ -422,16 +442,22 @@
         eureka:
             client:
                 registry-fetch-interval-seconds: 5
+        ```
+```
+    
     ```
-
+    
 - **服务下线**：服务正常关闭，会触发一个服务下线的Rest请求给EurekaServer，通知服务中心自己已经下线，服务中心接到通知会把该服务设置为下线状态。
 
 - **失效剔除**：但是服务的关闭一般是非正常的，大多数是因为内存溢出，网络故障等原因导致无法工作。所以EurekaServer会开启一个定时任务，间隔60秒对所有失效的服务(超过90秒未响应)进行剔除。这个时间值在开发阶段极不方便，你重启服务了，EurekaServer需要60秒才能反应过来，所以需要重置时间值。
     - ```yaml
         server:
             eviction-interval-timer-in-ms: 10000 #单位是毫秒
-    ```     
-
+        ```
+```     
+    
+    ```
+    
 - **自我保护**：当服务未按时进行心跳续约时，EurekaServer会统计最近15分钟心跳失败的服务实例的比例是否超过了85%。因为在线上环境下，因为网络延迟等原因，心跳失败的比例很有可能超标，此时把服务从列表中剔除是不妥当的，因为服务可能并没有宕机。这时候，EurekaServer就会把当前实例的注册信息保护起来，不会剔除。在生产环境下这种方式很有效，保证了大多数服务依然可用。
     - 但是这种机制，在开发阶段会很麻烦，因此，在开发阶段需要关闭自我保护
     - `service_eureka`
@@ -440,18 +466,19 @@
         server:
             enable-self-preservation: false # 关闭自我保护模式（缺省为打开）
             eviction-interval-timer-in-ms: 1000 # 扫描失效服务的间隔时间（缺省为60*1000ms）
-    ```
-
+        ```
+```
+    
     - 当关停一个服务，会在EurekaServer面板看到一条警告
     - ```bash
         emergency! eureka may be incorrectly claiming instances are up when they're not. 
         renewals are lesser than threshold and hence the instances are not being expired judt to be safe. 
-        DS replicas
-
+    DS replicas
+    
         紧急！ eureka可能会错误地声称实例在不存在的情况下会被启动。 
         续订小于阈值，因此实例未过期判断为安全。
         DS副本
-    ```    
+    ```
 
 ### Ribbon
 - Ribbon是Netflix发布的负载均衡器，助于控制HTTP合同TCP客户端的行为。为Ribbon配置服务提供者地址列表以后，可以基于算法，自动地帮助服务消费者去请求。Ribbon默认提供了一些算法，轮询、随机...
@@ -461,13 +488,17 @@
 - 测试
     - 启动多个服务提供者
     - ip，端口的配置，在`provider-service`
+        
         - `instance: prefer-ip-address: false`,  `instance: ip-address: 192.168.150.1`
     - 随机的测试，在`consumer.yml`配置
         - ```yaml
             provider-service: #提供者的id
                 ribbon:
                     NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+            ```
         ```        
+        
+        ```
 
 ### Hystrix
 - Hystix是Netflix开源的一个延迟和容错库，用于隔离访问远程服务、第三方库，防止出现级联失败。
@@ -484,7 +515,10 @@
         requestVolumeThreshold：触发熔断的最小请求次数，默认20
         errorThresholdPercentage：触发熔断的失败请求最小占比，默认50%
         sleepWindowInMilliseconds：休眠时长，默认是5000毫秒
+        ```
     ```    
+    
+    ```
 
 
 > **服务降级**：优先保证核心服务，而非核心服务不可用或弱可用。用户的请求故障时，不会被阻塞，更不会无休止的等待或看到系统崩溃，至少可以看到一个执行结果(返回友好提示)。服务降级虽然会导致**请求失败**，但是不会导致阻塞，最多对这个依赖服务对应的线程池中的资源造成影响，**最主要**的是不会对其他服务有影响，更快的释放资源，不至于宕机。
@@ -895,7 +929,7 @@ hystrix:
 
 
 
- 
+
 # RabbitMQ
 
 - MQ是消息通信的模型，并不是具体实现。是一种**应用程序**对**应用程序**的通信方法。应用程序通过读写出入队列的消息来通信，。同于直接调用彼此来通信，例如`feign`的**远程过程调用**技术。MQ的有两种主流方式
@@ -1057,6 +1091,7 @@ public class GoodsListener {
         - 默认情况只允许本地连接
             - `network.host: 0.0.0.0`(允许所有ip访问)
 - 运行
+    
     - `bin`目录执行`./elasticsearch`, 会有**4**个报错
 
 ```text
@@ -1087,13 +1122,16 @@ public class GoodsListener {
         - `vim /etc/security/limits.d/90-nproc.conf`
             - `soft nproc 1024` 修改为 `4096`
     - `3` 虚拟内存不够: `vm.max_map_count`限制一个进程可以拥有的VMA(虚拟内存区域)的数量
+        
         - `vim /etc/sysctl.conf` 添加 `vm.max_map_count=655360` 执行 `sysctl -p` 刷新
     - **切换youyou用户**再次执行， 部分用户修改完毕需要重启终端，否则配置无效
     - 启动很慢，成功以后`publish_address {192.168.150.129:9200}, bound_addresses {[::]:9200}`
+        
         - `9200`：独立端口，`9300`：云服务端口
 
 ### Kibana   
 - 修改配置，`config\kibana.yml`
+    
     - `elasticsearch.url: "http://192.168.150.129:9200"`
 - 双击`bin\kibana.bat`启动
 
@@ -1103,11 +1141,14 @@ public class GoodsListener {
         {
             "text":     "我是中国人"
         }
+        ```
     ```
     - 发现不能中文分词
+    ```
 - 安装`ik-analysis`
     - 复制到`/home/youyou/elasticsearch/plugins`目录下
     - `unzip elasticsearch.6.3.0.zip -d ik-analyzer`：解压到当前新建的`ik-analyzer`目录下
+        
         - **一定要删除解压包**, 再重新启动
     - 测试ik分词器
     - ```text
@@ -1116,6 +1157,9 @@ public class GoodsListener {
             "analyzer": "ik_max_word",
             "text":     "我是中国人"
         }
+        ```
+    ```
+    
     ```
 
 ### API
@@ -1136,11 +1180,16 @@ public class GoodsListener {
                 "number_of_replicas": 0
             }
         }
+        ```
+```
+    
     ```
-
+    
 - 查看索引库：`GET second`
+    
     - 查看所有的索引库：`GET *`
 - 删除索引库：`DELETE second`
+    
     -     
 
 
@@ -1185,8 +1234,9 @@ public class GoodsListener {
 #### 创建索引
 
 - `Document` 文档类 
-    - 文档对象，是一条原始的数据
-
+    
+- 文档对象，是一条原始的数据
+    
 - `Field` 字段类 
     - 一个Document中可以有很多个不同的字段，每一个字段都是一个Field类的对象。一个Document中的每个字段类型是不确定的，   所以Field类就提供了不同的子类
     - Field子类一定会被创建索引，但是不一定会被存储。需要同过构造函数中的参数`Store`来指定
@@ -1503,10 +1553,10 @@ solr
             <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /> 
             <field name="title" type="text_ik" indexed="true" stored="true" multiValued="false"/>
             <field name="text" type="text_ik" indexed="true" stored="false" multiValued="true"/>
-
+    
             <dynamicField name="*_i"  type="int"    indexed="true"  stored="true"/>
             <uniqueKey>id</uniqueKey>
-
+    
             <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
             <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
             <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
@@ -1589,8 +1639,9 @@ solr
     ```
 
 - 数据库连接驱动jar包, 放在`tomcat\webapps\solr\WEB-INF\lib`目录下
-    - `mysql-connector-java-5.1.32.jar`
-
+    
+- `mysql-connector-java-5.1.32.jar`
+    
 - tomcat启动报错：`Error initializing QueryElevationComponent`
     - 因为修改了`id`字段的类型，`core\conf\solrconfig.xml`配置文件中的组件出错，注释即可
     ```xml
