@@ -1,5 +1,6 @@
 package com.first.lambda;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +15,9 @@ public class LambdaTest {
     private List<Person> personList;
 
 
-
+    /**
+     * 准备数据
+     */
     @Before
     public void before1() {
         personList = Arrays.asList(
@@ -25,12 +28,12 @@ public class LambdaTest {
     }
 
 
+    /**
+     * 测试数据
+     */
     @Test
     public void main1 () {
         personList.forEach(System.out::println);
-
-
-
     }
 
 
@@ -52,17 +55,39 @@ public class LambdaTest {
         };
         myLambdaInterfaceImpl.doSomething("hello jdk1.7");
 
-        // 完整的Lambda表达式声明：
+        // 完整的Lambda表达式声明：其实Lambda就是个匿名类，只不过这个匿名类实现的接口只有一个抽象方法，我们只需要编写这个方法体就行了。
         MyLambdaInterface lambdaImpl = (str) -> System.out.println(str);
         // 执行方法体
         lambdaImpl.doSomething("hello lambda");
 
+
     }
 
 
+    /**
+     * 仿写Lambda
+     */
     @Test
     public void main3 () {
+        MyCheckName myCheckName = (Person p) -> StringUtils.startsWith( p.getFirstName(), "Z");
+        MyExecutor myExecutor = (Person person) -> System.out.println(person.getFirstName());
 
+        checkEndExecutor(personList, myCheckName, myExecutor);
+    }
+
+    /**
+     *
+     * @param list
+     * @param checkName
+     * @param executor
+     */
+    public static void checkEndExecutor(List<Person> list, MyCheckName checkName, MyExecutor executor) {
+        for (Person person : list) {
+            Boolean flag = checkName.check(person);
+            if (flag) {
+                executor.print(person);
+            }
+        }
     }
 
 
