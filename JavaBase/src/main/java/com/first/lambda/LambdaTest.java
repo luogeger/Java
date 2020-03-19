@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * @author luoxiaoqing
@@ -70,13 +72,25 @@ public class LambdaTest {
     @Test
     public void main3 () {
         MyCheckName myCheckName = (Person p) -> StringUtils.startsWith( p.getFirstName(), "Z");
-        MyExecutor myExecutor = (Person person) -> System.out.println(person.getFirstName());
+        MyExecutor myExecutor = (Person person) -> System.out.println(person.getFirstName() +" "+person.getLastName());
 
         checkEndExecutor(personList, myCheckName, myExecutor);
     }
 
     /**
-     *
+     * Lambda实现jdk的函数式接口
+     */
+    @Test
+    public void main4 () {
+        Predicate<Person> predicate = (Person p) -> StringUtils.startsWith( p.getFirstName(), "G");
+        Consumer<Person> consumer = (Person person) -> System.out.println(person.getFirstName() +" "+person.getLastName());
+        //checkEndExecutor(personList, predicate, consumer);
+
+        // 利用stream()替代静态函数 
+    }
+
+    /**
+     * 自定义函数式接口执行
      * @param list
      * @param checkName
      * @param executor
@@ -89,6 +103,34 @@ public class LambdaTest {
             }
         }
     }
+
+    /**
+     * Lambda（实现类，匿名类，方法体）作为参数传递
+     * @param list
+     * @param predicate
+     * @param consumer
+     */
+    public static void checkEndExecutor(List<Person> list, Predicate<Person> predicate, Consumer<Person> consumer) {
+        for (Person person : list) {
+            boolean test = predicate.test(person);
+            if (test) {
+                consumer.accept(person);
+            }
+        }
+
+        // forEach遍历
+        list.forEach(p -> {
+            boolean test = predicate.test(p);
+            if (test) {
+                consumer.accept(p);
+            }
+        });
+    }
+
+
+
+
+
 
 
 
