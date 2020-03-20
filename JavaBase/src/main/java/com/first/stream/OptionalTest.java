@@ -41,7 +41,7 @@ public class OptionalTest {
         Optional<String> o2 = Optional.ofNullable("lucy");
 
         System.out.println(o1);
-        // == Optional.empty
+        // Optional.empty
 
     }
 
