@@ -2,10 +2,6 @@
  `font-family: 'Source Code Pro','DejaVu Sans Mono','Ubuntu Mono','Anonymous Pro','Droid Sans Mono',Menlo,Monaco,Consolas,Inconsolata,Courier,monospace,"PingFang SC","Microsoft YaHei",sans-serif;`
 
 
-- 持久层
-- 业务层
-- 控制层
-
 - jdbc是获取数据源执行sql语句
 - 读取核心配置文件获取sqlSessionFactory, 在获取sqlSession对象，执行mapper.xml的sql语句
     - sqlSession是mybatis通过动态代理产生，过程很麻烦，`sqlSession.getMapper(UserMapper.class)`
