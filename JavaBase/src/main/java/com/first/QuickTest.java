@@ -19,7 +19,7 @@ public class QuickTest {
 
         System.out.println("image".toLowerCase());
 
-
-
     }
+
+
 }
