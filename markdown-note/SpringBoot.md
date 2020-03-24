@@ -1425,7 +1425,7 @@ public class CRUD {
     }
 
     // 修改索引
-    // a: lucene修改功能底层会先删除，再添加
+    // result: lucene修改功能底层会先删除，再添加
     // b: 修改功能会根据Term进行匹配，所有匹配到的都会被删除，不安全
     // c: 所以，一般修改的时候，会根据唯一不重复字段进行匹配修改，(ID)
     // d: 但是，词条搜索要求ID必须是字符串，如果不是这个方法就不能用
@@ -1446,7 +1446,7 @@ public class CRUD {
     }
 
     // 删除索引
-    // a: 根据ID精确删除
+    // result: 根据ID精确删除
     // b: 如果是用Term删除，要求ID是字符串类型
     @Test
     public void test12 () throws Exception{
@@ -1646,7 +1646,7 @@ solr
     - 因为修改了`id`字段的类型，`core\conf\solrconfig.xml`配置文件中的组件出错，注释即可
     ```xml
     <searchComponent name="elevator" class="solr.QueryElevationComponent" >
-        <!-- pick a fieldType to analyze queries -->
+        <!-- pick result fieldType to analyze queries -->
         <str name="queryFieldType">string</str>
         <str name="config-file">elevate.xml</str>
     </searchComponent>

@@ -251,28 +251,28 @@ alter table tt_user add index joint_index(teacher, course);
     select * from b_product, b_price
     
     # 隐式内连接
-    select * from b_product as a, b_price as b where a.id = b.b_product_id 
+    select * from b_product as result, b_price as b where result.id = b.b_product_id 
     
     # 显示内连接
-    select * from b_product as a inner join b_price as b on a.id = b.b_product_id 
+    select * from b_product as result inner join b_price as b on result.id = b.b_product_id 
     
     # 左外连接
-    select * from b_product as a left outer join b_price as b on a.id = b.b_product_id 
+    select * from b_product as result left outer join b_price as b on result.id = b.b_product_id 
 
     select b.*, s.dict_name from brand as b left outer join	system_dict as s on	b.exhibition_type = s.id
     
     # 右外连接
-    select * from b_product as a right outer join b_price as b on a.id = b.b_product_id 
+    select * from b_product as result right outer join b_price as b on result.id = b.b_product_id 
     
     # 全连接 会自动去重
-    select * from b_product as a left outer join b_price as b on a.id = b.b_product_id 
+    select * from b_product as result left outer join b_price as b on result.id = b.b_product_id 
     union 
-    select * from b_product as a right outer join b_price as b on a.id = b.b_product_id 
+    select * from b_product as result right outer join b_price as b on result.id = b.b_product_id 
     
     # 全连接 不会去重
-    select * from b_product as a left outer join b_price as b on a.id = b.b_product_id 
+    select * from b_product as result left outer join b_price as b on result.id = b.b_product_id 
     union all
-    select * from b_product as a right outer join b_price as b on a.id = b.b_product_id 
+    select * from b_product as result right outer join b_price as b on result.id = b.b_product_id 
 ```
 
 
@@ -954,10 +954,10 @@ device_id加了索引以后
 
 - 滤空函数：也称为通用函数，其特点是：适用于任何数据类型，同时也适用于空值。
 
-    - `nvl(a,c)`，当a为null的时候，返回c，否则，返回a本身。
-    - `nvl2(a,b,c)`,当a为null的时候，返回c，否则返回b—三元运算
-    - `nullif(a,b)`,当a=b的时候，返回null，否则返回a
-    - `coalesce(a,b,c,d)`，从左往右查找，当找到第一个不为null的值的时候，就显示这第一个有值的值。
+    - `nvl(result,c)`，当a为null的时候，返回c，否则，返回a本身。
+    - `nvl2(result,b,c)`,当a为null的时候，返回c，否则返回b—三元运算
+    - `nullif(result,b)`,当a=b的时候，返回null，否则返回a
+    - `coalesce(result,b,c,d)`，从左往右查找，当找到第一个不为null的值的时候，就显示这第一个有值的值。
 
 - 条件表达式
 
@@ -1101,8 +1101,8 @@ select * from emp where sal>all(select sal from emp where deptno=30);
 
 **多行子查询和单行子查询之间的联系：**
 
-- `> any(a, b, c)` === `> a or > b or > c `
-- `> all(a, b, c)`  === `> a and > b and > c`
+- `> any(result, b, c)` === `> result or > b or > c `
+- `> all(result, b, c)`  === `> result and > b and > c`
 
 **子查询注意事项：**
 

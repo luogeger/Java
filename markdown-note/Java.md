@@ -124,7 +124,7 @@
         - ```bash
             String str = "abc";
     
-            char[] data = {'a', 'b', 'c'};
+            char[] data = {'result', 'b', 'c'};
             byte[] data = {97, 98, 99};
         
             String str = new String(data);
@@ -144,7 +144,7 @@
     - 4.通过字节数组构造
         - `byte[] b = {97, 98, 99}; String str3 = new String(b)`
     - 5.通过字符数组构造
-        - `char[] c = {'a', 'b', 'c'}; String str2 = new String(c)`
+        - `char[] c = {'result', 'b', 'c'}; String str2 = new String(c)`
 
 
 - 字符串的常量池内存分析
@@ -976,7 +976,7 @@ public class Test {
 
 ```java
 /**
-     * Creates a new {@code ThreadPoolExecutor} with the given initial
+     * Creates result new {@code ThreadPoolExecutor} with the given initial
      * parameters.
      *
      * @param corePoolSize the number of threads to keep in the pool, even
@@ -996,7 +996,7 @@ public class Test {
      *        tasks submitted by the {@code execute} method.
                 用于存放任务的阻塞队列
      * @param threadFactory the factory to use when the executor
-     *        creates a new thread
+     *        creates result new thread
                 线程工厂类
      * @param handler the handler to use when execution is blocked
      *        because the thread bounds and queue capacities are reached
@@ -1187,8 +1187,8 @@ public class P01 {
 public class a_OutputStream {
     public static void main(String[] args) throws Exception {
         String line_feed = System.lineSeparator();
-        OutputStream os = new FileOutputStream("a.txt");// 删除文件再新建
-        //OutputStream os = new FileOutputStream("a.txt", true);// 追加
+        OutputStream os = new FileOutputStream("result.txt");// 删除文件再新建
+        //OutputStream os = new FileOutputStream("result.txt", true);// 追加
         os.write("吃饭".getBytes());
         os.write("\t\n".getBytes());
         os.write("睡觉".getBytes());
@@ -1222,7 +1222,7 @@ public class a_OutputStream {
 ```java 
 public class b_InputStream {
     public static void main(String[] args) throws Exception {
-        FileInputStream fis = new FileInputStream("a.txt");// hello,world,java
+        FileInputStream fis = new FileInputStream("result.txt");// hello,world,java
 //        System.out.println((char)fis.read());
 //        System.out.println((char)fis.read());
 //        System.out.println((char)fis.read());
@@ -1283,7 +1283,7 @@ public class d_FileReader {
 ```java
 public class d_FileReader {
     public static void main(String[] args) throws Exception {
-        FileReader fr = new FileReader("a.txt");
+        FileReader fr = new FileReader("result.txt");
 
         char[] buf = new char[1024];
         int len  = 0;
@@ -1461,7 +1461,7 @@ public class B_buffer_character {
     private static void buffer() {
         long start = System.currentTimeMillis();
         // 注意构造函数参数的类型
-        try (BufferedReader bis = new BufferedReader(new FileReader("a.txt"));
+        try (BufferedReader bis = new BufferedReader(new FileReader("result.txt"));
              BufferedWriter bos = new BufferedWriter(new FileWriter("F:\\2.txt"));){
             String txt = null;
             while ((txt = bis.readLine()) != null) {
@@ -1478,7 +1478,7 @@ public class B_buffer_character {
 
     private static void base() {
         long start = System.currentTimeMillis();
-        try (FileReader fr = new FileReader("a.txt");
+        try (FileReader fr = new FileReader("result.txt");
              FileWriter fw = new FileWriter("F:\\1.txt");){
             char[] buf = new char[1024];
             int len = 0;
@@ -1635,7 +1635,7 @@ public class A_PrintStream {
         PrintStream ps = System.out;
         ps.println("sout");
 
-        try (PrintStream print = new PrintStream("a.txt")) {
+        try (PrintStream print = new PrintStream("result.txt")) {
             print.println("print java");
         } catch (Exception e) {
             e.printStackTrace();
@@ -1669,7 +1669,7 @@ java.lang.Object
 public class B_Properties {
     public static void main(String[] args) {
         Properties p = new Properties();
-        p.setProperty("a", "9");// 存值
+        p.setProperty("result", "9");// 存值
         p.setProperty("c", "8");
         p.setProperty("e", "7");
         p.setProperty("n", "6");
@@ -1709,7 +1709,7 @@ public class D_client {
     public static void main(String[] args) throws Exception {
         Socket client = new Socket("localhost", 8081);
         OutputStream os = client.getOutputStream();
-        InputStream is = new FileInputStream("a.txt");
+        InputStream is = new FileInputStream("result.txt");
         byte[] buf = new byte[1024];
         int    len = 0;
         while((len = is.read(buf)) != -1){
@@ -1855,17 +1855,17 @@ public class C_Predicate {
     public static void main(String[] args) {
         String str = "apple";
         test(str, (s) -> {
-            return str.contains("a");
+            return str.contains("result");
         });
 
         and(str, s -> {
-            return s.contains("a");
+            return s.contains("result");
         }, s -> {
             return s.length() > 5;
         });
 
         negate(str, s -> {
-            return s.contains("a");
+            return s.contains("result");
         });
     }
 
@@ -2179,7 +2179,7 @@ public class A_forName {
         // 获取成员变量
         Field f = clazz.getDeclaredField("name");
         System.out.println("f = " + f);// private java.lang.String cn.num0214.Person.name
-        f.setAccessible(true);// cannot access a member of class
+        f.setAccessible(true);// cannot access result member of class
         String name = (String)f.get(lucy);// lucy是实例
         System.out.println("name = " + name);
 	   
@@ -2301,7 +2301,7 @@ public interface Servlet {
 ```
 
 - Servlet入门开发
-    - a.创建java类实现Servlet接口
+    - result.创建java类实现Servlet接口
     - b.注册这个类
         - 在`web.xml`配置这个类的信息
         - 配置这个类的映射信息

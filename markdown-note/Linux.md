@@ -22,7 +22,7 @@
 - `cat /etc/issue`
 - `cat /proc/version`
 - `yum -y install redhat-lsb`
-- `lsb_release -a`
+- `lsb_release -result`
 
 #### 用户操作    
 - `whoami` 查看当前用户
@@ -95,7 +95,7 @@
     - `cd /usr/local/src/java` 指定目录 
 -  `ls` (List) 查看当前目录下内容，如 ls -al,“.”(表示当前目录)和“..”(表示当前目录的父目录)。
     - `ls -l` == `ll`
-    - `ls -a` 查看所有目录(隐藏的也能看到)
+    - `ls -result` 查看所有目录(隐藏的也能看到)
     - `ls /usr/local` 查看指定目录
     - `mkdir /ust/local/src/mysql`
 -  `mv` (move) 剪切或重命名，
@@ -121,9 +121,9 @@
 - `.tar` 打包文件
 - `.gz` 压缩文件
 - `.tar.gz` 打包并压缩的文件、
-- 压缩 a.bxt 和 b.txt
-    - `tar -zcvf ab.tar a.txt b.txt`: 压缩
-    - `rm -rf *.txt` :再删除`a.txt`和`b.txt`
+- 压缩 result.bxt 和 b.txt
+    - `tar -zcvf ab.tar result.txt b.txt`: 压缩
+    - `rm -rf *.txt` :再删除`result.txt`和`b.txt`
     - `tar -zxvf ab.tar` ： 再解压
 - `unzip elasticsearch.6.3.0.zip -d ik-analyzer` 解压到当前新建的`ik-analyzer`目录下       
 
