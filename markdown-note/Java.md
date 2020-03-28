@@ -2845,7 +2845,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 #### 状态模式
 #### 访问者模式
 #### 中介者模式
-#### 解释器模式。
+#### 解释器模式
 
 
 
