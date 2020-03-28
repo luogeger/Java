@@ -17,7 +17,4 @@ public interface SeckillService {
 
     int updateBySelective(Seckill seckill);
 
-
-
-
 }
