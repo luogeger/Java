@@ -1,5 +1,6 @@
 package com.first.seckill.seckilldemo.controller;
 
+import com.first.seckill.seckilldemo.config.RedisService;
 import com.first.seckill.seckilldemo.entity.User;
 import com.first.seckill.seckilldemo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class SampleController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    RedisService redisService;
+
     @GetMapping("/thyme")
     public String thymeleaf (Model model) {
         model.addAttribute("name", "luoxiaoqing");
@@ -30,6 +34,18 @@ public class SampleController {
         User user = userService.selectOneById(id);
         return user;
     }
+
+    @GetMapping("/tx")
+    public void tx() {
+        userService.tx();
+    }
+
+    @GetMapping("/redis")
+    public String redis() {
+        String name = redisService.get("username", String.class);
+        return name;
+    }
+
 
 
 }

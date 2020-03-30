@@ -8,4 +8,6 @@ import com.first.seckill.seckilldemo.entity.User;
 public interface UserService {
 
     User selectOneById(Integer id);
+
+    boolean tx();
 }
