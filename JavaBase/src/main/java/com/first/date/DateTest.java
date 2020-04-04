@@ -1,6 +1,7 @@
 package com.first.date;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.junit.Test;
 
 import java.sql.Timestamp;
@@ -116,6 +117,22 @@ public class DateTest {
         //Long -> Date
         Date longToDate = new Date(1520754566856L);
         System.out.println("Long -> Date: " + longToDate);
+    }
+
+
+    /**
+     * 线程睡眠， 执行耗时
+     */
+    @Test
+    public void main8 () throws InterruptedException {
+        StopWatch stopWatch = new StopWatch();
+        //TimeUnit.SECONDS.sleep(3);
+
+        for (int i = 0; i < 10000; i++) {
+            System.out.println(i);
+        }
+        long time = stopWatch.getTime();
+        System.out.println(time);
     }
 
 }
