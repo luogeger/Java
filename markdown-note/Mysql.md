@@ -592,6 +592,14 @@ public class inject {
 - 虚读(幻读)
     - 一个事务多次读取了另一个事务已提交的数据的**数量**，强调的是`insert` , `delete`。
 
+> **事务和锁**
+
+- 悲观锁
+- 乐观锁
+- Java锁
+
+
+
 > **jdbc操作事务**
 
 - `public interface Connection extends Wrapper`
