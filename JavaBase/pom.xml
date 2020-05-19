@@ -103,6 +103,14 @@
             <artifactId>guava</artifactId>
             <version>28.1-jre</version>
         </dependency>
+        <!-- hutool -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.3.5</version>
+            <classifier>javadoc</classifier>
+            <type>javadoc</type>
+        </dependency>
     </dependencies>
 
     <build>

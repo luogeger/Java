@@ -1,9 +1,11 @@
 package com.first.date;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.commons.lang3.time.StopWatch;
 import org.junit.Test;
+import org.springframework.util.StopWatch;
 
+import java.io.Console;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +15,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+
 
 public class DateTest {
 
@@ -131,8 +134,29 @@ public class DateTest {
         for (int i = 0; i < 10000; i++) {
             System.out.println(i);
         }
-        long time = stopWatch.getTime();
-        System.out.println(time);
+//        long time = stopWatch.getTime();
+//        System.out.println(time);
+    }
+
+    @Test
+    public void main9 () throws InterruptedException {
+        StopWatch stopWatch = new StopWatch("任务名称");
+
+        // 任务1
+        stopWatch.start("任务一");
+        Thread.sleep(1000);
+        stopWatch.stop();
+
+        // 任务2
+        stopWatch.start("任务一");
+        Thread.sleep(2000);
+        stopWatch.stop();
+
+        StopWatch.TaskInfo[] taskInfo = stopWatch.getTaskInfo();
+        System.out.println(stopWatch.getTotalTimeMillis());
+
+        // 打印出耗时
+        System.out.println(stopWatch.prettyPrint());
     }
 
 }
