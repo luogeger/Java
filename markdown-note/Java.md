@@ -151,9 +151,8 @@
             System.out.print(one == two);// true
             // 虽然创建了两个字符串对象，但是内容是一样的，能够共享
             ```
-    ```
-        
-    ```
+    
+    
 - `String` 在jdk1.8以前底层是靠字符数组`char[]`实现的，jdk9.0已经改为`byte[]`
         - ```bash
             String str = "abc";
@@ -162,10 +161,6 @@
             byte[] data = {97, 98, 99};
         
             String str = new String(data);
-            ```
-        ```
-        
-        ```
 
 
 - 构建方式
@@ -202,6 +197,8 @@
 > **最后，如果程序不是多线程的，那么使用StringBuilder效率高于StringBuffer。**
 
 
+
+
 ### Date
 - `Date`
     ```java
@@ -220,141 +217,20 @@
 - `arraycopy`
 
 
+
+
 ### Generic  
-- `/dʒə'nɛrɪk/` 泛型
 > 泛型不支持基本类型
-<br>
-> 泛型不支持继承
-<br>
+泛型不支持继承
 > jdk1.7以后，泛型可以后面可以不用写，但是一定要 ``<>`` 
 
-- **自定义泛型类**
+- **泛型类**
 
-```java
+- **泛型方法**
 
-public class Generic<E> {
-    private E name;
+- **泛型接口**
 
-    public Generic() {
-    }
 
-    public Generic(E name) {
-        this.name = name;
-    }
-
-    public void showName () {
-        System.out.println(this.name);
-    }
-    
-    // getter, setter...
-}
-
-// ==
-
-public class R01 {
-    public static void main(String[] args) {
-        Generic<String> gen = new Generic<>();
-        gen.setName("lucy");
-        gen.showName();
-
-        Generic<Integer> genInt = new Generic<>();
-        genInt.setName(890);
-        genInt.showName();
-        
-    }
-}
-```
-
-- **自定义泛型方法**
-
-```java
-public class Generic {
-    private String  name;
-
-    public Generic() {
-    }
-
-    public Generic(String name) {
-        this.name = name;
-    }
-
-    public <E> void noReturn (E e) {
-        System.out.println(e);
-
-    }
-
-    public <E> E hasReturn(E e) {
-        return e;
-    }
-
-    public <I, S> S mutiReturn (I i, S s) {
-        System.out.println(i);
-        System.out.println(s);
-        return s;
-    }
-
-    // getter, setter...
-}
-
-// ==
-
-public static void main(String[] args) {
-        // 自定义泛型方法
-        Generic gen = new Generic();
-
-        // 不带返回值
-        gen.noReturn(123);
-        gen.noReturn("lucy");
-
-        // 带返回值
-        Integer i = gen.hasReturn(345);
-        String str = gen.hasReturn("cat");
-        System.out.println(i);
-        System.out.println(str);
-
-        // 多个泛型参数
-        String str2 = gen.mutiReturn(888, "dog");
-        System.out.println(str2);
-}
-
-```
-
-- **自定义泛型接口**
-
-```java
-public interface Coll_me<E> {
-    void show(E e);
-}
-
-// ==
-
-public interface List_me<E> extends Coll_me<E> {
-    @Override
-    default void show(E e) {};
-}
-
-// ==
-
-public class Array_me<E> implements List_me<E> {
-    @Override
-    public void show(E e) {
-        System.out.println(e);
-
-    }
-}
-
-// ==
-public class T01 {
-    public static void main(String[] args) {
-        Array_me<String> s = new Array_me<>();
-        s.show("cat");
-
-        Array_me<Integer> i = new Array_me<>();
-        i.show(978);
-    }
-}
-
-```
 
 
 ## Collection  

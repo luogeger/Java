@@ -8,6 +8,7 @@ import com.googlecode.aviator.runtime.type.AviatorDouble;
 import com.googlecode.aviator.runtime.type.AviatorObject;
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -198,11 +199,102 @@ public class Main {
         TestAviator foo = new TestAviator(100, 3.14f, new Date());
         Map<String, Object> env = new HashMap<>();
         env.put("foo", foo);
+
+        System.out.println(AviatorEvaluator.execute("'foo = '+foo", env));
         System.out.println(AviatorEvaluator.execute("'foo.i = '+foo.i", env));   // foo.i = 100
         System.out.println(AviatorEvaluator.execute("'foo.f = '+foo.f", env));   // foo.f = 3.14
         System.out.println(AviatorEvaluator.execute("'foo.date.year = '+(foo.date.year+1990)", env));  // foo.date.year = 2106
     }
 
+
+    /**
+     * nil对象
+     * <p>nil是 Aviator 内置的常量,类似 java 中的null,表示空的值。
+     * nil跟null不同的在于,在 java 中null只能使用在==、!=的比较运算符,而nil还可以使用>、>=、<、<=等比较运算符。
+     * Aviator 规定,任何对象都比nil大除了nil本身。用户传入的变量如果为null,将自动以nil替代。</p>
+     */
+    @Test
+    public void main12 () {
+        AviatorEvaluator.execute("nil == nil");   //true
+        AviatorEvaluator.execute(" 3> nil");      //true
+        AviatorEvaluator.execute(" true!= nil");  //true
+        AviatorEvaluator.execute(" ' '>nil ");    //true
+        AviatorEvaluator.execute(" a==nil ");     //true, a 是 null
+    }
+
+
+    /**
+     * 日期比较
+     * <p>Aviator 并不支持日期类型,如果要比较日期,你需要将日期写字符串的形式,
+     * 并且要求是形如 “yyyy-MM-dd HH:mm:ss:SS”的字符串,否则都将报错。
+     * 字符串跟java.util.Date比较的时候将自动转换为Date对象进行比较</p>
+     */
+    @Test
+    public void main13 () {
+        final Date date = new Date();
+        String dateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SS").format(date);
+
+        Map<String, Object> env = new HashMap<>();
+        env.put("date", date);
+        env.put("dateStr", dateStr);
+
+
+        Boolean result = (Boolean) AviatorEvaluator.execute("date==dateStr", env);
+        System.out.println(result);  // true
+
+        result = (Boolean) AviatorEvaluator.execute("date > '2010-12-20 00:00:00:00' ", env);
+        System.out.println(result);  // true
+
+        result = (Boolean) AviatorEvaluator.execute("date < '2200-12-20 00:00:00:00' ", env);
+        System.out.println(result);  // true
+
+        result = (Boolean) AviatorEvaluator.execute("date==date ", env);
+        System.out.println(result);  // true
+    }
+
+
+    /**
+     * 大数计算和精度
+     * <p>从 2.3.0 版本开始,aviator 开始支持大数字计算和特定精度的计算,
+     * 本质上就是支持java.math.BigInteger和java.math.BigDecimal两种类型,
+     * 这两种类型在 aviator 中简称 为big int和decimal类型。
+     * 类似99999999999999999999999999999999这样的数字在 Java语言里是没办法编译通过的,
+     * 因为它超过了Long类型的范围, 只能用BigInteger来封装。但是 aviator 通过包装,可以直接支持这种大整数的计算</p>
+     */
+    @Test
+    public void main14 () {
+        System.out.println(AviatorEvaluator.exec("99999999999999999999999999999999 + 99999999999999999999999999999999"));
+    }
+
+
+    /**
+     * 强大的 seq 库
+     * <p>aviator 拥有强大的操作集合和数组的 seq 库。整个库风格类似函数式编程中的高阶函数。
+     * 在 aviator 中, 数组以及java.util.Collection下的子类都称为seq,
+     * 可以直接利用 seq 库进行遍历、过滤和聚合等操作。</p>
+     */
+    @Test
+    public void main15 () {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(3);
+        list.add(20);
+        list.add(10);
+
+        Map<String, Object> env = new HashMap<>();
+        env.put("list", list);
+
+        Object result = AviatorEvaluator.execute("count(list)", env);
+        System.out.println(result);  // 3
+        result = AviatorEvaluator.execute("reduce(list,+,0)", env);
+        System.out.println(result);  // 33
+        result = AviatorEvaluator.execute("filter(list,seq.gt(9))", env);
+        System.out.println(result);  // [10, 20]
+        result = AviatorEvaluator.execute("include(list,10)", env);
+        System.out.println(result);  // true
+        result = AviatorEvaluator.execute("sort(list)", env);
+        System.out.println(result);  // [3, 10, 20]
+        AviatorEvaluator.execute("map(list,println)", env);
+    }
 
 }
 
@@ -225,7 +317,9 @@ class AddFunction extends AbstractFunction {
     }
 }
 
-
+/**
+ * 变量的语法糖
+ */
 class TestAviator {
 
     private int i;
@@ -236,5 +330,38 @@ class TestAviator {
         this.i = i;
         this.f = f;
         this.date = date;
+    }
+
+    public int getI() {
+        return i;
+    }
+
+    public void setI(int i) {
+        this.i = i;
+    }
+
+    public float getF() {
+        return f;
+    }
+
+    public void setF(float f) {
+        this.f = f;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "TestAviator{" +
+                "i=" + i +
+                ", f=" + f +
+                ", date=" + date +
+                '}';
     }
 }
