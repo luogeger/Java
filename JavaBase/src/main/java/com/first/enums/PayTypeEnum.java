@@ -1,5 +1,7 @@
 package com.first.enums;
 
+import com.alibaba.fastjson.JSON;
+
 /**
  * @author luoxiaoqing
  */
@@ -77,6 +79,8 @@ public enum PayTypeEnum {
                 return obj.getDesc();
             }
         }
+
+
         return  null;
     }
 }
