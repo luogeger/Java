@@ -11,7 +11,7 @@ public enum StrategyEnum {
      */
     TEMP(-1){
         @Override
-        int getSalary() {
+        int validation() {
             return 0;
         }
     },
@@ -22,7 +22,7 @@ public enum StrategyEnum {
      */
     BOSS(0) {
         @Override
-        int getSalary() {
+        int validation() {
             return 100000;
         }
     },
@@ -33,7 +33,7 @@ public enum StrategyEnum {
      */
     LEADER(1) {
         @Override
-        int getSalary() {
+        int validation() {
             return 50000;
         }
     },
@@ -43,7 +43,7 @@ public enum StrategyEnum {
      */
     STAFF(2) {
         @Override
-        int getSalary() {
+        int validation() {
             return 10000;
         }
     };
@@ -53,7 +53,7 @@ public enum StrategyEnum {
      * 抽象方法
      * @return
      */
-    abstract int getSalary();
+    abstract int validation();
 
     /**
      *
@@ -73,7 +73,8 @@ public enum StrategyEnum {
      * @param position
      * @return
      */
-    public static StrategyEnum valueOf(int position) {
+    public static StrategyEnum getaa(int position) {
+
         for (StrategyEnum strategyEnum : StrategyEnum.values()) {
             if (strategyEnum.position == position) {
                 return strategyEnum;
