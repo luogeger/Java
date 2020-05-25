@@ -54,10 +54,14 @@ public class QuickTest {
 
         User user = new User();
         user.setId("1");
+        user.setName("lucy");
+        user.setAge(18);
 
 //        System.out.println(JSON.toJSONString(user));
 //        System.out.println(JSON.toJSONString(user, true));
 
+        System.out.println(user.toString());
+        System.out.println(JSON.toJSONString(user));
         System.out.println(Format.print(user));
     }
 

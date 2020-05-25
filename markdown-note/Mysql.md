@@ -1,11 +1,11 @@
-Mysql
+# Mysql
 
 - 范式
     - 原子性，不可拆分
     - 完全依赖主键    
     - 不产生传递依赖
 
-### DCL
+## DCL
 	数据控制语言Data Contrlol Language ，设置用户权限和控制事务
 
 - 连接数据库     `mysql -h root -p`
@@ -27,7 +27,7 @@ Mysql
         - `mysqladmin -u root -p password <pwd>` ：超级管理员修改密码
         - `set password for '<user>'@'<tableName>' = password('<pwd>')` ：普通用户使用超级管理员修改
 
-### DDL
+## DDL
 
 	数据库定义语言Data Definition Language，用来定义数据库对象create , drop , alter, truncate
 
@@ -112,19 +112,7 @@ alter table tt_user add unique unique_name(name);
 alter table tt_user add index joint_index(teacher, course);
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-### DML
+## DML
 	数据操纵语言Data Manipulation Language，  insert， create， update操作
 
 - 查看表数据             `select* from <tableName>`
@@ -135,7 +123,7 @@ alter table tt_user add index joint_index(teacher, course);
 - 删除记录(where)        `delete from <tbaleName> where id=2;`
 - 删除表中所有记录        `delete from <tableName>` **表清空了**
 
-### DQL
+## DQL
 	数据查询语言Data Query Language， select操作
 - `null` 不参与运算
 - `is null`：`where birthday is null`

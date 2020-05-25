@@ -1,16 +1,6 @@
 
 ![image-20200129142216159.png](imgs/image-20200129142216159.png)
 
-this will reset the current branch head to the selected commit,
-and update the working tree and the index according to the selected mode:
-
-Soft:  files won't change, differences will be staged for commit.
-
-Mixed: files won't change, differences won't be staged.
-
-Hard:  files will be reverted to the state of the selected commit,warning: any local changes will be lost.
-       
-Keep:  files will be reverted to the state of the selected commit,but local changes will be kept intact.
 
 
 # IntelliJ IDEA windows keymap

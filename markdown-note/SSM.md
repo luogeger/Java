@@ -1,5 +1,5 @@
 # Mybatis
- `font-family: 'Source Code Pro','DejaVu Sans Mono','Ubuntu Mono','Anonymous Pro','Droid Sans Mono',Menlo,Monaco,Consolas,Inconsolata,Courier,monospace,"PingFang SC","Microsoft YaHei",sans-serif;`
+
 
 
 - jdbc是获取数据源执行sql语句
@@ -191,13 +191,13 @@
 
 ### Mapper实现类的动态代理
 - **命名空间**必须改成 **接口文件**的全路径
-    
+  
     - `<mapper namespace="cn.item.Dao.UserDaoMapper">`
 - **statement**必须和接口 **方法名**一致, 以及 **结果集的封装类型**和方法的 **返回类型**一致
     - `public User queryUserById(Long id) {`
     - `<select id="queryUserById"  resultType="cn.item.pojo.User">`
 - **parameType**
-    
+  
     - `select *, user_name AS userName from tb_user where id = #{id}`
 - `Test.java`
     - ```java
@@ -267,13 +267,14 @@
             new ClassPathXmlApplicationContext("applicationContext.xml");
         Dao dao = (Dao) ac.getBean("Dao_c");// bean的id
         dao.findUser();
+    ```
 ```
     
     - `Test.java`
     ```java
         Service service = new Service_c();
         service.login();
-    ```
+```
 
 ### DI: dependency injection
 
@@ -1198,11 +1199,11 @@ public void jdk () {
         ```
 ```
     
-    ```
-    
+```
+
 - **anno配置事务**
     - 开启注解扫描
-        
+      
         - `<context:component-scan base-package="com.ssm.service" />`
     - dataSource 是支持类需要的`JdbcDaoSupport`需要的，并不是`mapper`层需要
         - 调用父类的方法给父类赋值
@@ -1212,7 +1213,7 @@ public void jdk () {
             }
         ```
     - 开启事务注解驱动   
-        
+      
         - `<tx:annotation-driven transaction-manage="transactionManager" />`
 
 
@@ -1233,9 +1234,9 @@ public void jdk () {
     - 父类中看源码`DispatcherServlet.java`
     - SpringMVC都是面向接口，需要配置对应的实现, 而且实现的方式有很多种
 - **映射器**
-    
+  
 - `HandlerMapping` -- `BeanNameUrlHandlerMapping`将URL映射成对应对象的名称    
-    
+  
 - **适配器**
     - `HandlerAdapter` -- `SimpleControllerHandlerAdapter`: 处理器必须是Controller接口的实现类
     ```java
@@ -1327,16 +1328,16 @@ public void jdk () {
         ```
 ```
     
-    ```
-    
+```
+
 - `Model model`
-    
+  
 - `model.addAttribute("msg", "model")` 会覆盖 `request.setAttribute("msg", "request")`
-    
+  
 - `cookie`
-    
+  
 - `public String test(@CookieValue(value = "JSESSIONID") String cok, Model model) {`
-    
+  
 - `url`中的请求参数
     - `public String test(@RequestParam(value = "username", required = false) String name, Model model) {`
     - `public String test(@RequestParam(value = "username", defaultValue = "goodman") String name, Model model) {`
@@ -1361,10 +1362,9 @@ public void jdk () {
             System.out.println("sb = " + sb);
         }
         ```
-```
-    
-    ```
-    
+
+
+
 - POJO对象的绑定：获取前端的数组最终也是赋值给实体类
     - 前端传过来的对象的key值和set方法名的后缀要保持一致
     ```java
@@ -1407,8 +1407,8 @@ public void jdk () {
         ```
 ```    
     
-    ```
-    
+```
+
 - **拦截器和过滤器区别**
     - `Fileter`: 针对`Servlet`, 所有的请求
     - `Interceptor`: 针对处理器方法
