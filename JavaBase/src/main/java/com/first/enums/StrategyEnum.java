@@ -6,6 +6,8 @@ package com.first.enums;
  * @author luoxiaoqing
  */
 public enum StrategyEnum {
+
+
     /**
      * 临时工
      */

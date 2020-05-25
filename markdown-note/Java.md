@@ -28,9 +28,35 @@
 | 双精度浮点 | double (默认) | 8         | `4.9E-324` ~ `1.7977E+308` |
 | 布尔型   | boolean     | 1         | `true` `false`  |
 
-### base 基本数据类、包装类
+### 基本数据类、包装类
 
-### java develop kit
+
+
+
+
+### JVM内存模型
+
+> 堆区
+
+
+
+
+
+> 栈区
+
+- 栈描述的是方法执行的内存模型，分为三部分：基本类型变量区、执行环境上下文、操作指令区（存放操作指令）。每个方法被调用都会创建一个**栈帧**（局部变量表、操作数栈、动态链接、方法出口）
+- JVM为每个线程创建一个栈，用于存放该线程执行方法的信息（实际参数、局部变量等）
+- 栈属于线程私有，不能实现线程间的共享
+- 栈的存储特性是”先进后出，后进先出“（先进的后出来，后进的先出来）
+- 栈是由系统自动分配，速度快，是连续的内存空间
+
+> 方法区
+
+
+
+
+
+### JDK版本
 
 |     1.7     |    1.8    | 9.0  |
 | :---------: | :-------: | :--: |
@@ -40,7 +66,11 @@
 | 1.7之前处理io异常 |        -   |   -   |
 
 
-### modifier 修饰符 
+
+
+
+### 修饰符 
+
 - final `adj. 最终的；决定性的；不可更改的`
     - **类**: 不能被继承
     - **方法**: 不能被重写
@@ -50,7 +80,11 @@
 - Permission modifier 权限修饰符        
 
 
-### inner class 内部类
+
+### 内部类
+
+> 嵌套多层的json对象，可以使用内部类来接收
+
 - `成员内部类`
     - **类里面定义类**
     - 格式
@@ -117,9 +151,8 @@
             System.out.print(one == two);// true
             // 虽然创建了两个字符串对象，但是内容是一样的，能够共享
             ```
-    ```
-        
-    ```
+    
+    
 - `String` 在jdk1.8以前底层是靠字符数组`char[]`实现的，jdk9.0已经改为`byte[]`
         - ```bash
             String str = "abc";
@@ -128,10 +161,6 @@
             byte[] data = {97, 98, 99};
         
             String str = new String(data);
-            ```
-        ```
-        
-        ```
 
 
 - 构建方式
@@ -168,6 +197,8 @@
 > **最后，如果程序不是多线程的，那么使用StringBuilder效率高于StringBuffer。**
 
 
+
+
 ### Date
 - `Date`
     ```java
@@ -186,141 +217,20 @@
 - `arraycopy`
 
 
+
+
 ### Generic  
-- `/dʒə'nɛrɪk/` 泛型
 > 泛型不支持基本类型
-<br>
-> 泛型不支持继承
-<br>
+泛型不支持继承
 > jdk1.7以后，泛型可以后面可以不用写，但是一定要 ``<>`` 
 
-- **自定义泛型类**
+- **泛型类**
 
-```java
+- **泛型方法**
 
-public class Generic<E> {
-    private E name;
+- **泛型接口**
 
-    public Generic() {
-    }
 
-    public Generic(E name) {
-        this.name = name;
-    }
-
-    public void showName () {
-        System.out.println(this.name);
-    }
-    
-    // getter, setter...
-}
-
-// ==
-
-public class R01 {
-    public static void main(String[] args) {
-        Generic<String> gen = new Generic<>();
-        gen.setName("lucy");
-        gen.showName();
-
-        Generic<Integer> genInt = new Generic<>();
-        genInt.setName(890);
-        genInt.showName();
-        
-    }
-}
-```
-
-- **自定义泛型方法**
-
-```java
-public class Generic {
-    private String  name;
-
-    public Generic() {
-    }
-
-    public Generic(String name) {
-        this.name = name;
-    }
-
-    public <E> void noReturn (E e) {
-        System.out.println(e);
-
-    }
-
-    public <E> E hasReturn(E e) {
-        return e;
-    }
-
-    public <I, S> S mutiReturn (I i, S s) {
-        System.out.println(i);
-        System.out.println(s);
-        return s;
-    }
-
-    // getter, setter...
-}
-
-// ==
-
-public static void main(String[] args) {
-        // 自定义泛型方法
-        Generic gen = new Generic();
-
-        // 不带返回值
-        gen.noReturn(123);
-        gen.noReturn("lucy");
-
-        // 带返回值
-        Integer i = gen.hasReturn(345);
-        String str = gen.hasReturn("cat");
-        System.out.println(i);
-        System.out.println(str);
-
-        // 多个泛型参数
-        String str2 = gen.mutiReturn(888, "dog");
-        System.out.println(str2);
-}
-
-```
-
-- **自定义泛型接口**
-
-```java
-public interface Coll_me<E> {
-    void show(E e);
-}
-
-// ==
-
-public interface List_me<E> extends Coll_me<E> {
-    @Override
-    default void show(E e) {};
-}
-
-// ==
-
-public class Array_me<E> implements List_me<E> {
-    @Override
-    public void show(E e) {
-        System.out.println(e);
-
-    }
-}
-
-// ==
-public class T01 {
-    public static void main(String[] args) {
-        Array_me<String> s = new Array_me<>();
-        s.show("cat");
-
-        Array_me<Integer> i = new Array_me<>();
-        i.show(978);
-    }
-}
-
-```
 
 
 ## Collection  

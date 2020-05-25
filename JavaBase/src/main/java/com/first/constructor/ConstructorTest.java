@@ -17,13 +17,19 @@ public class ConstructorTest {
 class A {
 
     private Integer response;
-
+    /**
+     * 只在本类使用，只提供get方法
+     */
     private Integer result;
 
     public Integer getResponse() {
         return response;
     }
 
+    /**
+     * set赋值的时候，也给另外一个属性赋值
+     * @param response
+     */
     public void setResponse(Integer response) {
         this.response = response;
         this.result = response -10;
@@ -33,7 +39,4 @@ class A {
         return result;
     }
 
-    public void setResult(Integer result) {
-        this.result = result;
-    }
 }

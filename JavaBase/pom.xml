@@ -103,6 +103,12 @@
             <artifactId>guava</artifactId>
             <version>28.1-jre</version>
         </dependency>
+        <dependency>
+            <groupId>com.googlecode.aviator</groupId>
+            <artifactId>aviator</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+
         <!-- hutool -->
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -111,6 +117,7 @@
             <classifier>javadoc</classifier>
             <type>javadoc</type>
         </dependency>
+
     </dependencies>
 
     <build>
