@@ -97,8 +97,7 @@
 ## stage 
 
 - `git add ./file.txt`:将当前目录中的`file.txt`添加 **到暂存区**
-  
-    - >..." to update what will be committed`
+  - `..." to update what will be committed`
     
 - `git add .` 将当前目录 **所有文件**都添加的暂存区.
 
