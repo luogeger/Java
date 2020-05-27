@@ -37,10 +37,10 @@
 ## clone
 
 - `git clone [地址]`
-
 - `git clone -b dev [地址]` 只克隆`dev`分支
-
 - `--depth` 不需要下载整个仓储, 只要最新的一次提交
+
+
 
 
 ## remote
@@ -63,8 +63,9 @@
 ## status 
 
 - `git status ` : 查看当前工作目录的状态，是已经放到暂存区，还是提交到仓库了。
-
 - `git status -s ` 查看简要的状态信息
+
+
 
 ## log
 
@@ -126,8 +127,10 @@
 
 ## fetch 
 
-- 从另一个仓库下载 **对象** 和 **引用**
-- 只是把远程仓库的内容获取到本地仓库, 并没有把两者的内容进行合并
+- 从另一个仓库下载 **对象** 和 **引用**，只是把远程仓库的内容获取到本地仓库, 并没有把两者的内容进行合并
+- `git  fetch` = `git fetch origin master` 
+
+
 
 ## merge 
 
@@ -137,30 +140,49 @@
 
 ## diff
 
+​	`git diff`  比较的是 工作区里的修改，但是添加到暂存区以后，就看不到了。
+
+​	这时候需要用 `git diff --cached <fileName>` 比较的是暂存区与最近一次的commit的差异。
+
+​	`git diff --cached <hash> <fileName>` 与指定commit比较差异。
+
 - `git diff` 查看所有
 - `git diff --check` 快速查看有冲突的文件
 - `git diff <fileName>` 查看指定文件
 
 
+
+
 ## checkout
 
 - `git checkout -- index.html` 清空指定文件工作区
-  
 - `use "git checkout -- <file>..." to discard changes in working directory`
+- `git checkout -b newBrach origin/master` 在orgin/master的基础上，创建newBranch分支。
 
-## revert
 
 
 ## branch 
 
 - `git branch`: 查看有多少分支
+
 - `git branch -a`: 查看隐藏分支
+
 - `git branch dev`: 创建了一个名为dev的分支
+
 - `git checkout dev`: 切换到dev分支
+
 - `git checkout -b dev`: 创建并切换到指定分支
+
 - `git merge dev` 表示将当前分支与dev分支合并.  
+
 - `git branch -d dev` 不要在dev分支执行这个命令，在别的的分支执行.
+
 - `git ls-files -u` 查看冲突未处理的文件列表
+
+    
+
+## revert
+
 
 
 
@@ -209,18 +231,9 @@
 
 
 
-## stash
-
-- [保存当前的工作现场](https://zhuanlan.zhihu.com/p/28608106)
-- 使用git stash保存当前的工作现场，那么就可以切换到其他分支进行工作，或者在当前分支上完成其他紧急的工作，比如修订一个bug测试提交。
-- `git stash list`
-
-- `git show stash@{0}`
-
-
-
-
 ## reset
+
+- `use "git reset HEAD <file>..." to unstage`  使用 `git reset head <fileName>` 将文件从暂存区撤销
 
 
 
@@ -257,7 +270,22 @@
     - <img src="Git.assets/4428238-71f7141a3878da7e.webp" alt="img" style="zoom:80%;" />
 - `git reflog`:配合命令查看历史操作来进行回退 
 
+
+
+
+
+## stash
+
+- [保存当前的工作现场](https://zhuanlan.zhihu.com/p/28608106)
+- 使用git stash保存当前的工作现场，那么就可以切换到其他分支进行工作，或者在当前分支上完成其他紧急的工作，比如修订一个bug测试提交。
+- `git stash list`
+- `git show stash@{0}`
+
+
+
 ## cherry-pick
+
+
 
 
 ## rm
@@ -270,13 +298,15 @@
 ## .gitignore
 
 - `.gitignore` 和 `.git`同级目录    
-- `/node_modules` 忽略某个目录
-- `/css/index.css` 忽略某个文件
-- `/css/*.css` 忽略某一类文件
-- `*.*` 忽略目录下所有文件
-- `doc/a.txt`
-- `doc/**/a.txt`
-- `#`号表示注释
+
+```markdown
+# 忽略所有某类型文件
+
+
+# 忽略所有某目录名的目录
+
+
+```
 
 
 
