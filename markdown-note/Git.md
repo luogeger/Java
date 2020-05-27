@@ -32,14 +32,6 @@
 
 - ` git config --global --unset "错误的key删除掉"`
 
-## log
-
-- `git reflog` ：查看操作历史
-- `git log` 标准输出
-- `git log –-graph` 图形化输出
-- `git log --oneline` 简单输出
-	- `git log --pretty=oneline`   
-
 
 
 ## clone
@@ -51,11 +43,60 @@
 - `--depth` 不需要下载整个仓储, 只要最新的一次提交
 
 
+## remote
 
-## fetch 
+- `git remote` :可以查看已添加的远程主机
 
-- 从另一个仓库下载 **对象** 和 **引用**
-- 只是把远程仓库的内容获取到本地仓库, 并没有把两者的内容进行合并
+- `git remote -v`：显示所有仓库
+
+- `git remote add [主机名称] [远程仓库地址]`添加远程主机，即给远程主机起个别名，方便使用
+
+
+- `git remote rm [主机名称]` 命令用于删除远程主机。
+
+- `git remote show [主机名称]` 可以查看远程主机的信息
+
+- `git push origin --delete`
+
+
+
+## status 
+
+- `git status ` : 查看当前工作目录的状态，是已经放到暂存区，还是提交到仓库了。
+
+- `git status -s ` 查看简要的状态信息
+
+## log
+
+- `git reflog` ：查看操作历史
+- `git log` 标准输出
+- `git log –-graph` 图形化输出
+- `git log --oneline` 简单输出
+	- `git log --pretty=oneline`
+
+
+
+## stage 
+
+- `git add ./file.txt`:将当前目录中的`file.txt`添加 **到暂存区**
+  
+  - `..." to update what will be committed`
+  
+- `git add .` 将当前目录 **所有文件**都添加的暂存区.
+
+- `git add JavaBase/*` 将 `JavaBase` 里所有的文件添加到暂存区。
+
+- `git reset head  JavaBase/demo.java` 从暂存区退回到工作，**但是**，修改的内容还存在，通过 `git diff JavaBase/demo.java` 可以查看到修改的内容。
+  
+  
+
+## commit 
+
+- `git commit` 进入到vim模式编写提交记录
+
+- `git commit -m '快速编写提交记录， 如果没有空格或者其他符号，可以不加单引号' ` 
+- `git commit --amend`
+- `git commit -m  -c`
 
 
 
@@ -83,44 +124,31 @@
 
 
 
-## status 
+## fetch 
 
-- `git status ` : 查看当前工作目录的状态，是已经放到暂存区，还是提交到仓库了。
-- `git status -s ` 查看简要的状态信息
+- 从另一个仓库下载 **对象** 和 **引用**
+- 只是把远程仓库的内容获取到本地仓库, 并没有把两者的内容进行合并
+
+## merge 
+
+- `git merger --abort` 取消合并
 
 
 
+## diff
 
+- `git diff` 查看所有
+- `git diff --check` 快速查看有冲突的文件
+- `git diff <fileName>` 查看指定文件
 
-
-
-## stage 
-
-- `git add ./file.txt`:将当前目录中的`file.txt`添加 **到暂存区**
-  - `..." to update what will be committed`
-    
-- `git add .` 将当前目录 **所有文件**都添加的暂存区.
-
-- `git add JavaBase/*` 将 `JavaBase` 里所有的文件添加到暂存区。
-
-- `git reset head  JavaBase/demo.java` 从暂存区退回到工作，**但是**，修改的内容还存在，通过 `git diff JavaBase/demo.java` 可以查看到修改的内容。
 
 ## checkout
 
-- `git checkout -- index.html`  清空暂存区
+- `git checkout -- index.html` 清空指定文件工作区
   
 - `use "git checkout -- <file>..." to discard changes in working directory`
-  
-  
 
-## commit 
-
-- `git commit` 进入到vim模式编写提交记录
-
-- `git commit -m '快速编写提交记录， 如果没有空格或者其他符号，可以不加单引号' ` 
-- `git commit --amend`
-- `git commit -m  -c`
-
+## revert
 
 
 ## branch 
@@ -133,17 +161,6 @@
 - `git merge dev` 表示将当前分支与dev分支合并.  
 - `git branch -d dev` 不要在dev分支执行这个命令，在别的的分支执行.
 - `git ls-files -u` 查看冲突未处理的文件列表
-
-
-
-
-## merge 
-
-
-
-## diff
-
-- `git diff --check` 快速查看有冲突的文件
 
 
 
@@ -192,28 +209,14 @@
 
 
 
-
-## remote
-
-- `git remote` :可以查看已添加的远程主机
-- `git remote -v`：显示所有仓库
-- `git remote add [主机名称] [远程仓库地址]`添加远程主机，即给远程主机起个别名，方便使用
-- `git remote rm [主机名称]` 命令用于删除远程主机。
-- `git remote show [主机名称]` 可以查看远程主机的信息
-- `git push origin --delete`
-
-## revert
-
-
-
 ## stash
 
 - [保存当前的工作现场](https://zhuanlan.zhihu.com/p/28608106)
 - 使用git stash保存当前的工作现场，那么就可以切换到其他分支进行工作，或者在当前分支上完成其他紧急的工作，比如修订一个bug测试提交。
+- `git stash list`
 
+- `git show stash@{0}`
 
-
-## checkout
 
 
 
@@ -225,23 +228,26 @@
 
 
 
-```markdown
-this will reset the current branch head to the selected commit, and update the working tree and the index according to the selected mode:
+**this will reset the current branch head to the selected commit, and update the working tree and the index according to the selected mode:**
 
-Soft:  files won't change, differences will be staged for commit.
-	保留工作目录，并把重置 HEAD 所带来的新的差异放进暂存区
-	会在重置 HEAD 和 branch 时，保留工作目录和暂存区中的内容，并把重置 HEAD 所带来的新的差异放进暂存区。
+**Soft:  files won't change, differences will be staged for commit.**
 
-Mixed: files won't change, differences won't be staged.
-	保留工作目录，并清空暂存区
-	默认使用 --mixed 参数。它的行为是：保留工作目录，并且清空暂存区。也就是说，工作目录的修改、暂存区的内容以及由 reset 所导致的新的文件差异，都会被放进工作目录。简而言之，就是「把所有差异都混合（mixed）放在工作目录中」
+​	`保留工作目录，并把重置 HEAD 所带来的新的差异放进暂存区`
+​	`会在重置 HEAD 和 branch 时，保留工作目录和暂存区中的内容，并把重置 HEAD 所带来的新的差异放进暂存区。`
 
-Hard:  files will be reverted to the state of the selected commit,warning: any local changes will be lost.
-	重置stage区和工作目录
-	会在重置 HEAD 和branch的同时，重置stage区和工作目录里的内容。当你在 reset 后面加了 --hard 参数时，你的stage区和工作目录里的内容会被完全重置为和HEAD的新位置相同的内容。换句话说，就是你的没有commit的修改会被全部擦掉。
+**Mixed: files won't change, differences won't be staged.**
 
-Keep:  files will be reverted to the state of the selected commit,but local changes will be kept intact.
-```
+​	`保留工作目录，并清空暂存区`
+​	`默认使用 --mixed 参数。它的行为是：保留工作目录，并且清空暂存区。也就是说，工作目录的修改、暂存区的内容以及由 reset 所导致的新的文件差异，都会被放进工作目录。简而言之，就是「把所有差异都混合（mixed）放在工作目录中」`
+
+**Hard:  files will be reverted to the state of the selected commit,warning: any local changes will be lost.**
+
+​	`重置stage区和工作目录`
+​	`会在重置 HEAD 和branch的同时，重置stage区和工作目录里的内容。当你在 reset 后面加了 --hard 参数时，你的stage区和工作目录里的内容会被完全重置为和HEAD的新位置相同的内容。换句话说，就是你的没有commit的修改会被全部擦掉。`
+
+**Keep:  files will be reverted to the state of the selected commit,but local changes will be kept intact.**
+
+​	`...`
 
 <img src="Git.assets/4428238-fcad08ebe26933a6.webp" alt="img" style="zoom:150%;" />
 
@@ -251,6 +257,7 @@ Keep:  files will be reverted to the state of the selected commit,but local chan
     - <img src="Git.assets/4428238-71f7141a3878da7e.webp" alt="img" style="zoom:80%;" />
 - `git reflog`:配合命令查看历史操作来进行回退 
 
+## cherry-pick
 
 
 ## rm
@@ -273,7 +280,7 @@ Keep:  files will be reverted to the state of the selected commit,but local chan
 
 
 
-## cherry-pick
+
 
 
 
