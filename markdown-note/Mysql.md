@@ -167,7 +167,7 @@ alter table tt_user add index joint_index(teacher, course);
         - 等同于`select name 姓名 from a_student`
     
 
-### 聚合函数
+## 聚合函数
 
 - **count**
     - `null` 不参与统计
@@ -215,7 +215,7 @@ alter table tt_user add index joint_index(teacher, course);
 
 
 
-### 连接查询
+## 连接查询
 - 外键约束
     - `foreign key(<currentFiled>) reference(<foreignFiled>)` , 约束从表，保证数据有效性， 
     - 已经存在的表添加外键约束
@@ -265,7 +265,7 @@ alter table tt_user add index joint_index(teacher, course);
 
 
 
-### 子查询
+## 子查询
 
 > 概述：当一个查询是另一个查询的条件时，称之为子查询
 
@@ -327,7 +327,7 @@ alter table tt_user add index joint_index(teacher, course);
     ```
     
 
-### 原生函数
+## 原生函数
 - 日期
 ```sql
     select now(); -- 2018-06-26 11:07:24
@@ -350,7 +350,7 @@ alter table tt_user add index joint_index(teacher, course);
     select format(3.1415926, 4); -- 截取位数: 3.1416, 有四舍五入的功能
 ```
 
-###  JDBC
+##  JDBC
 
 - **java database connection**
 
@@ -545,7 +545,7 @@ public class inject {
 }
 ```
 
-### Transaction
+## Transaction
 
 - MYSQL5.5以后支持事务，存储引擎`InnoDB`支持事务，特点是自动提交
 - 概念：事务指的是逻辑上的一组操作，组成这组操作的各个单元，要么全部成功，要么全部失败(业务上市最小的工作单元，不可拆分)。
@@ -626,7 +626,7 @@ public class Transaction {
 }
 ```
 
-### Connection Pool
+## Connection Pool
 
 - 优化获取连接，主要是从性能上优化
 - `public interface DataSource extends CommonDataSource, Wrapper` : 厂商实现这个规定的接口
@@ -705,7 +705,7 @@ public class ComboPooledTest {
 
 
 
-### JDBCTemplate
+## JDBCTemplate
 
 - `JDBCTemplate` 是 `Spring` 对 `JDBC`的封装，目的是使`JDBC` 更加易于使用，处理了资源的建立和释放。
     - `commons-logging-1.2.jar` ：日志记录
@@ -789,7 +789,7 @@ public class ComboPooledTest {
 
 
 
-###  SQL优化
+##  SQL优化
 
 - `show variables like 'test_0520';`    
 - `show variables like '%log%';`
