@@ -39,15 +39,18 @@ public class WebLogAspectAOP {
 
     @Before("webLog()")
     public void doBefore(JoinPoint joinPoint) {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
         // 开始时间
         startTime.set(System.currentTimeMillis());
+
+        // 请求参数
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
         String requestParam = "";
-        //1.请求接口
-        String requestInterface = joinPoint.getSignature().getDeclaringTypeName() + "."
-                + joinPoint.getSignature().getName();
-        //2.请求Param参数-入参为文件时, 不打印log
+
+        // 1.请求接口
+        String requestInterface = joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
+
+        // 2.Param参数 - 入参为文件时, 不打印log
         Map originRequestParamMap = request.getParameterMap();
         if (originRequestParamMap.size() > 0) {
             Map<String, Object> filteredFileValueMap =
@@ -57,12 +60,9 @@ public class WebLogAspectAOP {
         }
 
 
+        // 3.Body参数 - 入参为文件时, 不打印log
         Object[] originBodyParamArray = joinPoint.getArgs();
-        //3.请求Body对象 - 入参为文件时, 不打印log
-        Object[] filteredFileValueArray =
-                StreamUtils.removeSpecifiedElement(
-                    originBodyParamArray,
-                    new Class[]{MultipartFile.class, File.class});
+        Object[] filteredFileValueArray = StreamUtils.removeSpecifiedElement(originBodyParamArray, new Class[]{MultipartFile.class, File.class});
 
         Map requestBody = Maps.newHashMap();
         if (filteredFileValueArray.length >= 1) {
@@ -75,6 +75,7 @@ public class WebLogAspectAOP {
                 requestBody = StreamUtils.removeNullElement(map);
             }
         }
+
         StringBuilder requestSb = new StringBuilder();
         requestSb.append("\nRequestInfo:\n"
                 + "ip=" + getIpAddress(request)
@@ -159,6 +160,7 @@ public class WebLogAspectAOP {
 
     /**
      * 异常处理
+     *
      * @param pjp
      * @param ex
      * @return
