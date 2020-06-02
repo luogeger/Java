@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  * @date 2020-05-14__16:06
  * @desc
  */
-public class MyBeanUtils extends BeanUtils {
+public class BeanUtilsPlus extends BeanUtils {
     /**
      * 集合数据的拷贝
      * @param sources: 数据源类

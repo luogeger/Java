@@ -1,13 +1,10 @@
 package com.first.utils;
 
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.internal.util.logging.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * @author luoxiaoqing
@@ -68,7 +65,7 @@ public class Main {
         List<UserDO> userDOList = new ArrayList();
         userDOList.add(new UserDO(1L, "Van", 18, 1));
         userDOList.add(new UserDO(2L, "VanVan", 20, 2));
-        List<UserVO> userVOList = MyBeanUtils.copyListProperties(userDOList, UserVO::new);
+        List<UserVO> userVOList = BeanUtilsPlus.copyListProperties(userDOList, UserVO::new);
         System.out.println(userVOList);
     }
 
