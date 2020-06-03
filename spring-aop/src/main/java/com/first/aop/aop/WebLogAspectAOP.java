@@ -6,12 +6,10 @@ import com.first.aop.utils.*;
 import com.google.common.collect.Maps;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,8 +24,8 @@ import java.util.Map;
 /**
  * 统一日志记录
  */
-//@Component
-//@Aspect
+@Aspect
+@Component
 public class WebLogAspectAOP {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -55,7 +53,6 @@ public class WebLogAspectAOP {
         if (originRequestParamMap.size() > 0) {
             Map<String, Object> filteredFileValueMap =
                     StreamUtils.removeSpecifiedElement(originRequestParamMap, new Class[]{MultipartFile.class, File.class});
-            //requestParam = JsonConvertUtil.formatStandardJSON(JSONObject.toJSONString(filteredFileValueMap));
             requestParam = JSONObject.toJSONString(filteredFileValueMap);
         }
 
@@ -86,7 +83,6 @@ public class WebLogAspectAOP {
                 + ",interface=" + requestInterface
                 + ",param=" + requestParam
                 + ",body=");
-        //requestSb.append(JsonConvertUtil.formatStandardJSON(JSONObject.toJSONString(requestBody)));// body
         requestSb.append(JSONObject.toJSONString(requestBody));
         logger.info(requestSb.toString());
     }

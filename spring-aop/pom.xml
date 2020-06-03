@@ -28,10 +28,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-        </dependency>
         <!-- web启动器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -41,11 +37,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <!-- springboot检测服务启动器 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <!-- jdbc启动器 -->
         <dependency>
@@ -77,11 +68,11 @@
             <scope>provided</scope>
         </dependency>
         <!-- aop -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
             <version>1.8.10</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -104,6 +95,16 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
+
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+        &lt;!&ndash; springboot检测服务启动器 &ndash;&gt;
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>-->
     </dependencies>
 
     <build>
