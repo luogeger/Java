@@ -1,4 +1,4 @@
-package com.first.abstractKeyWord.b;
+package com.first.abstracts.b;
 
 /**
  * 继承实现类， 可以不用从写方法

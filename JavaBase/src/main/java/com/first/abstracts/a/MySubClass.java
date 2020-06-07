@@ -1,4 +1,4 @@
-package com.first.abstractKeyWord.a;
+package com.first.abstracts.a;
 
 /**
  * 继承抽象类，
@@ -21,7 +21,7 @@ public class MySubClass extends MyAbstractClass {
 
     @Override
     public void run() {
-
+//        super.tempFiled
     }
 
     @Override

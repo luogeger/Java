@@ -1,4 +1,4 @@
-package com.first.abstractKeyWord;
+package com.first.abstracts;
 
 public class HttpServlet extends GenericServlet {
     @Override

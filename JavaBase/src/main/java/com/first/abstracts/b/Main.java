@@ -1,4 +1,4 @@
-package com.first.abstractKeyWord.b;
+package com.first.abstracts.b;
 
 import org.junit.Test;
 

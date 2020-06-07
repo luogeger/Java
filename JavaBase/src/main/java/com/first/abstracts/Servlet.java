@@ -1,4 +1,4 @@
-package com.first.abstractKeyWord;
+package com.first.abstracts;
 
 public interface Servlet {
     void init();

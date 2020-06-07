@@ -1,4 +1,4 @@
-package com.first.abstractKeyWord.a;
+package com.first.abstracts.a;
 
 /**
  * @author luoxiaoqing
@@ -6,7 +6,7 @@ package com.first.abstractKeyWord.a;
  */
 public abstract class MyAbstractClass implements MyInterface {
 
-    private String  tempFiled;
+    protected String  tempFiled;
 
     public MyAbstractClass(String tempFiled) {
         this.tempFiled = tempFiled;
@@ -22,5 +22,5 @@ public abstract class MyAbstractClass implements MyInterface {
 
     }
 
-    public abstract void run();
+    abstract void run();
 }

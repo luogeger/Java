@@ -1,4 +1,4 @@
-package com.first.abstractKeyWord;
+package com.first.abstracts;
 
 public abstract class GenericServlet implements Servlet{
 

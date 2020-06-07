@@ -1,4 +1,4 @@
-package com.first.abstractKeyWord.a;
+package com.first.abstracts.a;
 
 /**
  * @author luoxiaoqing
