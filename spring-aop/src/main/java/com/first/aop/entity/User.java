@@ -12,4 +12,5 @@ public class User extends BaseEntity {
     private Date    created;
     private String  salt;
 
+    
 }

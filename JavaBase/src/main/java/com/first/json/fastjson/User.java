@@ -1,4 +1,4 @@
-package com.first.json;
+package com.first.json.fastjson;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

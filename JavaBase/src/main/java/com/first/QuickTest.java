@@ -2,7 +2,7 @@ package com.first;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.first.json.Format;
+import com.first.json.fastjson.Format;
 import com.first.lombok.User;
 import org.junit.Test;
 
