@@ -1,12 +1,10 @@
 package com.first.list;
 
-import com.first.entity.User;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author luoxiaoqing
@@ -52,7 +50,7 @@ public class Run {
     @Test
     public void test3 () {
         //User u1 = new User().setUserID("1").setBalance(1);
-        User u2 = new User().setUserID("2").setBalance(2);
+        /*User u2 = new User().setUserID("2").setBalance(2);
         User u3 = new User().setUserID("2").setBalance(2);
 
         ArrayList<User> users = new ArrayList<>();
@@ -60,6 +58,6 @@ public class Run {
         List<User> li = users.stream().distinct().collect(Collectors.toList());
         for (User user : li) {
             System.out.println(user.toString());
-        }
+        }*/
     }
 }

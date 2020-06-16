@@ -1,6 +1,8 @@
 package com.first.stream;
 
 /**
+ * 函数式接口
+ *
  * @author luoxiaoqing
  * @date 2018-01-13__16:53
  */
