@@ -3,12 +3,16 @@ package com.first.abstracts;
 import org.junit.Test;
 
 /**
+ * 测试
+ *
  * @author luogeger
  */
-public class Main {
+public class MainTest {
 
     @Test
-    public void main1 () {
+    public void main1() {
 
     }
+
+
 }
