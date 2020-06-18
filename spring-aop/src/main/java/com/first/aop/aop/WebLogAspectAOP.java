@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -100,8 +101,8 @@ public class WebLogAspectAOP {
         return obj;
     }
 
-    @AfterReturning(value = "execution(public * com.first.aop.controller..*.*(..))", returning = "returnValue")
-    public void doAfterReturning(JoinPoint joinPoint, Object returnValue) {
+    @AfterReturning(value = "webLog()", returning = "returnVal")
+    public void doAfterReturning(JoinPoint joinPoint, Object returnVal) {
         // 处理完请求，返回内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
@@ -114,7 +115,7 @@ public class WebLogAspectAOP {
                 //+ "interface = " + requestInterface + "\n"
                 //+ "time = " + execTime + "ms" + "\n"
         );
-        responseSb.append(JSONObject.toJSONString(returnValue));
+        responseSb.append(JSONObject.toJSONString(returnVal));
         logger.info(responseSb.toString());
         startTime.remove();
     }
@@ -180,7 +181,11 @@ public class WebLogAspectAOP {
             response.setCode(e.getErrCode());
             response.setMsg(e.getMessage());
             logger.error("BusinessException==>方法：{}，参数：{}，异常：{}", pjp.getSignature(), sb.toString(), ex);
-        } else {
+        } else if (ex instanceof MethodArgumentNotValidException) {
+            MethodArgumentNotValidException e = (MethodArgumentNotValidException) ex;
+            logger.info(e.getCause().getMessage());
+        }
+        else {
             response.setCode(SystemStatus.SERVER_ERROR_CODE.getCode());
             response.setMsg(ex.getMessage());
             logger.error("异常==>方法：{}，参数：{}，异常：{}", pjp.getSignature(), sb.toString(), ex);

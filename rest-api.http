@@ -1,0 +1,13 @@
+POST {{aop}}/test/test/repeat/repeat
+Content-Type: application/json
+
+{
+  "id": 0,
+  "userName": "",
+  "password": "",
+  "phone": "",
+  "created": "",
+  "salt": ""
+}
+
+###
