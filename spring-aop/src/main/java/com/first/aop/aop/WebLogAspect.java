@@ -10,6 +10,8 @@ import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -20,20 +22,25 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * 统一日志记录
+ *
+ * @author luoxiaoqing
  */
 @Aspect
 @Component
-public class WebLogAspectAOP {
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+public class WebLogAspect {
+    private Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
     private static ThreadLocal<Long> startTime = new ThreadLocal<>();
+
 
     @Pointcut(value = "execution(public * com.first.aop.controller..*.*(..))")
     public void webLog() {
+        System.out.println("AOP");
     }
 
     @Before("webLog()")
@@ -88,19 +95,6 @@ public class WebLogAspectAOP {
         logger.info(requestSb.toString());
     }
 
-    @Around("webLog()")
-    public Object doAround(ProceedingJoinPoint pjp) {
-        long startTime = System.currentTimeMillis();
-        Object obj = null;
-        try {
-            obj = pjp.proceed();
-            logger.info("time : {}", (System.currentTimeMillis() - startTime));
-        } catch (Throwable throwable) {
-            obj = handlerException(pjp, throwable);
-        }
-        return obj;
-    }
-
     @AfterReturning(value = "webLog()", returning = "returnVal")
     public void doAfterReturning(JoinPoint joinPoint, Object returnVal) {
         // 处理完请求，返回内容
@@ -118,6 +112,45 @@ public class WebLogAspectAOP {
         responseSb.append(JSONObject.toJSONString(returnVal));
         logger.info(responseSb.toString());
         startTime.remove();
+    }
+
+    @AfterThrowing(value = "webLog()", throwing = "ex")
+    public void doThrowing(Throwable ex) {
+        System.out.println(ex);
+    }
+
+    @Around("webLog()")
+    public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
+        BindingResult bindingResult = null;
+        for (Object arg : pjp.getArgs()) {
+            if (arg instanceof BindingResult) {
+                bindingResult = (BindingResult) arg;
+            }
+        }
+        if (bindingResult != null) {
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            if (errors.size() > 0) {
+                StringBuilder msg = new StringBuilder();
+                for (ObjectError error : errors) {
+                    msg.append(error.getDefaultMessage());
+                    msg.append("\n");
+                }
+
+                HashMap<String, Object> result = new HashMap<>(2);
+                result.put("data", false);
+                result.put("message", msg.toString());
+            }
+        }
+        return pjp.proceed();
+        /*long startTime = System.currentTimeMillis();
+        Object obj = null;
+        try {
+            obj = pjp.proceed();
+            logger.info("time : {}", (System.currentTimeMillis() - startTime));
+        } catch (Throwable throwable) {
+            obj = handlerException(pjp, throwable);
+        }
+        return obj;*/
     }
 
     /**
@@ -184,8 +217,7 @@ public class WebLogAspectAOP {
         } else if (ex instanceof MethodArgumentNotValidException) {
             MethodArgumentNotValidException e = (MethodArgumentNotValidException) ex;
             logger.info(e.getCause().getMessage());
-        }
-        else {
+        } else {
             response.setCode(SystemStatus.SERVER_ERROR_CODE.getCode());
             response.setMsg(ex.getMessage());
             logger.error("异常==>方法：{}，参数：{}，异常：{}", pjp.getSignature(), sb.toString(), ex);
