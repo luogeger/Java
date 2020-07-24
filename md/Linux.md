@@ -144,7 +144,7 @@
     - `firewall-cmd --zone= public --remove-port=80/tcp --permanent`
 - 检查端口被哪个服务占用
     - `netstat -lnp|grep 8080`
-
+    - `netstat -ntpl | grep 80`
 
 #### 进程
 - 查看进程：`ps -ef`
