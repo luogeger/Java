@@ -152,7 +152,6 @@
             // 虽然创建了两个字符串对象，但是内容是一样的，能够共享
             ```
     
-    
 - `String` 在jdk1.8以前底层是靠字符数组`char[]`实现的，jdk9.0已经改为`byte[]`
         - ```bash
             String str = "abc";
@@ -199,37 +198,7 @@
 
 
 
-### Date
-- `Date`
-    ```java
-    //设置日期格式      
-    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    
-    // new Date()为获取当前系统时间 == 2018-03-05 21:50:58
-    System.out.println(df.format(new Date()));
-    ```
-    
-- `DateFormat`
-- `Calendar`
-
-### System
-- `currentTimeMilis`
-- `arraycopy`
-
-
-
-
 ### Generic  
-> 泛型不支持基本类型
-泛型不支持继承
-> jdk1.7以后，泛型可以后面可以不用写，但是一定要 ``<>`` 
-
-- **泛型类**
-
-- **泛型方法**
-
-- **泛型接口**
-
 
 
 
@@ -256,20 +225,6 @@
 
 
 
-
-
-> **集合常用功能**
-
-- Collection是所有单列集合``List`` ``Set``的父接口 , 因此定义了一些操作所有集合的通用方法。
-    - ``boolean add (E e)``:  把给定的对象添加到当前集合中
-    - ``void clear()``:   清空集合所有的元素
-    - ``boolean remove (E e)``:  把给定的对象删除
-    - ``boolean contains(E e)``:  判断是否包含给定对象
-    - ``boolean isEmpty()``:  判断集合是否为空
-    - ``int size()``: 返回集合中元素的个数
-    - ``Object[] toArray()``:  把集合中的元素，存储到数组中，可以**间接**对集合进行遍历。 
-    
-    
 
 
 ### Iterator
