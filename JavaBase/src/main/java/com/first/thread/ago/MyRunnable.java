@@ -1,4 +1,4 @@
-package com.first.thread;
+package com.first.thread.ago;
 
 public class MyRunnable implements Runnable {
     @Override

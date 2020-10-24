@@ -1,4 +1,4 @@
-package com.first.thread;
+package com.first.thread.ago;
 
 public class SellTicketTask implements Runnable {
     private int tickets = 100;
