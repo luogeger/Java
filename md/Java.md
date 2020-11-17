@@ -2094,7 +2094,7 @@ public @interface G_annotation {
 
 
 
-# proxy
+# timeProxy
 ### 动态代理
 - 动态代理是哪个版本的 ? = jdk1.6 和 jdk9.0 不一样
 

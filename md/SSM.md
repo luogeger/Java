@@ -659,7 +659,7 @@ AOP：横向抽取机制，在不修改原对象代码的情况下，通过代�
         }
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        public Object invoke(Object timeProxy, Method method, Object[] args) throws Throwable {
 
             if ("save".equals(method.getName()))
                 before();
@@ -677,13 +677,13 @@ AOP：横向抽取机制，在不修改原对象代码的情况下，通过代�
 ```java
 public void jdk () {
         // target       获取目标对象
-        // proxy        获取代理对象工厂
+        // timeProxy        获取代理对象工厂
         // proxyObject  获取代理对象
         // invoke       执行方法
 
         Inter target = new Inter_c();
-        JdkProxy proxy = new JdkProxy(target);
-        Inter proxyObject = (Inter)proxy.getProxyObject();
+        JdkProxy timeProxy = new JdkProxy(target);
+        Inter proxyObject = (Inter)timeProxy.getProxyObject();
 
         proxyObject.save();
         proxyObject.find();
@@ -718,7 +718,7 @@ public void jdk () {
 - `CglibProxy.java`
 
 ```java
-    import org.springframework.cglib.proxy.MethodInterceptor;// 注意导包
+    import org.springframework.cglib.timeProxy.MethodInterceptor;// 注意导包
     public class CglibProxy implements MethodInterceptor {
         private Object target;
         public CglibProxy(Object target) {
@@ -733,7 +733,7 @@ public void jdk () {
         }
 
         @Override
-        public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+        public Object intercept(Object timeProxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
             before();
             Object result = method.invoke(target);
             return result;
@@ -752,8 +752,8 @@ public void jdk () {
     @Test
     public void cglib () {
         CglibService target = new CglibService();
-        CglibProxy proxy = new CglibProxy(target);
-        CglibService proxyObject = (CglibService) proxy.getProxyObject();
+        CglibProxy timeProxy = new CglibProxy(target);
+        CglibService proxyObject = (CglibService) timeProxy.getProxyObject();
 
         proxyObject.save();
         proxyObject.find();
@@ -1022,7 +1022,7 @@ public void jdk () {
     <context:component-scan base-package="cn"/>
     <!-- 配置aop的aspectj的自动代理：
 			自动扫描bean组件中，含有@Aspect的bean，将其作为aop管理，开启动态代理-->
-    <aop:aspectj-autoproxy proxy-target-class="true"/>    
+    <aop:aspectj-autoproxy timeProxy-target-class="true"/>    
 ```
 
 - `Advice.java`
@@ -1111,7 +1111,7 @@ public void jdk () {
             c.find();
             ((CustomerService_c) c).update();// 会报错
             // java.lang.ClassCastException:
-            // com.sun.proxy.$Proxy14 cannot be cast to cn.item.a_aspect_anno.CustomerService_c
+            // com.sun.timeProxy.$Proxy14 cannot be cast to cn.item.a_aspect_anno.CustomerService_c
             System.out.println(" -------------------");
             p.find();
             p.save();

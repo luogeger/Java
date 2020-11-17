@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <sitemap>
+        　　
+        <loc><![CDATA[http://qq.com/xml/_1.xml]]></loc>
+        　　
+        <lastmod><![CDATA[2018-06-20 01:28:09]]></lastmod>
+        　　
+    </sitemap>
+    <sitemap>
+        　　
+        <loc><![CDATA[http://qq.com/xml/_2.xml]]></loc>
+        　　
+        <lastmod><![CDATA[2018-06-20 01:28:09]]></lastmod>
+        　　
+    </sitemap>
+    <sitemaps>
+        <sitemap>
+            　　
+            <loc><![CDATA[http://qq.com/xml/_46.xml]]></loc>
+            　　
+            <lastmod><![CDATA[2018-06-20 01:28:09]]></lastmod>
+            　　
+        </sitemap>
+        <sitemap>
+            　　
+            <loc><![CDATA[http://qq.com/xml/_47.xml]]></loc>
+            　　
+            <lastmod><![CDATA[2018-06-25 01:28:09]]></lastmod>
+            　　
+        </sitemap>
+    </sitemaps>
+</sitemapindex>

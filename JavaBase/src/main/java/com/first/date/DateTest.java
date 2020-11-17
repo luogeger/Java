@@ -1,15 +1,14 @@
 package com.first.date;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.Test;
 import org.springframework.util.StopWatch;
 
-import java.io.Console;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -52,6 +51,10 @@ public class DateTest {
      */
     @Test
     public void main4() {
+        System.out.println(LocalDate.parse("2020-09-02", DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        System.out.println(LocalDateTime.parse("2020-09-02 12:48:11", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        System.out.println("--------------------");
+
         //  String 转化为 Date
         String strDate = "2020-02-07 15:45:32";
 

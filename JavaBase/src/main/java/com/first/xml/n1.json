@@ -1,0 +1,24 @@
+{
+  "sitemapindex": {
+    "sitemaps": [
+      {
+        "sitemap": [
+          {
+            "loc": "http://qq.com/xml/_46.xml",
+            "lastmod": "2018-06-20 01:28:09"
+          }
+        ]
+      }
+    ],
+    "sitemap": [
+      {
+        "loc": "http://qq.com/xml/_1.xml",
+        "lastmod": "2018-06-20 01:28:09"
+      },
+      {
+        "loc": "http://qq.com/xml/_2.xml",
+        "lastmod": "2018-06-20 01:28:09"
+      }
+    ]
+  }
+}

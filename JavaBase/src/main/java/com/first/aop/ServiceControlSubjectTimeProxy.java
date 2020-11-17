@@ -7,8 +7,8 @@ import org.junit.Test;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ServiceControlSubjectProxy implements ISubject {
-    private static final Log logger = LogFactory.getLog(ServiceControlSubjectProxy.class);
+public class ServiceControlSubjectTimeProxy implements ISubject {
+    private static final Log logger = LogFactory.getLog(ServiceControlSubjectTimeProxy.class);
     private ISubject subject;
 
 //    public ServiceControlSubjectProxy(ISubject subject) {
