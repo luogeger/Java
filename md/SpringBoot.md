@@ -978,8 +978,8 @@ hystrix:
 - 发布/订阅：
     - **消息需要被消费多次** == 生产者需要把一个消息发送到多个队列、指定队列或都不发送。此时需要**交换机**，交换机有三种类型：
     -  声明exchange: `channel.exchangeDeclare(EXCHANGE_NAME, "fanout");`
-        - `Fanout`：广播，`channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes());`
-        - `Direct`：定向，`channel.basicPublish(EXCHANGE_NAME, "delete", null, message.getBytes());`
+        - `Fanout`：广播，`channel.basicPublish(EXCHANGE_NAME, "", null, request.getBytes());`
+        - `Direct`：定向，`channel.basicPublish(EXCHANGE_NAME, "delete", null, request.getBytes());`
         - `Topic`：通配符,
             - 通配符规则：  
                 - `#`：匹配一个或多个词
@@ -995,7 +995,7 @@ hystrix:
 - 消息队列默认是放在内存，如果宕机，怎么保证消息不丢失
     - 交换机持久：`channel.exchangeDeclare(EXCHANGE_NAME, "topic", true);`
     - 队列持久化：`channel.queueDeclare(QUEUE_NAME, true, false, false, null);`
-    - 消息持久化：`channel.basicPublish(EXCHANGE_NAME, "item.insert", MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());`
+    - 消息持久化：`channel.basicPublish(EXCHANGE_NAME, "item.insert", MessageProperties.PERSISTENT_TEXT_PLAIN, request.getBytes());`
 
 
 > **改造**

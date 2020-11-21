@@ -2487,55 +2487,7 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
     
     ```
 
-### session
-> 为客户端用户创建一个容器，容器中存储的数据能够在多个`request`之间共享，并且，
-这个容器只属于当前用户，**当前用户** 指的是 **当前用户的当前浏览器**, 数据是保存在服务器的内存中
 
-- `session`创建
-    - ```javascript
-        request.getSession();
-        request.getSession(true);// 等同于不传参数，如果存在 session, 获取，不存在，创建
-        request.getSession(false);// 如果存在 session，获取，不存在...,不创建
-        ```
-    ```
-    
-    ```
-    
-- `session`使用：存取数据
-    - ```javascript
-        // @WebServlet("/login")
-        HttpSession session = request.getSession();
-        session.setAttribute("name","lucy");
-            
-        // @WebServlet("/success")
-        String msg = (String) request.getSession().getAttribute("name");
-        System.out.println(msg);
-        ```
-   ```
-   
-   ```
-   
-- `session`持久化
-    - ```javascript
-        String id = request.getSession().getId();
-        System.out.println(id);
-        Cookie cookie = new Cookie("JSESSIONID",id);
-        cookie.setMaxAge(60*60*24*30);
-        response.addCookie(cookie);
-        ```
-```   
-    
-```
-
-- `session`移除 和 销毁
-    - ```javascript
-        request.getSession().removeSession("user");
-
-        request.getSession().invalidate("user");
-        ```
-    ```
-    
-    ```
 
 ### JSP 
 > `Java Server Page`, 本质是**简化的Servlet**，一种**动态网页**的技术标准，其实就是一个既能书写**Servlet**代码，又能书写**HTML**代码的文件
@@ -2606,64 +2558,6 @@ response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
 
 ### JSTL     
 > **The JavaServer Pages Standard Tag Library**
-
-- `倒包引入`
-    - `javax.servlet.jsp.jstl.jar`
-    - `jstl-impl.jar`
-    - `<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>`
-    
-- `常用标签`    
-    - `c:out` ：输出文本内容
-    - `c:set` ：设置各种Wed域中的属性 
-    - `c:remove` ：删除各种Web域中的属性
-    - `c:catch` 
-    - `c:if`
-    - `c:choose`
-        - `c:when`
-        - `c:otherWise`
-    - `c:forEach`
-    - `c:forTokens` ：迭代操作String字符串
-    - `c:param` ：给请求路径添加参数
-    - `c:url` ：重写URL
-    - `c:import`：jsp页面找那个导入一个URL地址指向的资源
-    - `c:redirect` ：将当前请求转发或重定向
-
-- `c:if`
-    - ```bash
-      <c:if test="${user != null}">
-        <c:out value="登陆成功"></c:out>
-      </c:if>
-      ```
-```
-    
-```
-
-- `c:forEach`    
-    - ```bash
-      <c:forEach items="${list}" var="item">
-        <span>&{item.name}</span>
-        <span>&{item.age}</span>
-      </c:forEach>
-      ```
-    ```
-    
-    ```
-    
-- `c:choose`    
-    - ```bash
-      <c:choose>
-        <c:when test="${result == 1}">
-            <c:out value="一号选手"></c:out>
-        </c:when>
-      </c:choose>
-      ```
-    ```
-    
-    ```
-
-
-
-
 
 
 # Design Pattern

@@ -20,8 +20,8 @@ public class Main {
     public void main1() {
         List<String> items = Arrays.asList("apple", "apple", "banana", "apple", "orange", "banana", "papaya");
 
-        Map<String, Long> result =
-                items.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        Map<String, Long> result = items.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
         System.out.println(result);
     }

@@ -208,10 +208,10 @@
     git rebase -i HEAD~3
 
     pick = use commit
-    reword = user commit, but edit the commit message
+    reword = user commit, but edit the commit request
     edit = use commit, but stop for amending
     squash = use commit, but meld into previous commit
-    fixup = like "squash", but discard this commit's message
+    fixup = like "squash", but discard this commit's request
     exec = run command (the rest of the line) using shell
     drop = remove commit
 
