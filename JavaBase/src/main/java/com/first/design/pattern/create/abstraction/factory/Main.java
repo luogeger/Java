@@ -1,4 +1,4 @@
-package com.first.design.pattern.create.factory.abstraction;
+package com.first.design.pattern.create.abstraction.factory;
 
 /**
  * 有4种角色
