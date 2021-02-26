@@ -11,6 +11,41 @@ import java.util.stream.Collectors;
 public class Main {
 
     @Test
+    public void main4 () {
+        List<String> list = Arrays.asList("1999-01","2003-11","1997-10","2010-03");
+
+        // 默认是升序
+        System.out.println("----- 升序");
+        System.out.println("min: "+list.stream().min(Comparator.naturalOrder()).get());
+        System.out.println("max: "+list.stream().max(Comparator.naturalOrder()).get());
+        System.out.println("----- 降序");
+        System.out.println("min: "+list.stream().min(Comparator.reverseOrder()).get());
+        System.out.println("max: "+list.stream().max(Comparator.reverseOrder()).get());
+
+    }
+
+
+    @Test
+    public void main3 () {
+        List<String> list = Arrays.asList("1999-01","2003-11","1997-10","2010-03");
+
+        String asc = list.stream()
+                .sorted((e1, e2) -> {return e1.compareTo(e2);})
+                .findFirst()
+                .get();
+        System.out.println(asc);
+
+        String desc = list.stream()
+                .sorted((e1, e2) -> {return e2.compareTo(e1);})
+                .findFirst()
+                .get();
+        System.out.println(desc);
+    }
+
+
+    
+    
+    @Test
     public void main2 () {
 //        System.out.println(StringTool.compare("1993-09", "2020-01"));
 //        System.out.println(StringTool.compare("1993-09", "1993-09"));
