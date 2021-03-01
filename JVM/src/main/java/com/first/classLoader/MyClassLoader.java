@@ -4,11 +4,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
-public class ClassLoaderPlus extends ClassLoader{
+public class MyClassLoader extends ClassLoader{
 
+    /**
+     * 自定义ClassLoader只需要重写findClass, 不建议重写loadClass
+     * @param name
+     * @return
+     * @throws ClassNotFoundException
+     */
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        File f = new File("C:/PC/workspace/clone/Java/JVM", name.replace(".", "/").concat(".class"));
+        File f = new File("C:/PC/workspace/clone/Java/JVM/target/classes/", name.replace(".", "/").concat(".class"));
         try {
             FileInputStream fis = new FileInputStream(f);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
