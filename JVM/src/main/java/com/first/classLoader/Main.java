@@ -5,6 +5,23 @@ import org.junit.Test;
 
 public class Main {
 
+
+    /**
+     * AppClassLoader 加载当前类
+     * @throws ClassNotFoundException
+     */
+    @Test
+    public void main0 () throws ClassNotFoundException {
+        Class<?> clazz = Main.class.getClassLoader().loadClass("com.first.classLoader.Main");
+        System.out.println(clazz);
+        System.out.println(clazz.getName());
+    }
+
+
+    /**
+     * 什么时候需要手动的去加载一个类
+     */
+
     /**
      * ClassLoader的级别
      */

@@ -59,6 +59,8 @@ public class Main {
         System.out.println("降序：Comparator.reverseOrder()   ==  (e1, e2)-> e2.compareTo(e1)");
         List<String> collect1 = list.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
         collect1.forEach(System.out::println);
+
+        Comparator<Object> comparator = Collections.reverseOrder();
     }
 
     @Test
