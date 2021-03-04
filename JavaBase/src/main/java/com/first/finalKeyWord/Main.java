@@ -1,7 +1,13 @@
 package com.first.finalKeyWord;
 
+import org.junit.Test;
+
 public class Main {
-    public static void main(String[] args) {
+
+
+    @Test
+    public void main1 () {
         First first = new First();
+        first.printName();
     }
 }
