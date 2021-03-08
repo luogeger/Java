@@ -2,7 +2,9 @@ package com.first.classLoader;
 
 public class Origin {
 
-    public void print () {
-        System.out.println("Origin");
+    Main m;
+
+    public static void main(String[] args) {
+        new Object();
     }
 }

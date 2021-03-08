@@ -4,7 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
-public class MyClassLoader extends ClassLoader{
+
+/**
+ * 只是重写了findClass方法，不能够实现热加载
+ */
+public class ClassLoaderFindClass extends ClassLoader{
 
     /**
      * 自定义ClassLoader只需要重写findClass, 不建议重写loadClass
