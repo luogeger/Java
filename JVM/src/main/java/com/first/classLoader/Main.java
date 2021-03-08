@@ -131,11 +131,56 @@ public class Main {
 //        System.out.println(P.s);//  非final，会加载
         Class<?> clazz = Class.forName("com.first.classLoader.Main$P");//  会加载
     }
+
+
+    /**
+     * 混合执行
+     */
+    @Test
+    public void main7 () {
+        long s1 = System.currentTimeMillis();
+        for (int i = 0; i < 100_000; i++) {
+            loop();
+        }
+        System.out.println(System.currentTimeMillis() - s1);
+
+        long s2 = System.currentTimeMillis();
+        for (int i = 0; i < 10_000; i++) {
+            loop();
+        }
+        System.out.println(System.currentTimeMillis() - s2);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //  Private Method
+    //  ================================================================================================================
+
+    private static void  loop() {
+        for (int i = 0; i < 100_000; i++) {
+            long j = 1%3;
+        }
+    }
     
 
 
 
 
+
+    //  inner class
+    //  ================================================================================================================
     public static class P {
         public static final int f = 8;
         public static int s = 9;
