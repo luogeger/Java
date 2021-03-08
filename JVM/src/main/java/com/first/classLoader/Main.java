@@ -34,7 +34,7 @@ public class Main {
         System.out.println(sun.net.spi.nameservice.dns.DNSNameService.class.getClassLoader().getClass().getClassLoader());
         System.out.println(Main.class.getClassLoader().getClass().getClassLoader());
 
-        System.out.println(new MyClassLoader().getParent());
+        System.out.println(new ClassLoaderFindClass().getParent());
         System.out.println(ClassLoader.getSystemClassLoader());
     }
 
@@ -64,7 +64,7 @@ public class Main {
     @Test
     public void main3() throws Exception {
 
-        ClassLoader loader = new MyClassLoader();
+        ClassLoader loader = new ClassLoaderFindClass();
         Class clazz = loader.loadClass("com.first.entity.Hello");
         Class clazz1 = loader.loadClass("com.first.entity.Hello");
 
@@ -76,7 +76,7 @@ public class Main {
 
         System.out.println(loader.getParent());                     //  sun.misc.Launcher$AppClassLoader@18b4aac2
         System.out.println(loader.getClass().getClassLoader());     //  sun.misc.Launcher$AppClassLoader@18b4aac2
-        System.out.println(MyClassLoader.getSystemClassLoader());   //  sun.misc.Launcher$AppClassLoader@18b4aac2
+        System.out.println(ClassLoaderFindClass.getSystemClassLoader());   //  sun.misc.Launcher$AppClassLoader@18b4aac2
     }
 
 
@@ -130,8 +130,9 @@ public class Main {
 //        System.out.println(P.f);//  final也不会加载
 //        System.out.println(P.s);//  非final，会加载
         Class<?> clazz = Class.forName("com.first.classLoader.Main$P");//  会加载
-    }
 
+    }
+    
 
     /**
      * 混合执行
@@ -149,6 +150,40 @@ public class Main {
             loop();
         }
         System.out.println(System.currentTimeMillis() - s2);
+
+    }
+
+    /**
+     * 不能热加载
+     */
+    @Test
+    public void main8 () throws ClassNotFoundException {
+        ClassLoader loader = new ClassLoaderFindClass();
+
+        Class clazz = loader.loadClass("com.first.entity.Hello");
+        System.out.println(clazz.hashCode());
+
+        Class clazz1 = loader.loadClass("com.first.entity.Hello");
+        System.out.println(clazz1.hashCode());
+
+        System.out.println(clazz == clazz1);
+
+    }
+
+    /**
+     * 不能热加载
+     */
+    @Test
+    public void main9 () throws ClassNotFoundException {
+        ClassLoader loader = new ClassLoaderFindClass();
+
+        Class clazz = loader.loadClass("com.first.entity.Hello");
+        System.out.println(clazz.hashCode());
+
+        Class clazz1 = loader.loadClass("com.first.entity.Hello");
+        System.out.println(clazz1.hashCode());
+
+        System.out.println(clazz == clazz1);
 
     }
 
@@ -173,7 +208,7 @@ public class Main {
             long j = 1%3;
         }
     }
-    
+
 
 
 
@@ -195,4 +230,5 @@ public class Main {
             System.out.println("C");
         }
     }
+
 }
