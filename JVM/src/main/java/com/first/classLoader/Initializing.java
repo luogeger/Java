@@ -2,7 +2,7 @@ package com.first.classLoader;
 
 public class Initializing {
 
-    public static Initializing t = new Initializing();
+//    public static Initializing t = new Initializing();//  不new对象，就不执行初始化代码。
     public static int count = 2;
 
     static {
@@ -10,7 +10,7 @@ public class Initializing {
     }
 
     {
-        System.out.println("初始化代码");
+        System.out.println("初始化代码  在构造器之前执行");
     }
 
     public Initializing() {
@@ -18,4 +18,7 @@ public class Initializing {
         count++;
     }
 
+    public static void main(String[] args) {
+        System.out.println(Initializing.count);
+    }
 }
