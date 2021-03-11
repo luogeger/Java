@@ -191,7 +191,13 @@ public class Main {
 
 
 
-
+    @Test
+    public void main10 () {
+        Object o = new Object();
+        System.out.println(o.hashCode());
+        int hashCode = System.identityHashCode(o);
+        System.out.println(hashCode);
+    }
 
 
 
