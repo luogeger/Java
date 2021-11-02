@@ -24,6 +24,8 @@ public class Main {
      *      被装饰者需要装饰很多类型的功能，该类就是负责管理这些具体的装饰类
      * 4， 具体装饰（ConcreteDecorator）：具体的装饰类
      *
+     *
+     *
      */
 
 
@@ -51,6 +53,10 @@ public class Main {
 
         Sugar sugarCoffee = new Sugar(coffee);
         System.out.println(sugarCoffee.money() + sugarCoffee.desc());
+
+        //  抽象类中间再加一层父类，可以选择性的增强方法，不用都重写被装饰类父接口里的所有方法。
+        Pepper pepper = new Pepper(sugarCoffee);
+        System.out.println(pepper.money());
     }
 
 

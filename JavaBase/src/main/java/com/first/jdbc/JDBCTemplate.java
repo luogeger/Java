@@ -62,6 +62,13 @@ public class JDBCTemplate {
         System.out.println("name = " + name);
     }
 
+    /**
+     *
+      */
+    public void main1 () {
+
+    }
+
 
 
 
